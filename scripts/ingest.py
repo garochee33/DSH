@@ -5,12 +5,12 @@ Populates vector memory from all KB, logs, docs, and agent code
 Run: python3 scripts/ingest.py
 """
 import sys
-sys.path.insert(0, "/Users/gadikedoshim/DOME-HUB")
+sys.path.insert(0, "/Users/enzogaroche/DOME-HUB")
 
 from pathlib import Path
 from agents.core.rag import RAGPipeline
 
-DOME_ROOT = Path("/Users/gadikedoshim/DOME-HUB")
+DOME_ROOT = Path("/Users/enzogaroche/DOME-HUB")
 
 SOURCES = [
     DOME_ROOT / "kb",

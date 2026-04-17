@@ -3,16 +3,19 @@ Akashic Record — dimensional entry writer
 Stores structured records into ChromaDB with domain/depth/node metadata.
 """
 from __future__ import annotations
-import uuid
+import os, uuid
 from datetime import datetime, timezone
 from typing import Literal
 
 import chromadb
 from chromadb.utils import embedding_functions
 
-DOME_ROOT = "/Users/gadikedoshim/DOME-HUB"
+DOME_ROOT = os.environ.get("DOME_ROOT", "/Users/gadikedoshim/DOME-HUB")
 CHROMA_PATH = f"{DOME_ROOT}/db/chroma"
 NAMESPACE = "akashic"
+_MODEL_NAME = "all-MiniLM-L6-v2"
+# Pin cache inside DOME-HUB via env var (set in zshrc-dome.sh)
+os.environ.setdefault("SENTENCE_TRANSFORMERS_HOME", f"{DOME_ROOT}/models")
 
 Domain = Literal["security", "agent", "build", "trinity", "infra", "creative", "meta"]
 Depth  = Literal["event", "decision", "architecture", "axiom"]
@@ -21,7 +24,7 @@ Depth  = Literal["event", "decision", "architecture", "axiom"]
 def _collection():
     client = chromadb.PersistentClient(path=CHROMA_PATH)
     ef = embedding_functions.SentenceTransformerEmbeddingFunction(
-        model_name="all-MiniLM-L6-v2"
+        model_name=_MODEL_NAME
     )
     return client.get_or_create_collection(NAMESPACE, embedding_function=ef)
 

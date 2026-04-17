@@ -33,3 +33,8 @@ models/embeddings/
 
 # Internal mesh
 agents/core/.mesh/
+
+# Akashic session context (machine-local, regenerated each terminal)
+.akashic-context
+logs/akashic-watcher.pid
+logs/akashic-watcher.log

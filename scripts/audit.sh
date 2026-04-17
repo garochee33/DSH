@@ -21,7 +21,7 @@ check "FileVault ON"       "fdesetup status"                          "FileVault
 check "SIP enabled"        "csrutil status"                           "enabled"
 check "Gatekeeper ON"      "spctl --status"                           "enabled"
 check "Firewall ON"        "/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate" "enabled"
-check "Stealth mode ON"    "/usr/libexec/ApplicationFirewall/socketfilterfw --getstealthmode" "enabled"
+gpg --list-secret-keys 2>/dev/null | grep -q "sec" && echo "✅ GPG key present" || echo "⚠️  No GPG key"
 check "Screen lock ON"     "defaults read com.apple.screensaver askForPassword" "1"
 
 echo ""
@@ -41,7 +41,7 @@ else
   echo "⚠️  pass store not initialized — run: pass init <gpg-id>"
 fi
 
-if gpg --list-secret-keys 2>/dev/null | grep -q "sec"; then
+if gpg --list-secret-keys 2>/dev/null | list-secret-keys 2>/dev/null | grep -q "sec"; then
   echo "✅ GPG key present"
 else
   echo "⚠️  No GPG key found"

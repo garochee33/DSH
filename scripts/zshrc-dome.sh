@@ -33,3 +33,4 @@ command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 # DOME-HUB aliases
 alias dome="cd $DOME_ROOT"
 alias newproject="$DOME_ROOT/scripts/new-project.sh"
+alias dome-pm="bash $DOME_ROOT/scripts/dome-pm.sh"

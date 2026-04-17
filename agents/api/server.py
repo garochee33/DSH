@@ -154,7 +154,7 @@ async def rag_query(req: QueryRequest):
 
 
 @app.get("/traces")
-async def list_traces(limit: int = 50):
+async def get_traces(limit: int = 50):
     return {"traces": _traces[-limit:]}
 
 

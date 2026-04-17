@@ -1,9 +1,19 @@
 # Claude compute environment — DOME-HUB
 # Pinned to known-good versions for Python 3.11.
 
-# --- Anthropic / Claude Agent SDK ---
+# --- Local inference (sovereign, air-gapped — preferred over any cloud API) ---
+# Apple MLX: native M-series silicon inference, fastest local path
+mlx>=0.16.0; sys_platform == "darwin"
+mlx-lm>=0.16.0; sys_platform == "darwin"
+# Ollama Python client (HTTP interface to local Ollama daemon)
+ollama>=0.2.0
+
+# --- Cloud LLM SDKs (secondary — use only when local is insufficient) ---
+# Anthropic Claude (preferred cloud provider — no OpenAI dependency)
 anthropic>=0.39.0,<1.0.0
 claude-agent-sdk>=0.1.0; python_version >= "3.11"
+# OpenAI SDK kept for Ollama OpenAI-compat endpoint only — avoid direct OpenAI API use
+openai>=1.30.0
 
 # --- Document creation (backs the docx/pdf/pptx/xlsx skills) ---
 python-docx>=1.1.0

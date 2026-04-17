@@ -6,9 +6,9 @@ DOME-HUB is the single root for all projects, platforms, agents, AI models, know
 
 ---
 
-## Owner
-- **Gadi Kedoshim** (Gadi.K1989) — `gadi.k@greenergyfl.com`
-- **Trinity Consortium** sovereign member — linked with Enzo Garoche (EGD33), founder of FRACTAL E8-SSII-AGI & trinity-unified-ai
+## Node
+- **Trinity Consortium** sovereign node
+- Apple M3 Pro · local-first · fully sovereign
 
 ## Machine
 - Apple M3 Pro · 12-core CPU · 18-core GPU · 18GB unified memory · macOS 26.3
@@ -35,15 +35,19 @@ pwsh scripts/sovereign-setup-windows.ps1
 
 ```
 DOME-HUB/
-├── agents/                  # AI agents
+├── agents/                  # AI agents (core, claude, api, workers, local)
 ├── codebase/                # Shared libraries & core code
 ├── compute/                 # Infrastructure & compute configs
 ├── db/                      # Databases & data stores
-│   └── dome.db              # SQLite — sessions, stack inventory
+│   ├── dome.db              # SQLite — sessions, stack, agents, skills, tools
+│   ├── episodic.db          # SQLite — episodic memory
+│   └── chroma/              # ChromaDB vector store (dome-kb)
 ├── kb/                      # Knowledge bases
 │   ├── developer-context.md # Trinity Consortium context
+│   ├── kiro-skills.md       # Kiro CLI capability reference
+│   ├── claude/              # Claude capability reference
 │   └── trinity-unified-ai/  # KB API for mycelium neural mesh
-├── logs/                    # Session logs
+├── logs/                    # Session and activity logs
 ├── models/                  # AI models & fine-tunes
 ├── platforms/               # Platforms & products
 ├── projects/                # Individual projects
@@ -52,23 +56,34 @@ DOME-HUB/
 │   ├── sovereign-setup-windows.ps1
 │   ├── bootstrap.sh
 │   ├── new-project.sh
+│   ├── dome-check.sh        # Protocol enforcer
+│   ├── dome-pm.sh           # Project manager
+│   ├── dome-approve.sh      # Approval gate
+│   ├── dome-sudo.sh         # Privileged command wrapper
+│   ├── daemon-watch.sh      # Daemon watchdog
+│   ├── ingest.py            # KB → ChromaDB ingest
+│   ├── register-claude.py   # Register Claude in dome.db
 │   ├── optimize.sh
 │   ├── harden.sh
 │   ├── audit.sh
+│   ├── finish-security.sh
 │   └── zshrc-dome.sh
 ├── software/                # Software packages & tools
+├── src/                     # TypeScript source
 ├── .venv/                   # Python 3.11.9 virtual environment
 ├── .vscode/                 # VS Code settings & extensions
 ├── .env.example             # Environment template
-├── .eslintrc.json           # ESLint config
+├── eslint.config.js         # ESLint flat config (ESLint 9)
 ├── .gitignore
 ├── .nvmrc                   # Node version pin (20)
 ├── .prettierrc              # Prettier config
 ├── .python-version          # Python version pin (3.11)
+├── CHANGELOG.md             # Change history
+├── CLAUDE.md                # Claude agent context
 ├── INDEX.md                 # Full file & directory reference
 ├── MANUAL.md                # Usage guide
+├── PROTOCOLS.md             # Core sovereignty protocols
 ├── package.json             # Root Node/TS tooling
-├── README.md
 └── tsconfig.json            # TypeScript config
 ```
 
@@ -135,11 +150,11 @@ The setup script will prompt you to install one. You can also install manually:
 DOME-HUB is the local sovereign node for Trinity Consortium work.
 
 - **trinity-unified-ai** — KB API for the Mycelium Neural Mesh (`kb/trinity-unified-ai/`)
-- **FRACTAL E8-SSII-AGI** — core AGI architecture by Enzo Garoche (EGD33)
+- **FRACTAL E8-SSII-AGI** — core AGI architecture by Trinity Consortium
 - **Mycelium Neural Mesh** — decentralized dimensional neural network
 
 ---
 
 ## Links
 - GitHub: https://github.com/gadikedoshim/DOME-HUB
-- Trinity Consortium: linked via `garochee33`
+- Trinity Consortium: [member-only access]

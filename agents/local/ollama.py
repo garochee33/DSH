@@ -17,6 +17,7 @@ class OllamaClient:
         self._ensure_running()
 
     def _ensure_running(self):
+        """Start Ollama server if not already running."""
         try:
             httpx.get(f"{self.base_url}/api/tags", timeout=3).raise_for_status()
         except Exception:
@@ -35,11 +36,13 @@ class OllamaClient:
             raise RuntimeError("Ollama failed to start")
 
     def list_models(self) -> list[str]:
+        """Return names of all locally available Ollama models."""
         resp = httpx.get(f"{self.base_url}/api/tags", timeout=10)
         resp.raise_for_status()
         return [m["name"] for m in resp.json().get("models", [])]
 
     def pull(self, model: str):
+        """Pull a model from the Ollama registry (blocks until complete)."""
         with httpx.stream(
             "POST", f"{self.base_url}/api/pull", json={"name": model}, timeout=300
         ) as resp:
@@ -48,6 +51,7 @@ class OllamaClient:
                 pass  # drain stream; pull completes when stream ends
 
     def run(self, prompt: str, model: str = "llama3") -> str:
+        """Run a prompt through the specified model and return the full response."""
         resp = httpx.post(
             f"{self.base_url}/api/generate",
             json={"model": model, "prompt": prompt, "stream": False},

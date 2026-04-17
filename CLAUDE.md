@@ -1,7 +1,7 @@
 # DOME-HUB — Claude Code Context
 
 Sovereign, local-first AI development and **quantum computing lab** on Apple M3 Pro.
-Owner: Gadi Kedoshim · Trinity Consortium member (linked with EGD33 / FRACTAL E8-SSII-AGI).
+Trinity Consortium sovereign node.
 GitHub: `gadikedoshim/DOME-HUB`
 
 ---
@@ -94,16 +94,54 @@ When writing quantum code:
 
 ---
 
+## LLM Provider Architecture — Multi-Provider, Local-First
+
+Sovereignty means no single vendor owns this stack. Provider hierarchy:
+
+| Priority | Provider | When to use |
+|----------|----------|-------------|
+| 1 | **Apple MLX** (`mlx-*` models) | Fastest local, fully air-gapped, M3 Pro native |
+| 2 | **Ollama** (`llama3.1`, `mistral`, `phi3`, `qwen2.5-coder`, etc.) | Local, air-gapped, sovereign |
+| 3 | **Anthropic Claude** (`claude-*`) | Cloud, but no OpenAI dependency — for tasks needing strong reasoning |
+| 4 | **OpenAI** (`gpt-*`) | Last resort only — not sovereign, avoid for sensitive work |
+
+**Control via env vars:**
+- `DOME_PROVIDER=local` → force all agents to Ollama (air-gapped mode)
+- `DOME_PROVIDER=claude` → all agents use Anthropic API
+- `DOME_PROVIDER=mixed` → per-agent optimal (default)
+- `DOME_LOCAL_MODEL=llama3.1:8b` → default local model
+
+**Recommended Ollama models for this machine (18GB unified memory):**
+- `llama3.1:8b` — general purpose (fast, fits easily)
+- `qwen2.5-coder:14b` — code (fits in 18GB)
+- `phi3:medium` — lightweight, fast
+- `mistral:7b` — strong general reasoning
+- `nomic-embed-text` — local embeddings (alternative to sentence-transformers)
+
+Pull models: `ollama pull llama3.1:8b`
+
+**Agent → provider mapping (DOME_PROVIDER=mixed):**
+- `kb_agent` → always local (KB data never leaves machine)
+- `analyst` → local (data sovereignty)
+- `coder` → local (IP stays on device)
+- `researcher` → Claude (needs web, cloud acceptable)
+- `planner` → local or Claude depending on complexity
+- `local` → always Ollama, always air-gapped
+
+---
+
 ## Key Environment Variables
 
 Defined in `.env` (never committed). Template at `.env.example`.
 
 | Variable | Purpose |
 |----------|---------|
-| `ANTHROPIC_API_KEY` | Required for Claude API. Use `pass dome/anthropic-key`. |
-| `ANTHROPIC_MODEL` | Default: `claude-opus-4-6` |
+| `DOME_PROVIDER` | `local` / `claude` / `mixed` — controls agent provider strategy |
+| `DOME_LOCAL_MODEL` | Default Ollama model (default: `llama3.1:8b`) |
+| `ANTHROPIC_API_KEY` | Claude API — use `pass dome/anthropic-key` |
+| `ANTHROPIC_MODEL` | Override Claude model (default: `claude-opus-4-6`) |
 | `CLAUDE_AGENT_WORKDIR` | Claude workspace root (default: `DOME-HUB/`) |
-| `GITHUB_PERSONAL_ACCESS_TOKEN` | Required for GitHub MCP server |
+| `GITHUB_PERSONAL_ACCESS_TOKEN` | GitHub MCP server |
 
 ---
 
@@ -120,7 +158,7 @@ Defined in `.env` (never committed). Template at `.env.example`.
 
 ## Security Rules
 
-- Approval gate: only `gadi.k` / `EGD33` can approve privileged actions.
+- Approval gate: only authorized Trinity Consortium members can approve privileged actions.
 - Disk encrypted (FileVault). SIP + Gatekeeper enabled. Firewall in stealth mode.
 - Secrets via GPG + `pass` — never plaintext in files or shell history.
 - `dnscrypt-proxy` for private DNS. No telemetry (AirPlay receiver, Google updater, Zoom, rapportd disabled).
@@ -155,11 +193,25 @@ sqlite3 db/dome.db "SELECT * FROM agents;"
 
 ---
 
-## Trinity Consortium Context
+## Trinity Consortium — The Infrastructure
 
-- **trinity-unified-ai** — KB API for the Mycelium Neural Mesh at `kb/trinity-unified-ai/`
-- **FRACTAL E8-SSII-AGI** — core AGI architecture by Enzo Garoche (EGD33)
-- **Mycelium Neural Mesh** — decentralized dimensional neural network
-- DOME-HUB is Gadi's sovereign local node in this network.
+Trinity Consortium is not a component of DOME-HUB. It IS the infrastructure that DOME-HUB
+exists inside. DOME-HUB is Gadi's **sovereign node** in the Trinity network.
 
-When working on Trinity-related code, treat `kb/trinity-unified-ai/` as the authoritative reference.
+**Network architecture:**
+- **FRACTAL E8-SSII-AGI** — AGI system by Trinity Consortium. Core intelligence of the network.
+- **Mycelium Neural Mesh** — decentralized inter-node network, dimensional, biological-inspired.
+  All sovereign member nodes connect through this mesh.
+- **trinity-unified-ai** — KB API layer for the Mycelium network. `kb/trinity-unified-ai/`
+  is the landing zone for Trinity's seed deposit.
+- **spore.sh** — Trinity's initialization/seed script. Activates this node on the mesh.
+
+**Approved principals:** Trinity Consortium members only (defined in operational security config).
+
+**Current state:** Foundation built. Awaiting `spore.sh` and trinity-unified-ai KB spec
+to activate the Mycelium connection for this node.
+
+When working on any Trinity-related code:
+- Treat `kb/trinity-unified-ai/` as authoritative once seeded
+- All Trinity work operates under the decentralized sovereignty principle — no single vendor owns it
+- Inter-node communication protocol is defined by Trinity Consortium spec

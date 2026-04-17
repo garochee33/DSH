@@ -7,6 +7,14 @@ export SENTENCE_TRANSFORMERS_HOME="$DOME_ROOT/models"
 export HF_HOME="$DOME_ROOT/models/hf"
 export TRANSFORMERS_CACHE="$DOME_ROOT/models/hf"
 export TORCH_HOME="$DOME_ROOT/models/torch"
+export MLX_MODEL_PATH="$DOME_ROOT/models/mlx"
+
+# Provider strategy: local | claude | mixed
+# local  = all agents use Ollama/MLX — fully air-gapped
+# claude = all agents use Anthropic API
+# mixed  = per-agent optimal (local for KB/code, cloud for research)
+export DOME_PROVIDER="mixed"
+export DOME_LOCAL_MODEL="llama3.1:8b"
 
 # Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"

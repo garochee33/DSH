@@ -6,6 +6,7 @@ from agents.core.agent import Agent
 from agents.core.orchestrator import Orchestrator
 from agents.core.registry import get_agent, make_dome_orchestrator, REGISTRY
 from agents.core.tools import ALL_TOOLS
+from agents.core.skills import SKILLS
 from agents.core.memory import MemorySystem
 from agents.core.trace import Tracer, get_trace, list_traces
 from agents.core.rag import RAGPipeline
@@ -18,6 +19,7 @@ __all__ = [
     "make_dome_orchestrator",
     "REGISTRY",
     "ALL_TOOLS",
+    "SKILLS",
     "MemorySystem",
     "Tracer",
     "get_trace",

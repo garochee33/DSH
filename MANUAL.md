@@ -1,6 +1,7 @@
 # DOME-HUB Manual
 
-Complete usage guide for the DOME-HUB sovereign development environment.
+Complete usage guide for the DOME-HUB sovereign build environment.  
+For developers, engineers, creatives, artists, designers, entrepreneurs, and researchers.  
 Last updated: 2026-04-17
 
 ---
@@ -369,3 +370,91 @@ pnpm install
 source .venv/bin/activate && pip install --upgrade -r compute/requirements.txt
 pnpm ingest
 ```
+
+---
+
+## 14. Customization Guide
+
+DOME-HUB is fully modular. Every component can be replaced, extended, or removed.
+
+### Switch AI provider
+Edit `.env`:
+```bash
+DOME_PROVIDER=local    # Ollama/MLX only — fully air-gapped
+DOME_PROVIDER=claude   # Anthropic API for all agents
+DOME_PROVIDER=mixed    # per-agent optimal (default)
+DOME_LOCAL_MODEL=llama3.1:8b   # change local model
+ANTHROPIC_MODEL=claude-opus-4-6
+```
+
+### Add a custom AI agent
+```bash
+newproject agents my-agent
+cd agents/my-agent
+# Build on top of agents/core/agent.py
+```
+
+### Add to your knowledge base
+Drop any `.md`, `.txt`, or `.pdf` into `kb/`, then:
+```bash
+pnpm ingest
+```
+Your content is now searchable by all agents via RAG.
+
+### Train or fine-tune a model
+```bash
+newproject models my-model
+cd models/my-model
+# PyTorch + MPS ready — use device = torch.device("mps")
+# Store weights in models/ — gitignored, stays local
+```
+
+### Add a new script or automation
+```bash
+# Add to scripts/
+chmod +x scripts/my-script.sh
+# Add alias to scripts/zshrc-dome.sh
+echo 'alias my-cmd="bash $DOME_ROOT/scripts/my-script.sh"' >> scripts/zshrc-dome.sh
+source ~/.zshrc
+```
+
+### Add a new project (any type)
+```bash
+newproject projects   my-app        # web app, API, tool
+newproject platforms  my-platform   # product or SaaS
+newproject software   my-cli        # CLI tool or package
+newproject agents     my-agent      # AI agent
+newproject models     my-model      # ML model or fine-tune
+newproject compute    my-infra      # infra, terraform, cloud
+```
+Each project is fully isolated: own Python venv, Node, `.env`, `.gitignore`.
+
+### Swap or add a database
+All databases are local. Add any DB you need:
+```bash
+brew install mysql          # MySQL
+brew install mongodb-community  # MongoDB
+pip install motor           # async MongoDB driver
+```
+
+### Customize security hardening
+Edit `scripts/harden.sh` — add or remove rules, adjust firewall ports, modify telemetry blocks.
+
+### Use a different shell or editor
+DOME-HUB works with any shell or editor. The zsh config is in `scripts/zshrc-dome.sh` — adapt it for bash, fish, or PowerShell. VS Code settings are in `.vscode/` — swap for any editor.
+
+---
+
+## 15. Use Cases
+
+| Goal | What to use |
+|------|-------------|
+| Build a web app | `newproject projects my-app` → FastAPI + Node + PostgreSQL |
+| Build an AI agent | `newproject agents my-agent` → agents/core framework |
+| Fine-tune a model | `newproject models my-model` → PyTorch MPS + Transformers |
+| Run local LLMs | Ollama (`ollama run llama3.1`) or MLX (`mlx_lm.generate`) |
+| Quantum experiments | Qiskit, PennyLane, Cirq — all pre-installed |
+| Generate documents | python-docx, python-pptx, reportlab — all pre-installed |
+| Data analysis | Pandas, NumPy, SciPy, Matplotlib — all pre-installed |
+| Deploy to cloud | AWS CLI + Terraform — pre-configured |
+| Build a product | `newproject platforms my-platform` → full-stack isolated env |

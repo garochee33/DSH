@@ -1,26 +1,13 @@
 """
-DOME-HUB Agent Base Class
-Supports tool use, memory, and multi-LLM routing (OpenAI, Anthropic, local)
+DOME-HUB Agent Base Class — wired with MemorySystem, Tracer, and streaming
 """
 from __future__ import annotations
-import json, time
-from typing import Any, Callable
-from dataclasses import dataclass, field
+import json, uuid
+from typing import Any, AsyncGenerator, Callable
 
-
-@dataclass
-class Message:
-    role: str   # system | user | assistant | tool
-    content: str
-    tool_name: str | None = None
-    metadata: dict = field(default_factory=dict)
-
-
-@dataclass
-class ToolResult:
-    name: str
-    output: Any
-    error: str | None = None
+from agents.core.memory import MemorySystem
+from agents.core.trace import Tracer
+from agents.core.stream import stream_openai, stream_anthropic, stream_local
 
 
 class Agent:
@@ -30,14 +17,22 @@ class Agent:
         model: str = "gpt-4o",
         system_prompt: str = "",
         tools: list[Callable] | None = None,
-        memory_limit: int = 50,
+        memory_namespace: str | None = None,
+        enable_tracing: bool = True,
     ):
         self.name = name
         self.model = model
         self.system_prompt = system_prompt
         self.tools: dict[str, Callable] = {t.__name__: t for t in (tools or [])}
-        self.memory: list[Message] = []
-        self.memory_limit = memory_limit
+        self.enable_tracing = enable_tracing
+        self._session = str(uuid.uuid4())
+        self.mem = MemorySystem(
+            agent=name,
+            session=self._session,
+            namespace=memory_namespace or name,
+            llm_fn=self._call_llm,
+        )
+        self.tracer = Tracer() if enable_tracing else None
         self._client = None
 
     # ── LLM routing ──────────────────────────────────────────────────────────
@@ -52,7 +47,6 @@ class Agent:
             import anthropic
             self._client = anthropic.Anthropic()
         else:
-            # local (ollama-compatible)
             import openai
             self._client = openai.OpenAI(base_url="http://localhost:11434/v1", api_key="local")
         return self._client
@@ -64,60 +58,103 @@ class Agent:
             msgs = [m for m in messages if m["role"] != "system"]
             resp = client.messages.create(model=self.model, max_tokens=4096, system=system, messages=msgs)
             return resp.content[0].text
-        else:
-            resp = client.chat.completions.create(model=self.model, messages=messages)
-            return resp.choices[0].message.content
+        resp = client.chat.completions.create(model=self.model, messages=messages)
+        return resp.choices[0].message.content
 
-    # ── Memory ────────────────────────────────────────────────────────────────
+    # ── Memory helpers ────────────────────────────────────────────────────────
 
     def remember(self, role: str, content: str, **meta):
-        self.memory.append(Message(role=role, content=content, metadata=meta))
-        if len(self.memory) > self.memory_limit:
-            self.memory = self.memory[-self.memory_limit:]
+        self.mem.store(role, content, metadata=meta)
 
     def recall(self) -> list[dict]:
         msgs = []
         if self.system_prompt:
             msgs.append({"role": "system", "content": self.system_prompt})
-        for m in self.memory:
-            msgs.append({"role": m.role, "content": m.content})
+        msgs.extend(self.mem.context())
         return msgs
 
     def clear_memory(self):
-        self.memory = []
+        self.mem.working.messages.clear()
 
     # ── Tool execution ────────────────────────────────────────────────────────
 
-    def use_tool(self, name: str, **kwargs) -> ToolResult:
+    def use_tool(self, name: str, span_id: str | None = None, **kwargs) -> Any:
         if name not in self.tools:
-            return ToolResult(name=name, output=None, error=f"Tool '{name}' not found")
+            return f"Tool '{name}' not found"
         try:
-            output = self.tools[name](**kwargs)
-            return ToolResult(name=name, output=output)
+            result = self.tools[name](**kwargs)
+            if self.tracer and span_id:
+                self.tracer.log_event(span_id, "tool_call", {"tool": name, "result": str(result)})
+            return result
         except Exception as e:
-            return ToolResult(name=name, output=None, error=str(e))
+            err = str(e)
+            if self.tracer and span_id:
+                self.tracer.log_event(span_id, "tool_error", {"tool": name, "error": err})
+            return f"Error: {err}"
 
     # ── Main run loop ─────────────────────────────────────────────────────────
 
     def run(self, prompt: str) -> str:
+        sid = self.tracer.start_span("agent.run") if self.tracer else None
+        if sid:
+            self.tracer.log_event(sid, "call", {"agent": self.name, "model": self.model, "prompt": prompt})
+
         self.remember("user", prompt)
         response = self._call_llm(self.recall())
 
-        # Simple tool call detection (JSON block in response)
+        # Tool call detection (```tool JSON block)
         if "```tool" in response:
             try:
-                tool_block = response.split("```tool")[1].split("```")[0].strip()
-                call = json.loads(tool_block)
-                result = self.use_tool(call["name"], **call.get("args", {}))
-                tool_output = str(result.output) if not result.error else f"Error: {result.error}"
+                block = response.split("```tool")[1].split("```")[0].strip()
+                call = json.loads(block)
+                tool_out = self.use_tool(call["name"], span_id=sid, **call.get("args", {}))
                 self.remember("assistant", response)
-                self.remember("tool", tool_output, tool_name=call["name"])
+                self.remember("tool", str(tool_out))
                 response = self._call_llm(self.recall())
             except Exception:
                 pass
 
         self.remember("assistant", response)
+
+        if sid:
+            self.tracer.log_event(sid, "result", {"response": response})
+            self.tracer.end_span(sid)
+
         return response
 
+    # ── Streaming ─────────────────────────────────────────────────────────────
+
+    async def stream_run(self, prompt: str) -> AsyncGenerator[str, None]:
+        sid = self.tracer.start_span("agent.stream_run") if self.tracer else None
+        if sid:
+            self.tracer.log_event(sid, "call", {"agent": self.name, "model": self.model, "prompt": prompt})
+
+        self.remember("user", prompt)
+        messages = self.recall()
+
+        if self.model.startswith("claude"):
+            gen = stream_anthropic(messages, self.model)
+        elif self.model.startswith("gpt") or self.model.startswith("o"):
+            gen = stream_openai(messages, self.model)
+        else:
+            gen = stream_local(messages, self.model)
+
+        chunks: list[str] = []
+        async for chunk in gen:
+            chunks.append(chunk)
+            yield chunk
+
+        full = "".join(chunks)
+        self.remember("assistant", full)
+
+        if sid:
+            self.tracer.log_event(sid, "result", {"response": full})
+            self.tracer.end_span(sid)
+
+    # ── Semantic recall ───────────────────────────────────────────────────────
+
+    def search_memory(self, query: str, top_k: int = 5) -> list[dict]:
+        return self.mem.search(query, top_k=top_k)
+
     def __repr__(self):
-        return f"Agent(name={self.name}, model={self.model}, tools={list(self.tools.keys())})"
+        return f"Agent(name={self.name!r}, model={self.model!r}, tools={list(self.tools)})"

@@ -2,6 +2,7 @@
 DOME-HUB Tools Library
 Tools: web, shell, file, code, db, kb_search
 """
+
 import subprocess, os, sqlite3
 from pathlib import Path
 
@@ -10,10 +11,12 @@ DOME_ROOT = Path(os.environ.get("DOME_ROOT", Path.home() / "DOME-HUB"))
 
 # ── Web ───────────────────────────────────────────────────────────────────────
 
+
 def web_search(query: str, num_results: int = 5) -> list[dict]:
     """Search the web using DuckDuckGo (no API key needed)."""
     try:
         from duckduckgo_search import DDGS
+
         with DDGS() as ddgs:
             return list(ddgs.text(query, max_results=num_results))
     except ImportError:
@@ -25,6 +28,7 @@ def web_fetch(url: str) -> str:
     try:
         import httpx
         from bs4 import BeautifulSoup
+
         resp = httpx.get(url, timeout=10, follow_redirects=True)
         soup = BeautifulSoup(resp.text, "html.parser")
         for tag in soup(["script", "style", "nav", "footer"]):
@@ -36,16 +40,26 @@ def web_fetch(url: str) -> str:
 
 # ── Shell ─────────────────────────────────────────────────────────────────────
 
+
 def shell_run(command: str, cwd: str | None = None, timeout: int = 30) -> dict:
     """Run a shell command and return stdout, stderr, exit code."""
     result = subprocess.run(
-        command, shell=True, capture_output=True, text=True,
-        cwd=cwd or str(DOME_ROOT), timeout=timeout
+        command,
+        shell=True,
+        capture_output=True,
+        text=True,
+        cwd=cwd or str(DOME_ROOT),
+        timeout=timeout,
     )
-    return {"stdout": result.stdout, "stderr": result.stderr, "exit_code": result.returncode}
+    return {
+        "stdout": result.stdout,
+        "stderr": result.stderr,
+        "exit_code": result.returncode,
+    }
 
 
 # ── File ──────────────────────────────────────────────────────────────────────
+
 
 def file_read(path: str) -> str:
     """Read a file and return its contents."""
@@ -67,6 +81,7 @@ def file_list(directory: str = ".", pattern: str = "**/*") -> list[str]:
 
 # ── Code ──────────────────────────────────────────────────────────────────────
 
+
 def code_run(code: str, language: str = "python") -> dict:
     """Execute code in a subprocess sandbox."""
     if language == "python":
@@ -79,10 +94,15 @@ def code_run(code: str, language: str = "python") -> dict:
         )
     else:
         return {"error": f"Unsupported language: {language}"}
-    return {"stdout": result.stdout, "stderr": result.stderr, "exit_code": result.returncode}
+    return {
+        "stdout": result.stdout,
+        "stderr": result.stderr,
+        "exit_code": result.returncode,
+    }
 
 
 # ── Database ──────────────────────────────────────────────────────────────────
+
 
 def db_query(sql: str, db_path: str | None = None) -> list[dict]:
     """Run a SQL query against the DOME-HUB SQLite DB."""
@@ -106,6 +126,7 @@ def db_write(sql: str, params: tuple = (), db_path: str | None = None) -> str:
 
 # ── KB Search ─────────────────────────────────────────────────────────────────
 
+
 def kb_search(query: str, kb_path: str | None = None, top_k: int = 5) -> list[dict]:
     """Semantic search over local knowledge base using embeddings."""
     try:
@@ -116,7 +137,7 @@ def kb_search(query: str, kb_path: str | None = None, top_k: int = 5) -> list[di
         docs = []
         for f in kb_dir.rglob("*.md"):
             text = f.read_text()
-            chunks = [text[i:i+500] for i in range(0, len(text), 500)]
+            chunks = [text[i : i + 500] for i in range(0, len(text), 500)]
             for chunk in chunks:
                 docs.append({"source": str(f), "text": chunk})
 
@@ -136,10 +157,14 @@ def kb_search(query: str, kb_path: str | None = None, top_k: int = 5) -> list[di
 # ── Tool registry ─────────────────────────────────────────────────────────────
 
 ALL_TOOLS = [
-    web_search, web_fetch,
+    web_search,
+    web_fetch,
     shell_run,
-    file_read, file_write, file_list,
+    file_read,
+    file_write,
+    file_list,
     code_run,
-    db_query, db_write,
+    db_query,
+    db_write,
     kb_search,
 ]

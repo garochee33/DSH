@@ -1,6 +1,7 @@
 """
 DOME-HUB Agent Registry
 """
+
 from agents.core.agent import Agent
 from agents.core.tools import ALL_TOOLS
 from agents.core.orchestrator import Orchestrator
@@ -68,7 +69,13 @@ def make_local_agent(model: str = "llama3") -> Agent:
 
 def make_dome_orchestrator() -> Orchestrator:
     orc = Orchestrator()
-    for factory in (make_researcher, make_coder, make_analyst, make_planner, make_kb_agent):
+    for factory in (
+        make_researcher,
+        make_coder,
+        make_analyst,
+        make_planner,
+        make_kb_agent,
+    ):
         orc.register(factory())
     orc.register(make_local_agent())
 

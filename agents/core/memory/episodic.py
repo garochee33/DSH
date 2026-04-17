@@ -1,6 +1,7 @@
 """
 DOME-HUB Episodic Memory — SQLite-backed episode and fact storage
 """
+
 from __future__ import annotations
 import sqlite3, time, uuid
 from pathlib import Path
@@ -42,7 +43,7 @@ class EpisodicMemory:
         eid = str(uuid.uuid4())
         self.conn.execute(
             "INSERT INTO episodes VALUES (?,?,?,?,?,?)",
-            (eid, agent, session, role, content, time.time())
+            (eid, agent, session, role, content, time.time()),
         )
         self.conn.commit()
         return eid
@@ -50,7 +51,7 @@ class EpisodicMemory:
     def recall_session(self, agent: str, session: str) -> list[dict]:
         rows = self.conn.execute(
             "SELECT * FROM episodes WHERE agent=? AND session=? ORDER BY ts",
-            (agent, session)
+            (agent, session),
         ).fetchall()
         return [dict(r) for r in rows]
 
@@ -64,7 +65,7 @@ class EpisodicMemory:
         fid = str(uuid.uuid4())
         self.conn.execute(
             "INSERT INTO facts VALUES (?,?,?,?,?) ON CONFLICT(agent,key) DO UPDATE SET value=excluded.value, ts=excluded.ts",
-            (fid, agent, key, value, time.time())
+            (fid, agent, key, value, time.time()),
         )
         self.conn.commit()
         return fid

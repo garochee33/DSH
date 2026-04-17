@@ -1,6 +1,25 @@
 .env
+.env.*
+*.env
 .venv/
 node_modules/
 __pycache__/
 *.pyc
 .DS_Store
+dist/
+
+# Database
+db/chroma/
+db/*.db
+
+# Secrets & credentials
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/
+.secrets
+*_rsa
+*_rsa.pub
+*.gpg

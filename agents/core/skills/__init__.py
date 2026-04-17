@@ -2,11 +2,12 @@
 DOME-HUB Skills Library
 Skills: reasoning, planning, summarize, embed, search
 """
+
 from __future__ import annotations
 from typing import Any
 
-
 # ── Reasoning ─────────────────────────────────────────────────────────────────
+
 
 def reason(agent, question: str, context: str = "") -> str:
     """Chain-of-thought reasoning on a question."""
@@ -25,6 +26,7 @@ def reflect(agent, response: str) -> str:
 
 
 # ── Planning ──────────────────────────────────────────────────────────────────
+
 
 def plan(agent, goal: str) -> list[str]:
     """Break a goal into ordered steps."""
@@ -47,6 +49,7 @@ def plan_and_execute(agent, goal: str) -> list[dict]:
 
 # ── Summarize ─────────────────────────────────────────────────────────────────
 
+
 def summarize(agent, text: str, style: str = "concise") -> str:
     """Summarize text. Styles: concise, bullet, detailed."""
     styles = {
@@ -59,29 +62,38 @@ def summarize(agent, text: str, style: str = "concise") -> str:
 
 def extract(agent, text: str, what: str) -> Any:
     """Extract specific information from text."""
-    return agent.run(f"Extract {what} from the following text. Return only the extracted data.\n\n{text}")
+    return agent.run(
+        f"Extract {what} from the following text. Return only the extracted data.\n\n{text}"
+    )
 
 
 # ── Embed ─────────────────────────────────────────────────────────────────────
 
+
 def embed(texts: list[str], model: str = "all-MiniLM-L6-v2"):
     """Generate embeddings for a list of texts."""
     from sentence_transformers import SentenceTransformer
+
     return SentenceTransformer(model).encode(texts)
 
 
 def similarity(text_a: str, text_b: str) -> float:
     """Compute cosine similarity between two texts."""
     import numpy as np
+
     embs = embed([text_a, text_b])
-    return float(np.dot(embs[0], embs[1]) / (np.linalg.norm(embs[0]) * np.linalg.norm(embs[1])))
+    return float(
+        np.dot(embs[0], embs[1]) / (np.linalg.norm(embs[0]) * np.linalg.norm(embs[1]))
+    )
 
 
 # ── Search ────────────────────────────────────────────────────────────────────
 
+
 def search_memory(agent, query: str, top_k: int = 5) -> list[dict]:
     """Semantic search over agent's memory."""
     import numpy as np
+
     if not agent.memory:
         return []
     texts = [m.content for m in agent.memory]
@@ -92,12 +104,17 @@ def search_memory(agent, query: str, top_k: int = 5) -> list[dict]:
     return [{"score": float(scores[i]), "message": agent.memory[i]} for i in top_idx]
 
 
-def search_code(query: str, root: str, extensions: list[str] | None = None) -> list[dict]:
+def search_code(
+    query: str, root: str, extensions: list[str] | None = None
+) -> list[dict]:
     """Search codebase for relevant files using embeddings."""
     from pathlib import Path
     import numpy as np
+
     exts = extensions or [".py", ".ts", ".js", ".go", ".rs"]
-    files = [f for f in Path(root).rglob("*") if f.suffix in exts and ".venv" not in str(f)]
+    files = [
+        f for f in Path(root).rglob("*") if f.suffix in exts and ".venv" not in str(f)
+    ]
     if not files:
         return []
     contents = [f.read_text(errors="ignore")[:1000] for f in files]

@@ -1,6 +1,7 @@
 """
 DOME-HUB RAG Pipeline — ingest, retrieve, augment, generate
 """
+
 from __future__ import annotations
 import re
 from pathlib import Path
@@ -25,13 +26,16 @@ def _load_source(source: str) -> str:
     """Load text from a file path or URL."""
     if source.startswith("http://") or source.startswith("https://"):
         import urllib.request
+
         with urllib.request.urlopen(source) as r:
             raw = r.read().decode("utf-8", errors="replace")
         # strip HTML tags for web pages
         return re.sub(r"<[^>]+>", " ", raw)
     path = Path(source)
     if path.suffix not in SUPPORTED_EXTS:
-        raise ValueError(f"Unsupported file type: {path.suffix}. Supported: {SUPPORTED_EXTS}")
+        raise ValueError(
+            f"Unsupported file type: {path.suffix}. Supported: {SUPPORTED_EXTS}"
+        )
     return path.read_text(encoding="utf-8")
 
 

@@ -1,7 +1,9 @@
 """
 DOME-HUB Agent Stack — Usage Examples
 """
+
 import sys
+
 sys.path.insert(0, "/Users/gadikedoshim/DOME-HUB")
 
 from agents import get_agent, make_dome_orchestrator, SKILLS
@@ -23,14 +25,14 @@ for step in steps:
 
 orc = make_dome_orchestrator()
 print(orc.run("Search for the latest news on mycelium neural networks"))  # → researcher
-print(orc.run("Write a FastAPI endpoint for kb search"))                  # → coder
-print(orc.run("Plan the trinity-unified-ai KB API architecture"))         # → planner
+print(orc.run("Write a FastAPI endpoint for kb search"))  # → coder
+print(orc.run("Plan the trinity-unified-ai KB API architecture"))  # → planner
 
 # ── Pipeline (chain agents) ───────────────────────────────────────────────────
 
 result = orc.pipeline(
     "Build a sovereign AI knowledge base",
-    ["planner", "coder"]   # planner makes steps, coder implements
+    ["planner", "coder"],  # planner makes steps, coder implements
 )
 print(result)
 
@@ -39,6 +41,6 @@ print(result)
 answer = orc.consensus(
     "What is the best architecture for a decentralized neural network?",
     ["researcher", "analyst", "planner"],
-    judge="planner"
+    judge="planner",
 )
 print(answer)

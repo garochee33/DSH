@@ -2,6 +2,7 @@
 DOME-HUB Agent Orchestrator
 Coordinates multiple agents: routing, pipelines, parallel execution
 """
+
 from __future__ import annotations
 import asyncio
 from typing import Callable
@@ -47,6 +48,7 @@ class Orchestrator:
 
     def parallel(self, prompt: str, agent_names: list[str]) -> dict[str, str]:
         """Run same prompt through multiple agents simultaneously."""
+
         async def _run_all():
             loop = asyncio.get_event_loop()
             tasks = [
@@ -55,6 +57,7 @@ class Orchestrator:
             ]
             results = await asyncio.gather(*tasks)
             return dict(zip(agent_names, results))
+
         return asyncio.run(_run_all())
 
     # ── Debate ────────────────────────────────────────────────────────────────
@@ -72,12 +75,16 @@ class Orchestrator:
 
     # ── Consensus ─────────────────────────────────────────────────────────────
 
-    def consensus(self, prompt: str, agent_names: list[str], judge: str | None = None) -> str:
+    def consensus(
+        self, prompt: str, agent_names: list[str], judge: str | None = None
+    ) -> str:
         """Get responses from multiple agents, synthesize with a judge agent."""
         responses = self.parallel(prompt, agent_names)
         summary = "\n\n".join([f"{k}: {v}" for k, v in responses.items()])
         judge_agent = self.agents.get(judge) or next(iter(self.agents.values()))
-        return judge_agent.run(f"Synthesize these responses into one best answer:\n\n{summary}")
+        return judge_agent.run(
+            f"Synthesize these responses into one best answer:\n\n{summary}"
+        )
 
     def __repr__(self):
         return f"Orchestrator(agents={list(self.agents.keys())})"

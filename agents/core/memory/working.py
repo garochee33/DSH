@@ -1,6 +1,7 @@
 """
 DOME-HUB Working Memory — sliding window context with LLM auto-summarization
 """
+
 from __future__ import annotations
 from collections import deque
 from typing import Callable
@@ -25,7 +26,12 @@ class WorkingMemory:
     def get(self) -> list[dict]:
         msgs = []
         if self._summary:
-            msgs.append({"role": "system", "content": f"[Prior context summary]\n{self._summary}"})
+            msgs.append(
+                {
+                    "role": "system",
+                    "content": f"[Prior context summary]\n{self._summary}",
+                }
+            )
         msgs.extend(self._window)
         return msgs
 
@@ -42,7 +48,11 @@ class WorkingMemory:
             text = "\n".join(f"{m['role']}: {m['content']}" for m in to_summarize)
             prompt = f"Summarize this conversation concisely, preserving key facts:\n\n{text}"
             new_summary = self.llm_fn(prompt)
-            self._summary = f"{self._summary}\n{new_summary}".strip() if self._summary else new_summary
+            self._summary = (
+                f"{self._summary}\n{new_summary}".strip()
+                if self._summary
+                else new_summary
+            )
         # if no llm_fn, oldest messages are simply dropped (already popped)
 
     def __len__(self) -> int:

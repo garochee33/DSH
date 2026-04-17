@@ -1,6 +1,7 @@
 """
 DOME-HUB Local Ollama LLM client
 """
+
 from __future__ import annotations
 import subprocess, time
 import httpx
@@ -19,7 +20,11 @@ class OllamaClient:
         try:
             httpx.get(f"{self.base_url}/api/tags", timeout=3).raise_for_status()
         except Exception:
-            subprocess.Popen(["ollama", "serve"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.Popen(
+                ["ollama", "serve"],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
             for _ in range(10):
                 time.sleep(1)
                 try:
@@ -35,7 +40,9 @@ class OllamaClient:
         return [m["name"] for m in resp.json().get("models", [])]
 
     def pull(self, model: str):
-        with httpx.stream("POST", f"{self.base_url}/api/pull", json={"name": model}, timeout=300) as resp:
+        with httpx.stream(
+            "POST", f"{self.base_url}/api/pull", json={"name": model}, timeout=300
+        ) as resp:
             resp.raise_for_status()
             for line in resp.iter_lines():
                 pass  # drain stream; pull completes when stream ends
@@ -52,8 +59,10 @@ class OllamaClient:
     def stream(self, prompt: str, model: str = "llama3"):
         """Yields text chunks from Ollama generate stream."""
         import json
+
         with httpx.stream(
-            "POST", f"{self.base_url}/api/generate",
+            "POST",
+            f"{self.base_url}/api/generate",
             json={"model": model, "prompt": prompt, "stream": True},
             timeout=120,
         ) as resp:

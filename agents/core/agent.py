@@ -1,6 +1,7 @@
 """
 DOME-HUB Agent Base Class — wired with MemorySystem, Tracer, and streaming
 """
+
 from __future__ import annotations
 import json, uuid
 from typing import Any, AsyncGenerator, Callable
@@ -42,13 +43,18 @@ class Agent:
             return self._client
         if self.model.startswith("gpt") or self.model.startswith("o"):
             import openai
+
             self._client = openai.OpenAI()
         elif self.model.startswith("claude"):
             import anthropic
+
             self._client = anthropic.Anthropic()
         else:
             import openai
-            self._client = openai.OpenAI(base_url="http://localhost:11434/v1", api_key="local")
+
+            self._client = openai.OpenAI(
+                base_url="http://localhost:11434/v1", api_key="local"
+            )
         return self._client
 
     def _call_llm(self, messages: list[dict]) -> str:
@@ -56,7 +62,9 @@ class Agent:
         if self.model.startswith("claude"):
             system = next((m["content"] for m in messages if m["role"] == "system"), "")
             msgs = [m for m in messages if m["role"] != "system"]
-            resp = client.messages.create(model=self.model, max_tokens=4096, system=system, messages=msgs)
+            resp = client.messages.create(
+                model=self.model, max_tokens=4096, system=system, messages=msgs
+            )
             return resp.content[0].text
         resp = client.chat.completions.create(model=self.model, messages=messages)
         return resp.choices[0].message.content
@@ -84,12 +92,16 @@ class Agent:
         try:
             result = self.tools[name](**kwargs)
             if self.tracer and span_id:
-                self.tracer.log_event(span_id, "tool_call", {"tool": name, "result": str(result)})
+                self.tracer.log_event(
+                    span_id, "tool_call", {"tool": name, "result": str(result)}
+                )
             return result
         except Exception as e:
             err = str(e)
             if self.tracer and span_id:
-                self.tracer.log_event(span_id, "tool_error", {"tool": name, "error": err})
+                self.tracer.log_event(
+                    span_id, "tool_error", {"tool": name, "error": err}
+                )
             return f"Error: {err}"
 
     # ── Main run loop ─────────────────────────────────────────────────────────
@@ -97,7 +109,9 @@ class Agent:
     def run(self, prompt: str) -> str:
         sid = self.tracer.start_span("agent.run") if self.tracer else None
         if sid:
-            self.tracer.log_event(sid, "call", {"agent": self.name, "model": self.model, "prompt": prompt})
+            self.tracer.log_event(
+                sid, "call", {"agent": self.name, "model": self.model, "prompt": prompt}
+            )
 
         self.remember("user", prompt)
         response = self._call_llm(self.recall())
@@ -107,7 +121,9 @@ class Agent:
             try:
                 block = response.split("```tool")[1].split("```")[0].strip()
                 call = json.loads(block)
-                tool_out = self.use_tool(call["name"], span_id=sid, **call.get("args", {}))
+                tool_out = self.use_tool(
+                    call["name"], span_id=sid, **call.get("args", {})
+                )
                 self.remember("assistant", response)
                 self.remember("tool", str(tool_out))
                 response = self._call_llm(self.recall())
@@ -127,7 +143,9 @@ class Agent:
     async def stream_run(self, prompt: str) -> AsyncGenerator[str, None]:
         sid = self.tracer.start_span("agent.stream_run") if self.tracer else None
         if sid:
-            self.tracer.log_event(sid, "call", {"agent": self.name, "model": self.model, "prompt": prompt})
+            self.tracer.log_event(
+                sid, "call", {"agent": self.name, "model": self.model, "prompt": prompt}
+            )
 
         self.remember("user", prompt)
         messages = self.recall()
@@ -157,4 +175,6 @@ class Agent:
         return self.mem.search(query, top_k=top_k)
 
     def __repr__(self):
-        return f"Agent(name={self.name!r}, model={self.model!r}, tools={list(self.tools)})"
+        return (
+            f"Agent(name={self.name!r}, model={self.model!r}, tools={list(self.tools)})"
+        )

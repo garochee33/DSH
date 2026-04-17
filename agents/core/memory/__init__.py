@@ -1,6 +1,7 @@
 """
 DOME-HUB Memory System — unified interface over vector, episodic, and working memory
 """
+
 from __future__ import annotations
 from .vector import VectorMemory
 from .episodic import EpisodicMemory
@@ -28,7 +29,12 @@ class MemorySystem:
 
     def store(self, role: str, content: str, metadata: dict | None = None) -> dict:
         """Store a message across all three layers. Returns IDs."""
-        meta = {**(metadata or {}), "agent": self.agent, "session": self.session, "role": role}
+        meta = {
+            **(metadata or {}),
+            "agent": self.agent,
+            "session": self.session,
+            "role": role,
+        }
         vid = self.vector.store(content, meta)
         eid = self.episodic.log(self.agent, self.session, role, content)
         self.working.add(role, content)

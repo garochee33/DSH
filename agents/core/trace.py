@@ -2,6 +2,7 @@
 DOME-HUB Observability / Tracing
 Persists spans to SQLite at DOME-HUB/db/dome.db
 """
+
 from __future__ import annotations
 import sqlite3, time, uuid, json, functools
 from pathlib import Path
@@ -101,23 +102,55 @@ class Tracer:
 
     def get_trace(self, trace_id: str) -> dict | None:
         with _conn() as c:
-            row = c.execute("SELECT * FROM traces WHERE trace_id=?", (trace_id,)).fetchone()
+            row = c.execute(
+                "SELECT * FROM traces WHERE trace_id=?", (trace_id,)
+            ).fetchone()
         if not row:
             return None
-        cols = [d[0] for d in c.description] if False else [
-            "trace_id","span_id","name","agent","model","prompt","response",
-            "tools_used","latency_ms","token_count","error","events","started_at","ended_at"
-        ]
+        cols = (
+            [d[0] for d in c.description]
+            if False
+            else [
+                "trace_id",
+                "span_id",
+                "name",
+                "agent",
+                "model",
+                "prompt",
+                "response",
+                "tools_used",
+                "latency_ms",
+                "token_count",
+                "error",
+                "events",
+                "started_at",
+                "ended_at",
+            ]
+        )
         return dict(zip(cols, row))
 
     def list_traces(self, agent: str | None = None, limit: int = 50) -> list[dict]:
-        cols = ["trace_id","span_id","name","agent","model","prompt","response",
-                "tools_used","latency_ms","token_count","error","events","started_at","ended_at"]
+        cols = [
+            "trace_id",
+            "span_id",
+            "name",
+            "agent",
+            "model",
+            "prompt",
+            "response",
+            "tools_used",
+            "latency_ms",
+            "token_count",
+            "error",
+            "events",
+            "started_at",
+            "ended_at",
+        ]
         with _conn() as c:
             if agent:
                 rows = c.execute(
                     "SELECT * FROM traces WHERE agent=? ORDER BY started_at DESC LIMIT ?",
-                    (agent, limit)
+                    (agent, limit),
                 ).fetchall()
             else:
                 rows = c.execute(
@@ -131,16 +164,22 @@ _default_tracer = Tracer()
 
 def trace(func=None, *, agent: str = "", model: str = ""):
     """Decorator: auto-traces any sync or async function."""
+
     def decorator(fn):
         @functools.wraps(fn)
         def sync_wrapper(*args, **kwargs):
             sid = _default_tracer.start_span(fn.__name__)
-            _default_tracer.log_event(sid, "call", {"agent": agent, "model": model, "prompt": str(args)})
+            _default_tracer.log_event(
+                sid, "call", {"agent": agent, "model": model, "prompt": str(args)}
+            )
             t0 = time.time()
             try:
                 result = fn(*args, **kwargs)
-                _default_tracer.log_event(sid, "result", {"response": str(result),
-                    "latency_ms": (time.time()-t0)*1000})
+                _default_tracer.log_event(
+                    sid,
+                    "result",
+                    {"response": str(result), "latency_ms": (time.time() - t0) * 1000},
+                )
                 return result
             except Exception as e:
                 _default_tracer.log_event(sid, "error", {"error": str(e)})
@@ -151,12 +190,17 @@ def trace(func=None, *, agent: str = "", model: str = ""):
         @functools.wraps(fn)
         async def async_wrapper(*args, **kwargs):
             sid = _default_tracer.start_span(fn.__name__)
-            _default_tracer.log_event(sid, "call", {"agent": agent, "model": model, "prompt": str(args)})
+            _default_tracer.log_event(
+                sid, "call", {"agent": agent, "model": model, "prompt": str(args)}
+            )
             t0 = time.time()
             try:
                 result = await fn(*args, **kwargs)
-                _default_tracer.log_event(sid, "result", {"response": str(result),
-                    "latency_ms": (time.time()-t0)*1000})
+                _default_tracer.log_event(
+                    sid,
+                    "result",
+                    {"response": str(result), "latency_ms": (time.time() - t0) * 1000},
+                )
                 return result
             except Exception as e:
                 _default_tracer.log_event(sid, "error", {"error": str(e)})
@@ -165,6 +209,7 @@ def trace(func=None, *, agent: str = "", model: str = ""):
                 _default_tracer.end_span(sid)
 
         import asyncio
+
         return async_wrapper if asyncio.iscoroutinefunction(fn) else sync_wrapper
 
     return decorator(func) if func else decorator

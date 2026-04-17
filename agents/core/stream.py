@@ -1,15 +1,18 @@
 """
 DOME-HUB Streaming LLM responses
 """
+
 from __future__ import annotations
 from typing import AsyncGenerator, TYPE_CHECKING
 import httpx, json
+
 if TYPE_CHECKING:
     from agents.core.agent import Agent
 
 
 async def stream_openai(messages: list[dict], model: str) -> AsyncGenerator[str, None]:
     import openai
+
     client = openai.AsyncOpenAI()
     async with client.chat.completions.stream(model=model, messages=messages) as stream:
         async for chunk in stream:
@@ -18,12 +21,17 @@ async def stream_openai(messages: list[dict], model: str) -> AsyncGenerator[str,
                 yield delta
 
 
-async def stream_anthropic(messages: list[dict], model: str) -> AsyncGenerator[str, None]:
+async def stream_anthropic(
+    messages: list[dict], model: str
+) -> AsyncGenerator[str, None]:
     import anthropic
+
     client = anthropic.AsyncAnthropic()
     system = next((m["content"] for m in messages if m["role"] == "system"), "")
     msgs = [m for m in messages if m["role"] != "system"]
-    async with client.messages.stream(model=model, max_tokens=4096, system=system, messages=msgs) as stream:
+    async with client.messages.stream(
+        model=model, max_tokens=4096, system=system, messages=msgs
+    ) as stream:
         async for text in stream.text_stream:
             yield text
 
@@ -44,4 +52,3 @@ async def stream_local(
                     yield content
                 if data.get("done"):
                     break
-

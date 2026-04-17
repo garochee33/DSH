@@ -105,3 +105,13 @@ chmod o-w ~/Public/Drop\ Box 2>/dev/null || true
 
 # Disable rapportd (AirDrop/Handoff network exposure)
 defaults write com.apple.rapport enabled -bool false 2>/dev/null || true
+
+# Remove Zoom daemon (prevents loading on reboot)
+sudo rm -f /Library/LaunchDaemons/us.zoom.ZoomDaemon.plist 2>/dev/null || true
+
+# Permanently remove unauthorized launch agents
+rm -f ~/Library/LaunchAgents/com.amazon.codewhisperer.launcher.plist
+rm -f ~/Library/LaunchAgents/com.google.GoogleUpdater.wake.plist
+rm -f ~/Library/LaunchAgents/com.google.keystone.agent.plist
+rm -f ~/Library/LaunchAgents/com.google.keystone.xpcservice.plist
+rm -f ~/Library/LaunchAgents/us.zoom.updater.gui.501.app.terminate.update.plist

@@ -35,11 +35,6 @@ if [ -d "$HOME/.password-store" ]; then
 else
   echo "⚠️  pass store not initialized — run: pass init <gpg-id>"
 fi
-if gpg --list-secret-keys 2>/dev/null | grep -q "sec"; then
-  echo "✅ GPG key present"
-else
-  echo "⚠️  No GPG key found"
-fi
 echo ""
 echo "--- Git ---"
 SIGNING=$(git config --global commit.gpgsign 2>/dev/null)

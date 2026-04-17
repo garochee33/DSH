@@ -63,9 +63,8 @@ foreach ($ext in $extensions) {
 Write-Host "==> Creating root Python venv..."
 python -m venv "$DOME_ROOT\.venv"
 & "$DOME_ROOT\.venv\Scripts\Activate.ps1"
-pip install --quiet torch torchvision psutil scipy sympy statsmodels `
-  scikit-learn numba matplotlib networkx openai anthropic langchain `
-  chromadb sentence-transformers transformers sqlalchemy redis pandas numpy
+pip install --upgrade pip wheel
+pip install -r "$DOME_ROOT\compute\requirements.txt"
 
 # ── 8. GPG + pass ─────────────────────────────────────────────────────────────
 Write-Host "==> Setting up GPG..."
@@ -109,7 +108,38 @@ if (-not (Test-Path $PROFILE) -or -not (Select-String -Path $PROFILE -Pattern "D
 Set-Location $DOME_ROOT
 pnpm install 2>$null
 
-# ── 12. AI Assistant ──────────────────────────────────────────────────────────
+# ── 12. .env setup ────────────────────────────────────────────────────────────
+Write-Host "==> Setting up .env..."
+if (-not (Test-Path "$DOME_ROOT\.env")) {
+  Copy-Item "$DOME_ROOT\.env.example" "$DOME_ROOT\.env"
+  Write-Host "    .env created from .env.example — add your API keys before running agents"
+}
+
+# ── 13. SQLite DB init ────────────────────────────────────────────────────────
+Write-Host "==> Initializing SQLite DB..."
+python - <<'PY'
+import sqlite3
+db = sqlite3.connect(r"$DOME_ROOT\db\dome.db")
+for sql in [
+  "CREATE TABLE IF NOT EXISTS sessions (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, title TEXT, content TEXT, tags TEXT, created_at TEXT)",
+  "CREATE TABLE IF NOT EXISTS stack (id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT, name TEXT, version TEXT, status TEXT, updated_at TEXT)",
+  "CREATE TABLE IF NOT EXISTS agents (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, type TEXT, model TEXT, status TEXT, registered_at TEXT)",
+  "CREATE TABLE IF NOT EXISTS skills (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id INTEGER, name TEXT, description TEXT)",
+  "CREATE TABLE IF NOT EXISTS tools (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id INTEGER, name TEXT, description TEXT)",
+]:
+  db.execute(sql)
+db.commit(); db.close(); print("DB ready")
+PY
+
+# ── 14. ChromaDB ingest ───────────────────────────────────────────────────────
+Write-Host "==> Ingesting KB into ChromaDB..."
+python scripts/ingest.py 2>$null
+
+# ── 15. Register Claude agent ─────────────────────────────────────────────────
+Write-Host "==> Registering Claude agent..."
+python scripts/register-claude.py 2>$null
+
+# ── 16. AI Assistant ──────────────────────────────────────────────────────────
 Write-Host ""
 Write-Host "==> AI Assistant — choose one to install:" -ForegroundColor Cyan
 Write-Host "    1) Kiro CLI       (npm install -g kiro-cli)"

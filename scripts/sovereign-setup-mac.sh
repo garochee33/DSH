@@ -40,9 +40,26 @@ eval "$(pyenv init -)"
 pyenv install 3.11.9 2>/dev/null || true
 pyenv global 3.11.9
 pip3 install --upgrade pip pipenv poetry
-pip3 install openai anthropic langchain chromadb sentence-transformers \
+
+# Core AI/ML
+pip3 install openai anthropic claude-agent-sdk langchain chromadb sentence-transformers \
   torch transformers sqlalchemy psycopg2-binary redis pandas numpy \
-  scipy sympy statsmodels scikit-learn numba matplotlib networkx psutil
+  scipy sympy statsmodels scikit-learn numba matplotlib networkx psutil tiktoken
+
+# Local inference (Apple Silicon)
+pip3 install mlx mlx-lm ollama
+
+# Quantum computing stack
+pip3 install qiskit qiskit-aer pennylane pennylane-qiskit cirq-core qutip pyquil amazon-braket-sdk
+
+# Document creation
+pip3 install python-docx python-pptx openpyxl reportlab pypdf pdfplumber
+
+# Web research
+pip3 install requests beautifulsoup4 httpx
+
+# Dev/API
+pip3 install python-dotenv pydantic rich typer uvicorn fastapi
 
 # ── 5. Node ───────────────────────────────────────────────────────────────────
 echo "==> Setting up Node..."
@@ -72,10 +89,8 @@ done
 echo "==> Creating root Python venv..."
 python3 -m venv "$DOME_ROOT/.venv"
 source "$DOME_ROOT/.venv/bin/activate"
-pip install --quiet torch torchvision psutil scipy sympy statsmodels \
-  scikit-learn numba matplotlib networkx openai anthropic langchain \
-  chromadb sentence-transformers transformers sqlalchemy psycopg2-binary \
-  redis pandas numpy
+pip install --upgrade pip wheel
+pip install -r "$DOME_ROOT/compute/requirements.txt"
 
 # ── 8. Databases ──────────────────────────────────────────────────────────────
 echo "==> Starting databases..."
@@ -139,11 +154,15 @@ mkdir -p "$DOME_ROOT"/{projects,platforms,software,compute,agents,models,kb,db,c
 
 # ── 14. SQLite DB init
 echo "==> Initializing SQLite DB..."
+source "$DOME_ROOT/.venv/bin/activate"
 python3 -c "
-import sqlite3, datetime
+import sqlite3
 db = sqlite3.connect('$DOME_ROOT/db/dome.db')
 db.execute('CREATE TABLE IF NOT EXISTS sessions (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, title TEXT, content TEXT, tags TEXT, created_at TEXT)')
 db.execute('CREATE TABLE IF NOT EXISTS stack (id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT, name TEXT, version TEXT, status TEXT, updated_at TEXT)')
+db.execute('CREATE TABLE IF NOT EXISTS agents (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, type TEXT, model TEXT, status TEXT, registered_at TEXT)')
+db.execute('CREATE TABLE IF NOT EXISTS skills (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id INTEGER, name TEXT, description TEXT)')
+db.execute('CREATE TABLE IF NOT EXISTS tools (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id INTEGER, name TEXT, description TEXT)')
 db.commit()
 db.close()
 print('DB ready')
@@ -152,7 +171,37 @@ print('DB ready')
 # ── 15. pnpm install ──────────────────────────────────────────────────────────
 cd "$DOME_ROOT" && pnpm install 2>/dev/null || true
 
-# ── 16. AI Assistant ──────────────────────────────────────────────────────────
+# ── 16. .env setup ────────────────────────────────────────────────────────────
+echo "==> Setting up .env..."
+if [ ! -f "$DOME_ROOT/.env" ]; then
+  cp "$DOME_ROOT/.env.example" "$DOME_ROOT/.env"
+  echo "    ⚠️  .env created from .env.example — add your API keys before running agents"
+fi
+
+# ── 17. ChromaDB ingest ───────────────────────────────────────────────────────
+echo "==> Ingesting KB into ChromaDB..."
+cd "$DOME_ROOT" && python3 scripts/ingest.py 2>/dev/null || echo "    (ingest skipped — run: pnpm ingest)"
+
+# ── 18. Register Claude agent ─────────────────────────────────────────────────
+echo "==> Registering Claude agent in dome.db..."
+python3 scripts/register-claude.py 2>/dev/null || true
+
+# ── 19. Git hooks + cron ──────────────────────────────────────────────────────
+echo "==> Installing git pre-push hook..."
+HOOK="$DOME_ROOT/.git/hooks/pre-push"
+cat > "$HOOK" <<'HOOK_EOF'
+#!/bin/bash
+echo "==> DOME-HUB pre-push protocol check..."
+bash "$(git rev-parse --show-toplevel)/scripts/dome-check.sh" || exit 1
+echo "✅ Protocols OK — pushing"
+HOOK_EOF
+chmod +x "$HOOK"
+
+echo "==> Installing dome-check cron (every 6h)..."
+CRON_JOB="0 */6 * * * cd $DOME_ROOT && bash scripts/dome-check.sh >> logs/dome-check.log 2>&1"
+(crontab -l 2>/dev/null | grep -v "dome-check"; echo "$CRON_JOB") | crontab -
+
+# ── 20. AI Assistant ──────────────────────────────────────────────────────────
 echo ""
 echo "==> AI Assistant — choose one to install:"
 echo "    1) Kiro CLI       (npm install -g kiro-cli)"

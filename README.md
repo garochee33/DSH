@@ -116,6 +116,20 @@ Creates isolated Python venv + Node (pnpm) per project.
 
 ---
 
+## AI Assistants
+
+The setup script will prompt you to install one. You can also install manually:
+
+| Assistant | Install |
+|-----------|---------|
+| **Kiro CLI** | `npm install -g kiro-cli` |
+| **Claude Code** | `npm install -g @anthropic-ai/claude-code` |
+| **Cursor** | `brew install --cask cursor` · [cursor.com](https://cursor.com) |
+| **GitHub Copilot** | `gh extension install github/gh-copilot` |
+| **Aider** | `pip install aider-chat` |
+
+---
+
 ## Trinity Consortium
 
 DOME-HUB is the local sovereign node for Trinity Consortium work.

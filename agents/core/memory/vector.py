@@ -3,20 +3,24 @@ DOME-HUB Vector Memory — ChromaDB-backed persistent semantic memory
 """
 
 from __future__ import annotations
-import uuid, time
+import os, uuid, time
 from pathlib import Path
 import chromadb
 from chromadb.config import Settings
 from sentence_transformers import SentenceTransformer
 
-DOME_ROOT = Path.home() / "DOME-HUB"
+DOME_ROOT = Path(os.environ.get("DOME_ROOT", Path.home() / "DOME-HUB"))
+_MODELS_DIR = Path(os.environ.get("SENTENCE_TRANSFORMERS_HOME", DOME_ROOT / "models"))
 _embedder = None
 
 
 def _get_embedder():
     global _embedder
     if _embedder is None:
-        _embedder = SentenceTransformer("all-MiniLM-L6-v2")
+        _embedder = SentenceTransformer(
+            "all-MiniLM-L6-v2",
+            cache_folder=str(_MODELS_DIR),
+        )
     return _embedder
 
 

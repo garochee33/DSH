@@ -152,6 +152,25 @@ print('DB ready')
 # ── 15. pnpm install ──────────────────────────────────────────────────────────
 cd "$DOME_ROOT" && pnpm install 2>/dev/null || true
 
+# ── 16. AI Assistant ──────────────────────────────────────────────────────────
+echo ""
+echo "==> AI Assistant — choose one to install:"
+echo "    1) Kiro CLI       (npm install -g kiro-cli)"
+echo "    2) Claude Code    (npm install -g @anthropic-ai/claude-code)"
+echo "    3) Cursor         (brew install --cask cursor)"
+echo "    4) GitHub Copilot (gh extension install github/gh-copilot)"
+echo "    5) Aider          (pip install aider-chat)"
+echo "    6) Skip"
+read -rp "    Enter choice [1-6]: " AI_CHOICE
+case "$AI_CHOICE" in
+  1) npm install -g kiro-cli ;;
+  2) npm install -g @anthropic-ai/claude-code ;;
+  3) brew install --cask cursor ;;
+  4) gh extension install github/gh-copilot ;;
+  5) pip install aider-chat ;;
+  *) echo "    Skipping AI assistant install." ;;
+esac
+
 echo ""
 echo "✅ DOME-HUB Sovereign Setup Complete"
 echo "   Run: source ~/.zshrc"

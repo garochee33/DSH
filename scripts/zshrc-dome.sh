@@ -2,6 +2,12 @@
 export DOME_ROOT="/Users/gadikedoshim/DOME-HUB"
 export PATH="$DOME_ROOT/scripts:$PATH"
 
+# Pin all AI/ML model caches inside DOME-HUB — nothing leaks to ~/
+export SENTENCE_TRANSFORMERS_HOME="$DOME_ROOT/models"
+export HF_HOME="$DOME_ROOT/models/hf"
+export TRANSFORMERS_CACHE="$DOME_ROOT/models/hf"
+export TORCH_HOME="$DOME_ROOT/models/torch"
+
 # Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 

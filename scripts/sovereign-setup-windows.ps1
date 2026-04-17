@@ -109,6 +109,25 @@ if (-not (Test-Path $PROFILE) -or -not (Select-String -Path $PROFILE -Pattern "D
 Set-Location $DOME_ROOT
 pnpm install 2>$null
 
+# ── 12. AI Assistant ──────────────────────────────────────────────────────────
+Write-Host ""
+Write-Host "==> AI Assistant — choose one to install:" -ForegroundColor Cyan
+Write-Host "    1) Kiro CLI       (npm install -g kiro-cli)"
+Write-Host "    2) Claude Code    (npm install -g @anthropic-ai/claude-code)"
+Write-Host "    3) Cursor         (winget install Anysphere.Cursor)"
+Write-Host "    4) GitHub Copilot (gh extension install github/gh-copilot)"
+Write-Host "    5) Aider          (pip install aider-chat)"
+Write-Host "    6) Skip"
+$aiChoice = Read-Host "    Enter choice [1-6]"
+switch ($aiChoice) {
+  "1" { npm install -g kiro-cli }
+  "2" { npm install -g "@anthropic-ai/claude-code" }
+  "3" { winget install Anysphere.Cursor }
+  "4" { gh extension install github/gh-copilot }
+  "5" { pip install aider-chat }
+  default { Write-Host "    Skipping AI assistant install." }
+}
+
 Write-Host ""
 Write-Host "DOME-HUB Sovereign Setup Complete" -ForegroundColor Green
 Write-Host "   Restart PowerShell, then run: bash scripts/audit.sh"

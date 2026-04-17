@@ -27,6 +27,27 @@ tiktoken>=0.7.0
 pandas>=2.2.0
 numpy>=1.26.0
 scipy>=1.12.0
+sympy>=1.12
+
+# --- Quantum computing (lab-grade stack) ---
+# IBM — circuit design, simulation, hardware access
+qiskit>=1.1.0
+qiskit-aer>=0.14.0
+# Differentiable QML — hybrid quantum/classical ML (MPS-compatible)
+pennylane>=0.36.0
+pennylane-qiskit>=0.36.0
+# Google-style quantum circuits
+cirq-core>=1.3.0
+# Open quantum systems, density matrices, Lindblad dynamics
+qutip>=4.7.0
+# Rigetti-style qubit programming
+pyquil>=4.0.0
+# AWS multi-backend (IonQ, Rigetti, simulators)
+amazon-braket-sdk>=1.83.0
+# Photonic / continuous-variable quantum computing
+strawberryfields>=0.23.0
+# PyTorch with MPS backend (classical side of hybrid VQE / QML loops)
+torch>=2.3.0
 
 # --- Dev / tooling ---
 python-dotenv>=1.0.1

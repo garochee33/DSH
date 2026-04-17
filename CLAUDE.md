@@ -69,7 +69,7 @@ This is a **lab-grade quantum computing environment**. Key libraries:
 | **QuTiP** | Open quantum systems, density matrices, Lindblad dynamics |
 | **PyQuil** | Rigetti-style qubit programming |
 | **Amazon Braket SDK** | Multi-backend (IonQ, Rigetti, Simulators) |
-| **strawberryfields** | Photonic / continuous-variable QC |
+| ~~strawberryfields~~ | Photonic QC — currently incompatible with scipy 1.15+ (broken upstream) |
 | PyTorch (MPS) | Classical ML side of hybrid algorithms |
 | NumPy / SciPy | Linear algebra, unitary ops, Hamiltonian math |
 | SymPy | Symbolic quantum mechanics, operator algebra |

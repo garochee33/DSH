@@ -55,7 +55,7 @@ pyquil>=4.0.0
 # AWS multi-backend (IonQ, Rigetti, simulators)
 amazon-braket-sdk>=1.83.0
 # Photonic / continuous-variable quantum computing
-strawberryfields>=0.23.0
+# strawberryfields>=0.23.0  # incompatible: thewalrus requires scipy>=1.15.3 but sf uses removed simps API
 # PyTorch with MPS backend (classical side of hybrid VQE / QML loops)
 torch>=2.3.0
 

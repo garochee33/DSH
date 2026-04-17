@@ -1,0 +1,13 @@
+=== DOME-HUB Daemon Watchdog ===
+Date: Fri Apr 17 03:53:32 EDT 2026
+⚠️  UNAUTHORIZED: com.amazon.codewhisperer.launcher
+   → Disabled. Requires dome-approve to re-enable.
+⚠️  UNAUTHORIZED: com.google.GoogleUpdater.wake
+   → Disabled. Requires dome-approve to re-enable.
+⚠️  UNAUTHORIZED: com.google.keystone.agent
+   → Disabled. Requires dome-approve to re-enable.
+⚠️  UNAUTHORIZED: com.google.keystone.xpcservice
+   → Disabled. Requires dome-approve to re-enable.
+⚠️  UNAUTHORIZED: us.zoom.updater.gui.501.app.terminate.update
+   → Disabled. Requires dome-approve to re-enable.
+⚠️  UNAUTHORIZED DAEMON: us.zoom.ZoomDaemon

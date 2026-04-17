@@ -81,3 +81,27 @@ killall SystemUIServer 2>/dev/null || true
 
 echo "==> Security hardening complete"
 echo "    Reboot recommended for all changes to take effect"
+
+# ── System-wide (beyond DOME-HUB) ────────────────────────────────────────────
+
+# Close AirPlay ports 5000/7000
+sudo defaults write /Library/Preferences/com.apple.controlcenter AirplayRecieverEnabled -bool false 2>/dev/null || true
+
+# Disable Google auto-updater (phones home constantly)
+launchctl unload -w ~/Library/LaunchAgents/com.google.GoogleUpdater.wake.plist 2>/dev/null || true
+launchctl unload -w ~/Library/LaunchAgents/com.google.keystone.agent.plist 2>/dev/null || true
+launchctl unload -w ~/Library/LaunchAgents/com.google.keystone.xpcservice.plist 2>/dev/null || true
+
+# Disable Zoom daemon
+sudo launchctl unload -w /Library/LaunchDaemons/us.zoom.ZoomDaemon.plist 2>/dev/null || true
+launchctl unload -w ~/Library/LaunchAgents/us.zoom.updater.gui.501.app.terminate.update.plist 2>/dev/null || true
+
+# Disable Amazon CodeWhisperer auto-launcher
+launchctl unload -w ~/Library/LaunchAgents/com.amazon.codewhisperer.launcher.plist 2>/dev/null || true
+
+# Fix world-writable directories
+chmod o-w ~/Library/Application\ Support/zoom.us 2>/dev/null || true
+chmod o-w ~/Public/Drop\ Box 2>/dev/null || true
+
+# Disable rapportd (AirDrop/Handoff network exposure)
+defaults write com.apple.rapport enabled -bool false 2>/dev/null || true

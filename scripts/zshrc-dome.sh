@@ -52,3 +52,13 @@ alias dome-approve="bash $DOME_ROOT/scripts/dome-approve.sh"
 alias dome-sudo="bash $DOME_ROOT/scripts/dome-sudo.sh"
 alias daemon-watch="bash $DOME_ROOT/scripts/daemon-watch.sh"
 alias dome-check="bash $DOME_ROOT/scripts/dome-check.sh"
+
+# Akashic Co-Pilot — dimensional context on every session
+alias akashic-start="bash $DOME_ROOT/scripts/akashic-start.sh"
+alias akashic-query="source $DOME_ROOT/.venv/bin/activate && python3 $DOME_ROOT/akashic/assembler.py"
+
+# Auto-assemble context on new terminal (silent background)
+if [ -d "$DOME_ROOT/.venv" ]; then
+  (source "$DOME_ROOT/.venv/bin/activate" && \
+   python3 "$DOME_ROOT/akashic/assembler.py" > /dev/null 2>&1 &)
+fi

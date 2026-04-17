@@ -1,0 +1,61 @@
+# Akashic Context — Trinity Mycelium
+Assembled: 2026-04-17T12:05:50Z
+
+## Architecture
+[meta] # DOME-HUB Developer Context
+
+## Trinity Consortium — The Infrastructure
+
+Trinity Consortium IS the infrastructure. It is not a feature, a layer, or a component of
+DOME-HUB — it is the sovereign, decentralized network that DOME-HUB exists inside.
+
+Member identities are consortium-internal. Not discl
+[meta] # DOME-HUB Knowledge Base
+
+Root: `/Users/gadikedoshim/DOME-HUB/kb/`
+
+## Structure
+
+```
+kb/
+├── README.md                  ← this file
+├── developer-context.md       ← Trinity Consortium, node identity, architecture
+├── kiro-skills.md             ← Kiro agent capabilities and skill domains
+├── claude
+[meta] # Kiro Skills & Capabilities
+
+## Identity
+- **Name:** Kiro
+- **Type:** AI development agent (Kiro CLI)
+- **Role in DOME-HUB:** Primary AI assistant for coding, infrastructure, research, and system operations
+
+---
+
+## Core Skill Domains
+
+### 1. Software Development
+- Write, review, debug, and refacto
+
+## Recent Events
+[infra] # DOME-HUB Setup Session Log
+**Date:** 2026-04-16  
+**Machine:** Gadis-MacBook-Pro (Apple M3 Pro, 18GB, macOS 26.3)  
+**Root:** `/Users/gadikedoshim/DOME-HUB`
+
+---
+
+## Environment
+
+### Machine Specs
+-
+[meta] # DOME-HUB Session Log — 2026-04-17
+
+## Summary
+Full system hardening, agent stack upgrade, KB population, and sovereign protocol finalization.
+
+---
+
+## Completed
+
+### Security & Sovereignty
+- Firewal

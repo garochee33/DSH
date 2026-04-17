@@ -10,7 +10,16 @@ Provider hierarchy (sovereign order):
 
 from __future__ import annotations
 from typing import AsyncGenerator, TYPE_CHECKING
-import asyncio, httpx, json
+import asyncio, httpx, json, os
+
+
+def _spore_guard(provider: str) -> None:
+    """Raise if spore is germinating — no outbound provider calls allowed."""
+    if os.environ.get("SPORE_GERMINATING") == "1":
+        raise RuntimeError(
+            f"[LOCKDOWN] Spore germinating — outbound call to {provider} blocked. "
+            "Node is air-gapped during activation."
+        )
 
 if TYPE_CHECKING:
     from agents.core.agent import Agent
@@ -64,6 +73,7 @@ async def stream_anthropic(
     messages: list[dict], model: str
 ) -> AsyncGenerator[str, None]:
     """Anthropic Claude API — cloud, but no OpenAI dependency."""
+    _spore_guard("Anthropic")
     import anthropic
 
     client = anthropic.AsyncAnthropic()
@@ -80,6 +90,7 @@ async def stream_openai(
     messages: list[dict], model: str
 ) -> AsyncGenerator[str, None]:
     """OpenAI API — last resort, not sovereign. Avoid for sensitive work."""
+    _spore_guard("OpenAI")
     import openai
 
     client = openai.AsyncOpenAI()

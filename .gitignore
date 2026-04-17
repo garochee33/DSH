@@ -12,6 +12,12 @@ dist/
 db/chroma/
 db/*.db
 
+# Large model files
+models/
+
+# AI assistant context files (machine-local)
+CLAUDE.md
+
 # Secrets & credentials
 *.pem
 *.key

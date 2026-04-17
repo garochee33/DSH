@@ -17,7 +17,9 @@
     "serve": "python3 -m uvicorn agents.api.server:app --reload --port 8000",
     "worker": "python3 -m agents.workers.queue",
     "audit": "bash scripts/audit.sh",
-    "sync": "git pull && python3 scripts/ingest.py && git add -A && git commit -m \"sync: auto\" && git push"
+    "sync": "git pull && python3 scripts/ingest.py && git add -A && git commit -m \"sync: auto\" && git push",
+    "check": "bash scripts/dome-check.sh",
+    "precommit": "bash scripts/audit.sh"
   },
   "devDependencies": {
     "@types/node": "^25.6.0",

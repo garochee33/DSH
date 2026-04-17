@@ -19,7 +19,7 @@ check "SIP enabled"        "csrutil status"                           "enabled"
 check "Gatekeeper ON"      "spctl --status"                           "enabled"
 check "Firewall ON"        "/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate" "enabled"
 /opt/homebrew/bin/gpg --list-secret-keys 2>/dev/null | grep -q "sec" && echo "✅ GPG key present" || echo "⚠️  No GPG key"
-check "Screen lock ON"     "defaults read com.apple.screensaver askForPassword" "1"
+check "Screen lock ON"     "/usr/bin/defaults read com.apple.screensaver askForPassword" "1"
 echo ""
 echo "--- Network ---"
 DNS=$(scutil --dns | grep nameserver | head -1 | awk '{print $3}')

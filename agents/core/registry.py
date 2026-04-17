@@ -1,17 +1,25 @@
 """
 DOME-HUB Agent Registry
+All agents default to Claude (Anthropic) — sovereign, local-first.
+Override per-agent with ANTHROPIC_MODEL env var or explicit model= arg.
 """
 
+import os
 from agents.core.agent import Agent
 from agents.core.tools import ALL_TOOLS
 from agents.core.orchestrator import Orchestrator
+
+# Default model follows env var; fall back to Opus for max capability
+_DEFAULT_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-opus-4-6")
+# Fast/cheap model for lighter tasks
+_FAST_MODEL = "claude-sonnet-4-6"
 
 
 def make_researcher() -> Agent:
     return Agent(
         name="researcher",
-        model="gpt-4o",
-        system_prompt="You are a research agent. Search the web, fetch pages, and synthesize accurate information.",
+        model=_DEFAULT_MODEL,
+        system_prompt="You are a research agent inside DOME-HUB. Search the web, fetch pages, and synthesize accurate information. Prefer primary sources and cite them.",
         tools=ALL_TOOLS,
         memory_namespace="researcher",
     )
@@ -20,8 +28,8 @@ def make_researcher() -> Agent:
 def make_coder() -> Agent:
     return Agent(
         name="coder",
-        model="gpt-4o",
-        system_prompt="You are an expert software engineer. Write clean, efficient code. Use tools to read/write files and run code.",
+        model=_DEFAULT_MODEL,
+        system_prompt="You are an expert software engineer inside DOME-HUB. Write clean, efficient, secure code. Use tools to read/write files and run code. Follow DOME-HUB conventions: Python 3.11, TypeScript strict, Go, Rust. Use MPS backend for PyTorch.",
         tools=ALL_TOOLS,
         memory_namespace="coder",
     )
@@ -30,8 +38,8 @@ def make_coder() -> Agent:
 def make_analyst() -> Agent:
     return Agent(
         name="analyst",
-        model="gpt-4o",
-        system_prompt="You are a data analyst. Query databases, analyze data, and produce clear insights.",
+        model=_DEFAULT_MODEL,
+        system_prompt="You are a data analyst inside DOME-HUB. Query SQLite (db/dome.db) and ChromaDB, analyze data, and produce clear, structured insights.",
         tools=ALL_TOOLS,
         memory_namespace="analyst",
     )
@@ -40,8 +48,8 @@ def make_analyst() -> Agent:
 def make_planner() -> Agent:
     return Agent(
         name="planner",
-        model="gpt-4o",
-        system_prompt="You are a strategic planner. Break down complex goals into clear, executable plans.",
+        model=_DEFAULT_MODEL,
+        system_prompt="You are a strategic planner inside DOME-HUB. Break down complex goals into clear, executable plans with explicit steps, owners, and success criteria.",
         tools=ALL_TOOLS,
         memory_namespace="planner",
     )
@@ -50,8 +58,8 @@ def make_planner() -> Agent:
 def make_kb_agent() -> Agent:
     return Agent(
         name="kb_agent",
-        model="gpt-4o",
-        system_prompt="You are a knowledge base agent. Search, retrieve, and synthesize information from the DOME-HUB knowledge base.",
+        model=_FAST_MODEL,
+        system_prompt="You are a knowledge base agent for DOME-HUB. Search, retrieve, and synthesize information from kb/ and the ChromaDB vector store (dome-kb, 1815 chunks). Return grounded answers with source references.",
         tools=ALL_TOOLS,
         memory_namespace="kb_agent",
     )
@@ -61,7 +69,7 @@ def make_local_agent(model: str = "llama3") -> Agent:
     return Agent(
         name="local",
         model=model,
-        system_prompt="You are a helpful local AI assistant running on DOME-HUB.",
+        system_prompt="You are a helpful local AI assistant running on DOME-HUB via Ollama. No data leaves the machine.",
         tools=ALL_TOOLS,
         memory_namespace="local",
     )

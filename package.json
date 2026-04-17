@@ -11,7 +11,11 @@
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "format": "prettier --write '**/*.{ts,tsx,js,json,md}'",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "ingest": "python3 scripts/ingest.py",
+    "serve": "python3 -m uvicorn agents.api.server:app --reload --port 8000",
+    "worker": "python3 -m agents.workers.queue",
+    "audit": "bash scripts/audit.sh"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.0.0",

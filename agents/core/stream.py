@@ -2,10 +2,10 @@
 DOME-HUB Streaming LLM responses
 """
 from __future__ import annotations
-import httpx
-import json
-from typing import AsyncGenerator
-from agents.core.agent import Agent
+from typing import AsyncGenerator, TYPE_CHECKING
+import httpx, json
+if TYPE_CHECKING:
+    from agents.core.agent import Agent
 
 
 async def stream_openai(messages: list[dict], model: str) -> AsyncGenerator[str, None]:
@@ -45,24 +45,3 @@ async def stream_local(
                 if data.get("done"):
                     break
 
-
-class StreamingAgent(Agent):
-    """Agent subclass that adds async streaming via stream_run."""
-
-    async def stream_run(self, prompt: str) -> AsyncGenerator[str, None]:
-        self.remember("user", prompt)
-        messages = self.recall()
-
-        if self.model.startswith("claude"):
-            gen = stream_anthropic(messages, self.model)
-        elif self.model.startswith("gpt") or self.model.startswith("o"):
-            gen = stream_openai(messages, self.model)
-        else:
-            gen = stream_local(messages, self.model)
-
-        full_response = []
-        async for chunk in gen:
-            full_response.append(chunk)
-            yield chunk
-
-        self.remember("assistant", "".join(full_response))

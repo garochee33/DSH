@@ -133,7 +133,23 @@ echo "==> Configuring shell..."
 grep -q "zshrc-dome" ~/.zshrc 2>/dev/null || \
   echo "source $DOME_ROOT/scripts/zshrc-dome.sh" >> ~/.zshrc
 
-# ── 13. pnpm install ──────────────────────────────────────────────────────────
+# ── 13. DOME-HUB directory structure
+echo "==> Creating DOME-HUB structure..."
+mkdir -p "$DOME_ROOT"/{projects,platforms,software,compute,agents,models,kb,db,codebase,logs,scripts}
+
+# ── 14. SQLite DB init
+echo "==> Initializing SQLite DB..."
+python3 -c "
+import sqlite3, datetime
+db = sqlite3.connect('$DOME_ROOT/db/dome.db')
+db.execute('CREATE TABLE IF NOT EXISTS sessions (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, title TEXT, content TEXT, tags TEXT, created_at TEXT)')
+db.execute('CREATE TABLE IF NOT EXISTS stack (id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT, name TEXT, version TEXT, status TEXT, updated_at TEXT)')
+db.commit()
+db.close()
+print('DB ready')
+" 2>/dev/null || true
+
+# ── 15. pnpm install ──────────────────────────────────────────────────────────
 cd "$DOME_ROOT" && pnpm install 2>/dev/null || true
 
 echo ""

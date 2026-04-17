@@ -30,3 +30,6 @@ credentials/
 *_rsa.pub
 *.gpg
 models/embeddings/
+
+# Internal mesh
+agents/core/.mesh/

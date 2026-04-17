@@ -28,7 +28,7 @@ It is the local compute base, KB, DB, and agent orchestration endpoint for this 
 ## Seed Deposit
 
 The foundation of this node is built and ready to receive Trinity's seed:
-- `spore.sh` — Trinity's initialization script, deposited into this node to activate it
+- `spore.sh` — Trinity's initialization script, deposited into this node
 - `kb/trinity-unified-ai/` — The landing zone for the trinity-unified-ai KB API spec
 - Once deposited, the Mycelium connection between this node and the network activates
 

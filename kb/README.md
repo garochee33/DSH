@@ -15,7 +15,7 @@ kb/
 │   ├── file-handling-guide.md ← File operation patterns
 │   ├── tools-reference.md     ← MCP tool catalog
 │   └── skills/                ← Packaged Claude skills (docx, pdf, pptx, xlsx, etc.)
-└── trinity-unified-ai/        ← Trinity Consortium KB API (awaiting spore.sh from EGD33)
+└── trinity-unified-ai/        ← Trinity Consortium KB API (awaiting spore.sh from Trinity Consortium)
 ```
 
 ## Files
@@ -29,7 +29,7 @@ kb/
 | `claude/tools-reference.md` | Full MCP tool catalog with signatures |
 | `claude/file-handling-guide.md` | File read/write/edit patterns for Claude |
 | `claude/skills/` | Self-contained skill packages (each has schema + handler) |
-| `trinity-unified-ai/` | Reserved for EGD33's trinity-unified-ai KB API spec |
+| `trinity-unified-ai/` | Reserved for Trinity Consortium's trinity-unified-ai KB API spec |
 
 ## Querying
 
@@ -64,4 +64,4 @@ Ask Kiro directly — it has access to this KB via the knowledge tool (context I
 
 ## Pending
 
-- `trinity-unified-ai/` — awaiting `spore.sh` deposit from EGD33 to activate Mycelium connection
+- `trinity-unified-ai/` — awaiting `spore.sh` deposit from Trinity Consortium to activate Mycelium connection

@@ -82,7 +82,7 @@ def make_planner() -> Agent:
         name="planner",
         model=_model(_LOCAL, _CLAUDE_STRONG),
         system_prompt=(
-            "You are a strategic planner inside DOME-HUB for Gadi Kedoshim / Trinity Consortium. "
+            "You are a strategic planner inside DOME-HUB for Trinity Consortium. "
             "Break down complex goals into clear, executable plans with explicit steps, "
             "owners, and success criteria."
         ),

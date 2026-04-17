@@ -118,7 +118,43 @@ DOME-HUB/
 
 ---
 
-## New Project
+## Scripts & Commands
+
+### Shell Scripts
+
+| Script | Command | Purpose |
+|--------|---------|---------|
+| `sovereign-setup-mac.sh` | `bash scripts/sovereign-setup-mac.sh` | Full sovereign setup for macOS M1/M2/M3/M4 |
+| `sovereign-setup-windows.ps1` | `pwsh scripts/sovereign-setup-windows.ps1` | Full sovereign setup for Windows |
+| `bootstrap.sh` | `bash scripts/bootstrap.sh` | Install all dependencies |
+| `new-project.sh` | `newproject <cat> <name>` | Scaffold new project with venv + Node |
+| `dome-check.sh` | `dome-check` / `pnpm check` | Protocol enforcer — security, code, git |
+| `dome-pm.sh` | `dome-pm <cmd>` | Project manager (new, list, push-all…) |
+| `dome-approve.sh` | `dome-approve <action> <desc>` | Approval gate for privileged actions |
+| `dome-sudo.sh` | `dome-sudo <cmd>` | Privileged command wrapper |
+| `daemon-watch.sh` | `bash scripts/daemon-watch.sh` | Remove unauthorized launch agents |
+| `optimize.sh` | `sudo bash scripts/optimize.sh` | Hardware optimization |
+| `harden.sh` | `sudo bash scripts/harden.sh` | Security hardening |
+| `audit.sh` | `bash scripts/audit.sh` / `pnpm audit` | Security audit |
+| `finish-security.sh` | `bash scripts/finish-security.sh` | Post-setup security finalization |
+| `zshrc-dome.sh` | sourced by `~/.zshrc` | Shell environment & aliases |
+
+### pnpm Scripts
+
+| Command | Purpose |
+|---------|---------|
+| `pnpm check` | Full protocol check (`dome-check.sh`) |
+| `pnpm sync` | Pull + ingest + commit + push |
+| `pnpm ingest` | Populate ChromaDB from KB, logs, docs |
+| `pnpm serve` | Start FastAPI agent server (port 8000) |
+| `pnpm audit` | Run security audit |
+| `pnpm lint` | ESLint TypeScript source |
+| `pnpm lint:fix` | ESLint with auto-fix |
+| `pnpm format` | Prettier format all files |
+| `pnpm typecheck` | TypeScript type check |
+| `pnpm worker` | Start async task worker |
+
+---
 
 ```bash
 newproject <category> <name>

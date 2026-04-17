@@ -6,7 +6,7 @@
 - DNS encrypted via dnscrypt-proxy. No Google DNS.
 
 ## Access Control
-- Privileged actions require approval from gadi.k or EGD33.
+- Privileged actions require approval from authorized Trinity Consortium members.
 - No unauthorized daemons or launch agents.
 - GPG-signed commits only.
 

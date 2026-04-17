@@ -44,7 +44,7 @@ def system_prompt(manifest: dict) -> str:
     kb_root = REPO / manifest.get("kb", {}).get("root", "kb/claude/")
     parts = [
         "You are Claude, running inside DOME-HUB — a sovereign, local-first AI ",
-        "development environment owned by Gadi Kedoshim (Trinity Consortium).",
+        "development environment — a sovereign node of Trinity Consortium.",
         "",
         f"Your knowledge base is at {kb_root.relative_to(REPO)}. ",
         "Always consult it before answering questions about your own ",

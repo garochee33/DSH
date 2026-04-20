@@ -8,10 +8,10 @@ DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 LOG="$DOME_ROOT/logs/dome-check.log"
 PASS=0; FAIL=0; FIXED=0
 
-log() { echo "$1" | tee -a "$LOG"; }
-ok()    { log "✅ $1"; ((PASS++)); }
-fail()  { log "❌ $1"; ((FAIL++)); }
-fixed() { log "🔧 $1"; ((FIXED++)); }
+log()   { echo "$1" | tee -a "$LOG"; }
+ok()    { log "✅ $1"; PASS=$((PASS+1)); return 0; }
+fail()  { log "❌ $1"; FAIL=$((FAIL+1)); return 0; }
+fixed() { log "🔧 $1"; FIXED=$((FIXED+1)); return 0; }
 
 log ""
 log "=== DOME-HUB PROTOCOL CHECK === $(date)"
@@ -19,15 +19,11 @@ log "=== DOME-HUB PROTOCOL CHECK === $(date)"
 # ── 1. Security ───────────────────────────────────────────────────────────────
 log "--- Security ---"
 
-/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null | grep -q "enabled" && ok "Firewall ON" || {
-  sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on 2>/dev/null
-  fixed "Firewall enabled"
-}
+FW_STATE=$(/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null)
+if echo "$FW_STATE" | grep -qE "enabled|blocking"; then ok "Firewall ON"; else fail "Firewall OFF — enable in System Settings"; fi
 
-/usr/libexec/ApplicationFirewall/socketfilterfw --getstealthmode 2>/dev/null | grep -q "enabled" && ok "Stealth mode ON" || {
-  sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on 2>/dev/null
-  fixed "Stealth mode enabled"
-}
+FW_STEALTH=$(/usr/libexec/ApplicationFirewall/socketfilterfw --getstealthmode 2>/dev/null)
+if echo "$FW_STEALTH" | grep -q "on"; then ok "Stealth mode ON"; else fail "Stealth mode OFF"; fi
 
 fdesetup status 2>/dev/null | grep -q "On" && ok "FileVault ON" || fail "FileVault OFF — enable in System Settings"
 
@@ -39,12 +35,22 @@ defaults read com.apple.screensaver askForPassword 2>/dev/null | grep -q "1" && 
   fixed "Screen lock enabled"
 }
 
-/opt/homebrew/bin/gpg --list-secret-keys 2>/dev/null | grep -q "sec" && ok "GPG key present" || fail "GPG key missing"
+# GPG key is optional — DOME-HUB supports both GPG+pass and macOS Keychain for secrets.
+# If you use Keychain (the sovereign default), this check passes when the entry exists.
+if security find-generic-password -s "dome/HUB_API_SECRET" -w >/dev/null 2>&1; then
+  ok "Secrets in Keychain"
+elif /opt/homebrew/bin/gpg --list-secret-keys 2>/dev/null | grep -q "sec"; then
+  ok "GPG key present (pass-based secrets)"
+else
+  fail "No secret backend found (Keychain or GPG)"
+fi
 
-git -C "$DOME_ROOT" config --global commit.gpgsign 2>/dev/null | grep -q "true" && ok "Git signing ON" || {
-  git config --global commit.gpgsign true
-  fixed "Git signing enabled"
-}
+# Git signing is optional. Only report; never auto-enable (locked key → commits fail).
+if [ "$(git -C "$DOME_ROOT" config --global commit.gpgsign 2>/dev/null)" = "true" ]; then
+  ok "Git signing ON"
+else
+  ok "Git signing OFF (user choice)"
+fi
 
 # ── 2. Network ────────────────────────────────────────────────────────────────
 log "--- Network ---"
@@ -55,10 +61,7 @@ DNS=$(scutil --dns 2>/dev/null | grep nameserver | head -1 | awk '{print $3}')
   fixed "DNS switched to 127.0.0.1"
 }
 
-brew services list 2>/dev/null | grep dnscrypt-proxy | grep -q "started" && ok "dnscrypt-proxy running" || {
-  sudo brew services start dnscrypt-proxy 2>/dev/null
-  fixed "dnscrypt-proxy started"
-}
+if pgrep -x dnscrypt-proxy >/dev/null 2>&1; then ok "dnscrypt-proxy running"; else fail "dnscrypt-proxy not running — run: sudo brew services start dnscrypt-proxy"; fi
 
 # ── 3. Daemons ────────────────────────────────────────────────────────────────
 log "--- Daemons ---"
@@ -106,16 +109,18 @@ log "--- Git ---"
 
 UNCOMMITTED=$(git -C "$DOME_ROOT" status --short 2>/dev/null | wc -l | tr -d ' ')
 if [ "$UNCOMMITTED" -gt 0 ]; then
-  git -C "$DOME_ROOT" add -A
-  git -C "$DOME_ROOT" commit -m "chore: auto-commit by dome-check"
-  git -C "$DOME_ROOT" push 2>/dev/null
-  fixed "Auto-committed and pushed $UNCOMMITTED changes"
+  # Report only. Auto-commit/push removed — destructive and bypasses review.
+  fail "$UNCOMMITTED uncommitted change(s) — review with: git -C \"$DOME_ROOT\" status"
 else
   ok "Git clean"
 fi
 
 BEHIND=$(git -C "$DOME_ROOT" fetch --dry-run 2>&1 | wc -l | tr -d ' ')
-[ "$BEHIND" -eq 0 ] && ok "Git up to date" || { git -C "$DOME_ROOT" pull 2>/dev/null; fixed "Pulled latest from remote"; }
+if [ "$BEHIND" -eq 0 ]; then
+  ok "Git up to date"
+else
+  fail "Remote has updates — pull with: git -C \"$DOME_ROOT\" pull"
+fi
 
 # ── Summary ───────────────────────────────────────────────────────────────────
 log ""

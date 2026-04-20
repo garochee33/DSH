@@ -1,0 +1,38 @@
+                                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/
+
+Copyright (c) 2024-2026 Enzo Garoche / Trinity Consortium
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+---
+
+## Scope notes
+
+This license covers the DSH (Dome Sovereign Hub) shell, framework, setup
+scripts, agent-stack scaffolding, and documentation in this repository.
+
+It does NOT cover:
+
+- Trinity Consortium proprietary components (FRACTAL E8-SSII-AGI engine
+  internals, Mycelium Neural Mesh protocols, sovereign node cryptographic
+  identity) — those are governed by Trinity Consortium terms.
+- Third-party dependencies — governed by their respective licenses
+  (see `package.json`, `compute/requirements.txt`).
+- Model weights downloaded at setup time (e.g. Sentence-Transformers,
+  Ollama models) — governed by each model's license.
+
+If you plan to use DSH commercially or integrate it with Trinity Consortium
+infrastructure, consult `docs/PUBLIC_PROD_HARDENING.md` and contact the
+copyright holder for Trinity-specific terms.

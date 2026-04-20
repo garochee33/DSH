@@ -5,8 +5,8 @@ Must pass 100% before spore.sh is executed.
 
 Run: python3 scripts/pre-spore-verify.py
 """
-import sys
-sys.path.insert(0, "/Users/gadikedoshim/DOME-HUB")
+import sys, pathlib
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 
 SKILLS = [
     ("math",            "agents.skills.math"),

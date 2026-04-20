@@ -7,7 +7,7 @@ Claude Agent SDK) runs in when invoked from inside DOME-HUB.
 
 ## Runtime
 
-- **Python:** 3.11.9 (pinned by `/Users/gadikedoshim/DOME-HUB/.python-version`)
+- **Python:** 3.11.9 (pinned by `$DOME_ROOT/.python-version`)
 - **Venv:** `DOME-HUB/.venv` (root) — shared with the rest of DOME-HUB
 - **Node:** 20 (pinned by `.nvmrc`, needed for the `pptxgenjs` slide path)
 - **OS:** macOS 26.3 (Apple M3 Pro, MPS-capable) · Linux sandbox for Bash tool
@@ -15,7 +15,7 @@ Claude Agent SDK) runs in when invoked from inside DOME-HUB.
 ## Install
 
 ```bash
-cd /Users/gadikedoshim/DOME-HUB
+cd "$DOME_ROOT"   # e.g. ~/DSH
 source .venv/bin/activate
 pip install -r compute/requirements.txt
 

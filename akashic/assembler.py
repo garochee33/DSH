@@ -11,20 +11,20 @@ import os
 from pathlib import Path
 from datetime import datetime, timezone
 
-sys.path.insert(0, "/Users/gadikedoshim/DOME-HUB")
+DOME_ROOT = Path(os.environ.get("DOME_ROOT") or Path(__file__).resolve().parents[1])
+sys.path.insert(0, str(DOME_ROOT))
 
 from akashic.record import query
 
-DOME_ROOT = Path("/Users/gadikedoshim/DOME-HUB")
 OUTPUT = DOME_ROOT / ".akashic-context"
 
 
 def _cwd_concept() -> str:
     """Infer session concept from current working directory."""
     cwd = Path(os.getcwd())
-    parts = cwd.parts
-    for p in reversed(parts):
-        if p not in ("Users", "gadikedoshim", "/"):
+    skip = {"Users", "/", os.environ.get("USER", "")}
+    for p in reversed(cwd.parts):
+        if p not in skip:
             return p
     return "DOME-HUB sovereign node"
 

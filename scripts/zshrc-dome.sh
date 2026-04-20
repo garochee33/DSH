@@ -1,5 +1,6 @@
 # DOME-HUB environment
-export DOME_ROOT="/Users/gadikedoshim/DOME-HUB"
+# Override by exporting DOME_ROOT before sourcing this file (e.g. in ~/.zshrc)
+export DOME_ROOT="${DOME_ROOT:-$HOME/DSH}"
 export PATH="$DOME_ROOT/scripts:$PATH"
 
 # Pin all AI/ML model caches inside DOME-HUB — nothing leaks to ~/

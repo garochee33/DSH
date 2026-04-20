@@ -48,7 +48,8 @@ code --install-extension bradlc.vscode-tailwindcss
 code --install-extension prisma.prisma
 
 # Root dev dependencies
-cd /Users/gadikedoshim/DOME-HUB && pnpm install
+DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+cd "$DOME_ROOT" && pnpm install
 
 echo ""
 echo "==> Done. Run: source ~/.zshrc"

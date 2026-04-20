@@ -163,11 +163,11 @@ VS Code settings.
 
 | Resource | Path |
 |----------|------|
-| Root | `/Users/gadikedoshim/DOME-HUB` |
-| Python venv | `/Users/gadikedoshim/DOME-HUB/.venv` |
-| SQLite DB | `/Users/gadikedoshim/DOME-HUB/db/dome.db` |
-| Episodic DB | `/Users/gadikedoshim/DOME-HUB/db/episodic.db` |
-| Vector Store | `/Users/gadikedoshim/DOME-HUB/db/chroma` |
-| Trinity KB | `/Users/gadikedoshim/DOME-HUB/kb/trinity-unified-ai` |
+| Root | `$DOME_ROOT` (default: `~/DSH`) |
+| Python venv | `$DOME_ROOT/.venv` |
+| SQLite DB | `$DOME_ROOT/db/dome.db` |
+| Episodic DB | `$DOME_ROOT/db/episodic.db` |
+| Vector Store | `$DOME_ROOT/db/chroma` |
+| Trinity KB | `$DOME_ROOT/kb/trinity-unified-ai` |
 | API Server | `http://localhost:8000` |
-| GitHub | `https://github.com/gadikedoshim/DOME-HUB` |
+| GitHub | `https://github.com/garochee33/DSH` |

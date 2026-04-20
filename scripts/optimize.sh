@@ -2,6 +2,7 @@
 # DOME-HUB Hardware Optimization Script
 # Tunes CPU, GPU, memory for AI/dev workloads on Apple M3 Pro
 
+DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 echo "==> DOME-HUB Hardware Optimization"
 
 # Disable App Nap (prevents background processes from being throttled)
@@ -29,7 +30,7 @@ sudo launchctl limit maxproc 2048 4096
 sudo defaults write /Library/Preferences/com.apple.CoreDisplay useMetal -bool true 2>/dev/null || true
 
 # Disable Spotlight indexing on DOME-HUB (reduces I/O during builds)
-sudo mdutil -i off /Users/gadikedoshim/DOME-HUB 2>/dev/null && echo "Spotlight off for DOME-HUB"
+sudo mdutil -i off "$DOME_ROOT" 2>/dev/null && echo "Spotlight off for DOME-HUB"
 
 # Prioritize DOME-HUB processes
 sudo renice -n -5 -p $$ 2>/dev/null || true

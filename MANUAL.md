@@ -10,15 +10,15 @@ Last updated: 2026-04-17
 
 ### macOS (M1 / M2 / M3 / M4)
 ```bash
-git clone https://github.com/gadikedoshim/DOME-HUB.git
-cd DOME-HUB
+git clone https://github.com/garochee33/DSH.git
+cd DSH
 bash scripts/sovereign-setup-mac.sh
 ```
 
 ### Windows
 ```powershell
-git clone https://github.com/gadikedoshim/DOME-HUB.git
-cd DOME-HUB
+git clone https://github.com/garochee33/DSH.git
+cd DSH
 pwsh scripts/sovereign-setup-windows.ps1
 ```
 
@@ -310,7 +310,7 @@ bash scripts/daemon-watch.sh
 
 ### PostgreSQL
 ```bash
-psql -U gadikedoshim -d postgres
+psql -U "$USER" -d postgres
 ```
 
 ### Redis
@@ -341,7 +341,7 @@ results = vm.query("your query here", n_results=5)
 
 | Alias | Action |
 |-------|--------|
-| `dome` | `cd /Users/gadikedoshim/DOME-HUB` |
+| `dome` | `cd "$DOME_ROOT"` (default: `~/DSH`) |
 | `newproject` | Run `scripts/new-project.sh` |
 | `dome-check` | Run `scripts/dome-check.sh` |
 | `dome-pm` | Run `scripts/dome-pm.sh` |
@@ -362,7 +362,7 @@ results = vm.query("your query here", n_results=5)
 ## 13. Updating DOME-HUB
 
 ```bash
-cd /Users/gadikedoshim/DOME-HUB
+cd "$DOME_ROOT"   # e.g. ~/DSH
 pnpm sync
 # or manually:
 git pull

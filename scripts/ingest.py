@@ -4,13 +4,13 @@ DOME-HUB KB Ingest Script
 Populates vector memory from all KB, logs, docs, and agent code
 Run: python3 scripts/ingest.py
 """
-import sys
-sys.path.insert(0, "/Users/enzogaroche/DOME-HUB")
-
+import os, sys
 from pathlib import Path
-from agents.core.rag import RAGPipeline
 
-DOME_ROOT = Path("/Users/enzogaroche/DOME-HUB")
+DOME_ROOT = Path(os.environ.get("DOME_ROOT") or Path(__file__).resolve().parents[1])
+sys.path.insert(0, str(DOME_ROOT))
+
+from agents.core.rag import RAGPipeline
 
 SOURCES = [
     DOME_ROOT / "kb",

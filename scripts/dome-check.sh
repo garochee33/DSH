@@ -4,7 +4,7 @@
 # Usage: bash scripts/dome-check.sh
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
-DOME_ROOT="/Users/gadikedoshim/DOME-HUB"
+DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 LOG="$DOME_ROOT/logs/dome-check.log"
 PASS=0; FAIL=0; FIXED=0
 

@@ -2,7 +2,7 @@
 # DOME-HUB Project Manager
 # Usage: dome-pm <command> [args]
 
-DOME_ROOT="/Users/gadikedoshim/DOME-HUB"
+DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 DB="$DOME_ROOT/db/dome.db"
 
 cmd=$1; shift

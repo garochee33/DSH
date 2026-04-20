@@ -4,7 +4,8 @@
 
 CATEGORY=${1:?usage: new-project.sh <category> <name>}
 NAME=${2:?usage: new-project.sh <category> <name>}
-DIR="/Users/gadikedoshim/DOME-HUB/$CATEGORY/$NAME"
+DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+DIR="$DOME_ROOT/$CATEGORY/$NAME"
 
 mkdir -p "$DIR"
 cd "$DIR"
@@ -19,7 +20,7 @@ pnpm init > /dev/null 2>&1
 echo "node_modules/" >> .gitignore
 
 # Env
-echo "DOME_ROOT=/Users/gadikedoshim/DOME-HUB" > .env.example
+echo "DOME_ROOT=$DOME_ROOT" > .env.example
 echo "ENV=dev" >> .env.example
 echo ".env" >> .gitignore
 

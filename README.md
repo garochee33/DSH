@@ -50,8 +50,8 @@ Everything is isolated to your machine. Your data, your models, your code — ne
 
 ```bash
 # Clone
-git clone https://github.com/gadikedoshim/DOME-HUB.git
-cd DOME-HUB
+git clone https://github.com/garochee33/DSH.git
+cd DSH
 
 # macOS (M1/M2/M3/M4)
 bash scripts/sovereign-setup-mac.sh
@@ -214,5 +214,5 @@ DOME-HUB is the sovereign local node for Trinity Consortium work.
 
 ## Links
 
-- GitHub: https://github.com/gadikedoshim/DOME-HUB
+- GitHub: https://github.com/garochee33/DSH
 - Trinity Consortium: [member-only access]

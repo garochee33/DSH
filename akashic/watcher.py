@@ -6,19 +6,19 @@ and auto-ingests them as dimensional records.
 Run: python3 akashic/watcher.py &
 """
 from __future__ import annotations
+import os
 import sys
 import time
 import hashlib
 from pathlib import Path
 
-sys.path.insert(0, "/Users/gadikedoshim/DOME-HUB")
+DOME_ROOT = Path(os.environ.get("DOME_ROOT") or Path(__file__).resolve().parents[1])
+sys.path.insert(0, str(DOME_ROOT))
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
 from akashic.record import write
-
-DOME_ROOT = Path("/Users/gadikedoshim/DOME-HUB")
 
 WATCH_DIRS = ["logs", "kb", "projects", "agents"]
 EXTENSIONS = {".md", ".txt", ".py", ".ts"}

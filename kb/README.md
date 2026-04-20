@@ -1,6 +1,6 @@
 # DOME-HUB Knowledge Base
 
-Root: `/Users/gadikedoshim/DOME-HUB/kb/`
+Root: `$DOME_ROOT/kb/` (default: `~/DSH/kb/`)
 
 ## Structure
 
@@ -42,7 +42,7 @@ results = rag.query("your question here", n_results=5)
 
 ### Via ingest (re-index all KB files)
 ```bash
-cd /Users/gadikedoshim/DOME-HUB
+cd "$DOME_ROOT"   # e.g. ~/DSH
 source .venv/bin/activate
 python3 scripts/ingest.py
 ```

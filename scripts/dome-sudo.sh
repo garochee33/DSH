@@ -12,7 +12,8 @@ if [ -z "$CMD" ]; then
 fi
 
 # Require approval
-bash /Users/gadikedoshim/DOME-HUB/scripts/dome-approve.sh "sudo" "$CMD"
+DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+bash "$DOME_ROOT/scripts/dome-approve.sh" "sudo" "$CMD"
 if [ $? -ne 0 ]; then exit 1; fi
 
 # Execute

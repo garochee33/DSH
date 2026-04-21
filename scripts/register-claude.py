@@ -37,6 +37,14 @@ SKILLS = [
     ("setup-cowork", "Guided Cowork onboarding (plugin/skill/connector)"),
     ("skill-creator", "Author, evaluate, and optimize skills"),
     ("consolidate-memory", "Periodic memory hygiene / dedupe / prune"),
+    # DSH sovereign-node skills (Phase 1 foundation)
+    ("dsh-setup", "Install DSH on a fresh Mac — one guided flow"),
+    ("machine-probe", "Node self-introspection — chip, tier, security, model recommendations"),
+    ("sovereign-lockdown", "Full sovereign lockdown — daemons, DNS, firewall, pf anchor"),
+    ("trinity-activate", "Phase 2 — join Trinity mesh via spore.sh"),
+    ("lava-neuro-sim", "Run a Lava SNN on Loihi 2 simulation backend"),
+    ("dsh-ingest", "Rebuild dome.db + ChromaDB + verify all skills load"),
+    ("sovereign-audit", "Produce consolidated hardening report with remediation"),
 ]
 
 TOOLS = [

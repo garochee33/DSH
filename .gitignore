@@ -1,6 +1,8 @@
 .env
 .env.*
 *.env
+!.env.template
+!.env.example
 .venv/
 node_modules/
 __pycache__/

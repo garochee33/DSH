@@ -1,6 +1,6 @@
 #!/bin/bash
 # DOME-HUB Hardware Optimization Script
-# Tunes CPU, GPU, memory for AI/dev workloads on Apple M3 Pro
+# Tunes CPU, GPU, memory for AI/dev workloads on Apple Silicon (M1/M2/M3/M4)
 
 DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 echo "==> DOME-HUB Hardware Optimization"

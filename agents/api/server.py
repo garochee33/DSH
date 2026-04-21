@@ -14,6 +14,7 @@ from pydantic import BaseModel
 
 from agents.core.registry import make_dome_orchestrator, REGISTRY
 from agents.core.memory.vector import VectorMemory
+from agents.core import machine as _machine
 
 app = FastAPI(title="DOME-HUB API")
 app.add_middleware(
@@ -156,6 +157,36 @@ async def rag_query(req: QueryRequest):
 @app.get("/traces")
 async def get_traces(limit: int = 50):
     return {"traces": _traces[-limit:]}
+
+
+# ── Machine introspection ────────────────────────────────────────────────────
+
+
+@app.get("/machine")
+async def get_machine():
+    """Full machine profile as probed by scripts/machine-probe.py."""
+    try:
+        return _machine.get_profile()
+    except _machine.ProfileMissingError as e:
+        raise HTTPException(503, str(e))
+
+
+@app.get("/machine/summary")
+async def get_machine_summary():
+    """Compact view — the subset a mobile client needs to reason about this node."""
+    try:
+        return {
+            "summary": _machine.summary_one_liner(),
+            "tier": _machine.get_tier(),
+            "chip": _machine.get_chip_family(),
+            "ram_gb": _machine.get_ram_gb(),
+            "npu_tops": _machine.get_npu_tops(),
+            "is_apple_silicon": _machine.is_apple_silicon(),
+            "recommended_local_model": _machine.recommend_local_model(),
+            "security": _machine.security_posture(),
+        }
+    except _machine.ProfileMissingError as e:
+        raise HTTPException(503, str(e))
 
 
 # ── Health ────────────────────────────────────────────────────────────────────

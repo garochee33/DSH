@@ -4,7 +4,7 @@
 # Usage: bash scripts/dome-check.sh
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
-DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+DOME_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOG="$DOME_ROOT/logs/dome-check.log"
 PASS=0; FAIL=0; FIXED=0
 
@@ -15,6 +15,31 @@ fixed() { log "🔧 $1"; FIXED=$((FIXED+1)); return 0; }
 
 log ""
 log "=== DOME-HUB PROTOCOL CHECK === $(date)"
+
+# ── 0. Machine profile refresh ────────────────────────────────────────────────
+# Sovereign node self-knowledge. Probe runs before other checks so the rest of
+# this script (and any agent that reads agents/core/.mesh/machine.json) sees
+# ground truth, not stale state.
+log "--- Machine ---"
+PROBE_PY="$DOME_ROOT/.venv/bin/python3"
+[ -x "$PROBE_PY" ] || PROBE_PY="$(command -v python3)"
+if [ -n "$PROBE_PY" ] && [ -f "$DOME_ROOT/scripts/machine-probe.py" ]; then
+  if DOME_ROOT="$DOME_ROOT" "$PROBE_PY" "$DOME_ROOT/scripts/machine-probe.py" >> "$LOG" 2>&1; then
+    SUMMARY=$(DOME_ROOT="$DOME_ROOT" "$PROBE_PY" -c "
+import sys; sys.path.insert(0, '$DOME_ROOT')
+try:
+    from agents.core.machine import summary_one_liner
+    print(summary_one_liner())
+except Exception as e:
+    print(f'profile read failed: {e}')
+" 2>/dev/null)
+    ok "Profile: ${SUMMARY:-refreshed}"
+  else
+    fail "machine-probe failed — see $LOG"
+  fi
+else
+  fail "machine-probe unavailable (missing python or scripts/machine-probe.py)"
+fi
 
 # ── 1. Security ───────────────────────────────────────────────────────────────
 log "--- Security ---"

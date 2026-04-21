@@ -38,3 +38,31 @@ agents/core/.mesh/
 .akashic-context
 logs/akashic-watcher.pid
 logs/akashic-watcher.log
+
+# Session logs — per-machine, never public
+logs/*.md
+logs/*.log
+logs/reports/
+
+# Full local databases (schema lives in code, data stays per-node)
+db/
+
+# Google Drive desktop sync mount — not source of truth
+google drive/
+Google Drive/
+
+# Machine-local Trinity mesh identity
+agents/core/.mesh/
+
+# Ollama pulled model weights — downloaded per-node
+models/ollama/
+
+# Python build artifacts
+build/
+*.egg-info/
+.pytest_cache/
+
+# IDE / OS cruft
+.idea/
+*.swp
+.DS_Store

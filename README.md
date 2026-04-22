@@ -230,6 +230,25 @@ Trinity mesh components (activated by `spore.sh`):
 - **trinity-unified-ai** — Knowledge Base API layer for the mesh
   (landing zone pre-loaded at `kb/trinity-unified-ai/`)
 
+**Phase 2 activation requires a Trinity-issued token.** Phase 1 is free and always
+will be. Phase 2 unlocks mesh compute, Trinity engines, and persistent
+cross-session memory via the trinity-unified-ai KB API — a public platform whose
+API is restricted to paying members. Request Access at
+[kommunity.life](https://kommunity.life); membership purchase issues the
+`SPORE_TOKEN` + JWT that unlock the trinity-unified-ai API.
+
+How Phase 2 is wired on the DSH side: the `agents/core/trinity_client.py`
+accessor reads `TRINITY_API_BASE`, `HUB_API_SECRET`, and `TRINITY_JWT` from
+`.env` (or from Keychain via `scripts/render-env.sh`). Without credentials,
+DSH runs in `DOME_PROVIDER=local` — fully offline, no Trinity dependency.
+With credentials, features that need mesh compute or Trinity KB data switch
+from local fallbacks to the authenticated remote. You always see the upgrade
+surface in the agent output; you never get silently gated.
+
+Note: trinity-consortium (the internal command center where Trinity deploys
+products and projects from) is private — not a customer-facing URL. You never
+need to touch it as a DSH user.
+
 ```
 ┌──────────────────────────────┐
 │  Phase 2 — spore.sh          │  ← optional mesh upgrade

@@ -33,6 +33,7 @@ Rules:
 - Add any newly open-source-safe path to allowlist.
 - Add private, machine-local, or sensitive paths to denylist.
 - If a file appears in both, denylist wins.
+- `README.md`, `MANUAL.md`, and `.gitignore` are denylisted to preserve DSH public-facing identity and contributor hygiene policy.
 
 ## Safety Gate Coverage
 
@@ -56,4 +57,3 @@ bash scripts/public-safety-check.sh --source . --strict-paths
 3. Run `pnpm public:export:dry` and inspect diff.
 4. Run `pnpm public:export`.
 5. Review and commit inside `~/DSH`.
-

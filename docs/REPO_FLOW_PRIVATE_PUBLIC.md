@@ -34,6 +34,7 @@ Rules:
 - Add private, machine-local, or sensitive paths to denylist.
 - If a file appears in both, denylist wins.
 - `README.md`, `MANUAL.md`, and `.gitignore` are denylisted to preserve DSH public-facing identity and contributor hygiene policy.
+- `scripts/dome-check.sh` is currently denylisted to avoid exporting a partial dependency set before its companion scripts are tracked and public-ready.
 
 ## Safety Gate Coverage
 

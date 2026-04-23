@@ -1,8 +1,10 @@
 #!/bin/bash
 # DOME-HUB Hardware Optimization Script
-# Tunes CPU, GPU, memory for AI/dev workloads on Apple Silicon (M1/M2/M3/M4)
+# Tunes CPU, GPU, memory for AI/dev workloads on Apple Silicon (tested on M4 Pro)
 
-DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOME_ROOT="${DOME_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
+
 echo "==> DOME-HUB Hardware Optimization"
 
 # Disable App Nap (prevents background processes from being throttled)

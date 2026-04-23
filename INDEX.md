@@ -132,7 +132,11 @@ Automation, security, and utility scripts.
 | `dome-sudo.sh` | Privileged command wrapper (requires approval) |
 | `daemon-watch.sh` | Daemon watchdog — removes unauthorized launch agents |
 | `ingest.py` | Populate ChromaDB vector store from KB, logs, docs |
+| `rollover-language-landscape.py` | Create next `kb/language-landscape-<year>.md` from latest + optional ingest |
+| `rollover-language-landscape.sh` | Wrapper: venv + rollover + ingest (cron / launchd) |
 | `register-claude.py` | Populate dome.db with Claude agent + skills + tools |
+| `public-safety-check.sh` | Public export gate for secrets, key signatures, and path leaks |
+| `export-to-dsh.sh` | Allowlist/denylist-driven DOME-HUB -> DSH export pipeline |
 
 ### `/software`
 Software packages, tools, and standalone utilities.
@@ -163,11 +167,11 @@ VS Code settings.
 
 | Resource | Path |
 |----------|------|
-| Root | `$DOME_ROOT` (default: `~/DSH`) |
-| Python venv | `$DOME_ROOT/.venv` |
-| SQLite DB | `$DOME_ROOT/db/dome.db` |
-| Episodic DB | `$DOME_ROOT/db/episodic.db` |
-| Vector Store | `$DOME_ROOT/db/chroma` |
-| Trinity KB | `$DOME_ROOT/kb/trinity-unified-ai` |
-| API Server | `http://localhost:8000` |
-| GitHub | `https://github.com/garochee33/DSH` |
+| Root | `~/DOME-HUB` |
+| Python venv | `~/DOME-HUB/.venv` |
+| SQLite DB | `~/DOME-HUB/db/dome.db` |
+| Episodic DB | `~/DOME-HUB/db/episodic.db` |
+| Vector Store | `~/DOME-HUB/db/chroma` |
+| Trinity KB | `~/DOME-HUB/kb/trinity-unified-ai` |
+| API Server | `http://127.0.0.1:8000` |
+| GitHub | `https://github.com/gadikedoshim/DOME-HUB` |

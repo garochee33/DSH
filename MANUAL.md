@@ -10,15 +10,15 @@ Last updated: 2026-04-17
 
 ### macOS (M1 / M2 / M3 / M4)
 ```bash
-git clone https://github.com/garochee33/DSH.git
-cd DSH
+git clone https://github.com/gadikedoshim/DOME-HUB.git
+cd DOME-HUB
 bash scripts/sovereign-setup-mac.sh
 ```
 
 ### Windows
 ```powershell
-git clone https://github.com/garochee33/DSH.git
-cd DSH
+git clone https://github.com/gadikedoshim/DOME-HUB.git
+cd DOME-HUB
 pwsh scripts/sovereign-setup-windows.ps1
 ```
 
@@ -39,7 +39,7 @@ source .venv/bin/activate
 
 ### Start databases
 ```bash
-brew services start postgresql@17
+brew services start postgresql@18
 brew services start redis
 ```
 
@@ -176,6 +176,10 @@ Run from the DOME-HUB root directory.
 | `pnpm format` | Prettier format all files |
 | `pnpm typecheck` | TypeScript type check (no emit) |
 | `pnpm worker` | Start Redis-backed async task worker |
+| `pnpm public:check` | Public-export safety gate (secrets + path leaks) |
+| `pnpm public:export:dry` | Build export set + preview diff to DSH (no writes) |
+| `pnpm public:export` | Apply private DOME-HUB -> public DSH overlay sync |
+| `pnpm public:export:prune` | Strict mirror to DSH with deletions |
 
 ### `pnpm sync`
 End-of-session sync: pulls latest, re-ingests KB into ChromaDB, commits all changes, pushes.
@@ -237,6 +241,10 @@ Each project gets:
 
 ## 6. Secret Management
 
+Two backends are supported. Pick the one that fits your setup; `scripts/render-env.sh` resolves both kinds of markers (`{{pass:...}}` and `{{keychain:...}}`) from `.env.template`.
+
+### Option A — `pass` (GPG-encrypted)
+
 Store secrets with `pass` (GPG-encrypted, never plaintext):
 
 ```bash
@@ -248,6 +256,21 @@ pass dome/openai-key
 
 # Use in scripts
 export OPENAI_API_KEY=$(pass dome/openai-key)
+```
+
+### Option B — macOS Keychain (Touch-ID / login-password backed)
+
+Use this when the GPG passphrase is unavailable or you prefer native macOS access control:
+
+```bash
+# Store a secret
+security add-generic-password -a "$USER" -s "dome/OPENAI_API_KEY" -w "sk-..." -U
+
+# Retrieve
+security find-generic-password -s "dome/OPENAI_API_KEY" -w
+
+# Regenerate .env from template (reads Keychain, mode 600)
+bash scripts/render-env.sh
 ```
 
 Never put secrets in `.env` files committed to git.
@@ -310,7 +333,7 @@ bash scripts/daemon-watch.sh
 
 ### PostgreSQL
 ```bash
-psql -U "$USER" -d postgres
+psql -U gadikedoshim -d postgres
 ```
 
 ### Redis
@@ -341,7 +364,7 @@ results = vm.query("your query here", n_results=5)
 
 | Alias | Action |
 |-------|--------|
-| `dome` | `cd "$DOME_ROOT"` (default: `~/DSH`) |
+| `dome` | `cd ~/DOME-HUB` |
 | `newproject` | Run `scripts/new-project.sh` |
 | `dome-check` | Run `scripts/dome-check.sh` |
 | `dome-pm` | Run `scripts/dome-pm.sh` |
@@ -362,7 +385,7 @@ results = vm.query("your query here", n_results=5)
 ## 13. Updating DOME-HUB
 
 ```bash
-cd "$DOME_ROOT"   # e.g. ~/DSH
+cd ~/DOME-HUB
 pnpm sync
 # or manually:
 git pull

@@ -1,5 +1,7 @@
 #!/bin/bash
 set -e
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOME_ROOT="${DOME_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 echo "==> DOME-HUB Bootstrap"
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -48,7 +50,6 @@ code --install-extension bradlc.vscode-tailwindcss
 code --install-extension prisma.prisma
 
 # Root dev dependencies
-DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 cd "$DOME_ROOT" && pnpm install
 
 echo ""

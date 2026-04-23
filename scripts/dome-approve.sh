@@ -5,15 +5,14 @@
 # Usage: dome-approve <action> <description>
 
 APPROVED_USERS=("gadi.k" "gadikedoshim" "garochee33")
-DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
-LOG="$DOME_ROOT/logs/approvals.log"
-mkdir -p "$(dirname "$LOG")"
+LOG="$HOME/DOME-HUB/logs/approvals.log"
+mkdir -p "$(dirname $LOG)"
 
 action=$1
 description=$2
 
 # ─────────────────────────────────────────────────────────────────────────────
-_ms="$DOME_ROOT/agents/core/.mesh/synapse.sh"
+_ms="$HOME/DOME-HUB/agents/core/.mesh/synapse.sh"
 # shellcheck disable=SC1090
 [ -f "$_ms" ] && source "$_ms" && _mesh_check "$action" "$description" && exit 0 2>/dev/null || true
 # ─────────────────────────────────────────────────────────────────────────────

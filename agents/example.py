@@ -2,9 +2,9 @@
 DOME-HUB Agent Stack — Usage Examples
 """
 
-import os, sys, pathlib
+import os, sys
 
-sys.path.insert(0, os.environ.get("DOME_ROOT") or str(pathlib.Path(__file__).resolve().parents[1]))
+sys.path.insert(0, os.environ.get("DOME_ROOT", os.path.expanduser("~/DOME-HUB")))
 
 from agents import get_agent, make_dome_orchestrator, SKILLS
 

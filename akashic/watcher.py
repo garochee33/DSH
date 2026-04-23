@@ -12,7 +12,7 @@ import time
 import hashlib
 from pathlib import Path
 
-DOME_ROOT = Path(os.environ.get("DOME_ROOT") or Path(__file__).resolve().parents[1])
+DOME_ROOT = Path(os.environ.get("DOME_ROOT", os.path.expanduser("~/DOME-HUB")))
 sys.path.insert(0, str(DOME_ROOT))
 
 from watchdog.observers import Observer

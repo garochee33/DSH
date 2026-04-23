@@ -1,10 +1,8 @@
 #!/bin/bash
 # DOME-HUB Security Audit Script
 # Run anytime to check security posture
-DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 echo "=== DOME-HUB SECURITY AUDIT ==="
 echo "Date: $(date)"
-echo "Root: $DOME_ROOT"
 echo ""
 check() {
   local label=$1 cmd=$2 pass=$3
@@ -47,6 +45,7 @@ else
 fi
 echo ""
 echo "--- DOME-HUB ---"
+DOME_ROOT="${DOME_ROOT:-$HOME/DOME-HUB}"
 [ -f "$DOME_ROOT/.env" ] && \
   echo "⚠️  .env file exists — ensure it's in .gitignore" || \
   echo "✅ No exposed .env"

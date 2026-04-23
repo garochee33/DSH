@@ -1,10 +1,11 @@
 #!/bin/bash
 # DOME-HUB: Finish security + optimization setup
-# Run once: bash scripts/finish-security.sh (from DSH root)
+# Run once: bash "$HOME/DOME-HUB/scripts/finish-security.sh"
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 set -e
-DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOME_ROOT="${DOME_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 
 echo "==> Step 1: Firewall + Stealth"
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
@@ -32,8 +33,8 @@ Key-Type: RSA
 Key-Length: 4096
 Subkey-Type: RSA
 Subkey-Length: 4096
-Name-Real: $(whoami)
-Name-Email: $(whoami)@dome-hub.local
+Name-Real: gadikedoshim
+Name-Email: gadi@dome-hub.local
 Expire-Date: 0
 %no-protection
 EOF

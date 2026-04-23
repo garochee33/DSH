@@ -80,7 +80,7 @@ copied into `kb/claude/skills/`.
 ---
 
 ## DOME-HUB Integration
-- Root: `$DOME_ROOT` (host, default `~/DSH`) · `/sessions/.../mnt/DOME-HUB` (sandbox mount)
+- Root: `~/DOME-HUB` (host) · `/sessions/.../mnt/DOME-HUB` (sandbox mount)
 - Workspace folder for user-visible deliverables: `DOME-HUB/` root and subfolders
 - Registered in `db/dome.db` → `stack` table (category = `agent`, name = `claude`)
 - Individual skills registered in `db/dome.db` → `stack` table (category = `skill`)

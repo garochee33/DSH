@@ -14,7 +14,7 @@ inside DOME-HUB.
 ## Running
 
 ```bash
-cd "$DOME_ROOT"   # e.g. ~/DSH
+cd ~/DOME-HUB
 bash compute/bootstrap-claude.sh
 ```
 

@@ -4,7 +4,8 @@
 
 CATEGORY=${1:?usage: new-project.sh <category> <name>}
 NAME=${2:?usage: new-project.sh <category> <name>}
-DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOME_ROOT="${DOME_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 DIR="$DOME_ROOT/$CATEGORY/$NAME"
 
 mkdir -p "$DIR"

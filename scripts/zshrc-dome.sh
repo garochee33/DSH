@@ -1,6 +1,5 @@
 # DOME-HUB environment
-# Override by exporting DOME_ROOT before sourcing this file (e.g. in ~/.zshrc)
-export DOME_ROOT="${DOME_ROOT:-$HOME/DSH}"
+export DOME_ROOT="${DOME_ROOT:-$HOME/DOME-HUB}"
 export PATH="$DOME_ROOT/scripts:$PATH"
 
 # Pin all AI/ML model caches inside DOME-HUB — nothing leaks to ~/
@@ -53,6 +52,40 @@ alias dome-approve="bash $DOME_ROOT/scripts/dome-approve.sh"
 alias dome-sudo="bash $DOME_ROOT/scripts/dome-sudo.sh"
 alias daemon-watch="bash $DOME_ROOT/scripts/daemon-watch.sh"
 alias dome-check="bash $DOME_ROOT/scripts/dome-check.sh"
+
+# Trinity multi-workspace helpers (DOME-HUB + 3 project dirs)
+trinity-ws() {
+  bash "$DOME_ROOT/scripts/trinity-workspaces.sh" "$@"
+}
+
+trinity-list() {
+  trinity-ws list
+}
+
+trinity-status() {
+  trinity-ws status
+}
+
+trinity-run() {
+  trinity-ws run "$*"
+}
+
+# Fast navigation for the active 4 directories
+cd-dome() {
+  cd "$(trinity-ws path dome-hub)"
+}
+
+cd-womb() {
+  cd "$(trinity-ws path the-womb)"
+}
+
+cd-consortium() {
+  cd "$(trinity-ws path trinity-consortium)"
+}
+
+cd-console() {
+  cd "$(trinity-ws path trinity-dev-console)"
+}
 
 # Akashic Co-Pilot — dimensional context on every session
 alias akashic-start="bash $DOME_ROOT/scripts/akashic-start.sh"

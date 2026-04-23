@@ -21,8 +21,8 @@ Member identities are consortium-internal. Not disclosed in shared or public-fac
 DOME-HUB is a **sovereign node** in the Trinity Consortium network — not a standalone project.
 It is the local compute base, KB, DB, and agent orchestration endpoint for this node.
 
-- Root: `$DOME_ROOT` (default: `~/DSH`)
-- Machine: target Apple Silicon (M1/M2/M3/M4) with MPS-capable GPU and ≥16GB unified memory
+- Root: `~/DOME-HUB`
+- Machine: Apple M3 Pro, 18GB unified memory, macOS 26.3
 - Security: FileVault, SIP, GPG, pass, approval gate (Trinity members only)
 
 ## Seed Deposit
@@ -38,7 +38,7 @@ The foundation of this node is built and ready to receive Trinity's seed:
 |-------|-------|
 | Network | Trinity Consortium — Mycelium Neural Mesh |
 | Node type | Sovereign compute + KB + agent orchestration |
-| GitHub repo | garochee33/DSH (public) |
+| GitHub repo | gadikedoshim/DOME-HUB |
 | Approved principals | Trinity Consortium members (operational config) |
 
 ## Build Goals

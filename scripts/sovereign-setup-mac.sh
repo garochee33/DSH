@@ -27,7 +27,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 echo "==> Installing core tools..."
 brew install git curl wget jq yq tree htop tmux ripgrep fzf zoxide \
   pyenv nvm go rust node \
-  postgresql@17 redis sqlite \
+  postgresql@18 redis sqlite \
   awscli hashicorp/tap/terraform gh \
   gnupg pinentry-mac pass dnscrypt-proxy \
   starship zsh-autosuggestions zsh-syntax-highlighting
@@ -37,8 +37,9 @@ echo "==> Setting up Python..."
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
-pyenv install 3.11.9 2>/dev/null || true
-pyenv global 3.11.9
+PY_VER="${DOME_PYTHON_VERSION:-3.14.3}"
+pyenv install "$PY_VER" 2>/dev/null || true
+pyenv global "$PY_VER"
 pip3 install --upgrade pip pipenv poetry
 
 # Core AI/ML
@@ -94,7 +95,7 @@ pip install -r "$DOME_ROOT/compute/requirements.txt"
 
 # ── 8. Databases ──────────────────────────────────────────────────────────────
 echo "==> Starting databases..."
-brew services start postgresql@17
+brew services start postgresql@18
 brew services start redis
 
 # ── 9. GPG + pass ─────────────────────────────────────────────────────────────

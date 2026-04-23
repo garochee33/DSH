@@ -3,14 +3,14 @@ Akashic Record — dimensional entry writer
 Stores structured records into ChromaDB with domain/depth/node metadata.
 """
 from __future__ import annotations
-import os, pathlib, uuid
+import os, uuid
 from datetime import datetime, timezone
 from typing import Literal
 
 import chromadb
 from chromadb.utils import embedding_functions
 
-DOME_ROOT = os.environ.get("DOME_ROOT") or str(pathlib.Path(__file__).resolve().parents[1])
+DOME_ROOT = os.environ.get("DOME_ROOT", os.path.expanduser("~/DOME-HUB"))
 CHROMA_PATH = f"{DOME_ROOT}/db/chroma"
 NAMESPACE = "akashic"
 _MODEL_NAME = "all-MiniLM-L6-v2"

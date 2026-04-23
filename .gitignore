@@ -1,21 +1,25 @@
+# Environment
 .env
 .env.*
-*.env
-!.env.template
 !.env.example
+!.env.template
+*.env
 .venv/
+
+# Build / dependency caches
 node_modules/
 __pycache__/
 *.pyc
 .DS_Store
 dist/
 
-# Database
+# Database (local-only, regenerated on ingest)
 db/chroma/
 db/*.db
 
 # Large model files
 models/
+models/embeddings/
 
 # AI assistant context files (machine-local)
 CLAUDE.md
@@ -31,40 +35,21 @@ credentials/
 *_rsa
 *_rsa.pub
 *.gpg
-models/embeddings/
 
 # Internal mesh
 agents/core/.mesh/
 
-# Akashic session context (machine-local, regenerated each terminal)
-.akashic-context
-logs/akashic-watcher.pid
-logs/akashic-watcher.log
-
-# Session logs — per-machine, never public
-logs/*.md
+# Logs (machine-local, all transient)
 logs/*.log
-logs/reports/
+logs/*.pid
+.akashic-context
 
-# Full local databases (schema lives in code, data stays per-node)
-db/
-
-# Google Drive desktop sync mount — not source of truth
+# Bulky snapshots / exported archives — never commit
 google drive/
-Google Drive/
+drive/
+*.zip
+**/*.bak
+**/*.pre-sovereign.*
 
-# Machine-local Trinity mesh identity
-agents/core/.mesh/
-
-# Ollama pulled model weights — downloaded per-node
-models/ollama/
-
-# Python build artifacts
-build/
-*.egg-info/
-.pytest_cache/
-
-# IDE / OS cruft
-.idea/
-*.swp
-.DS_Store
+# Cursor/IDE machine-local
+.cursor/rules/codacy.mdc

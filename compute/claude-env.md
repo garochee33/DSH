@@ -7,15 +7,15 @@ Claude Agent SDK) runs in when invoked from inside DOME-HUB.
 
 ## Runtime
 
-- **Python:** 3.11.9 (pinned by `$DOME_ROOT/.python-version`)
+- **Python:** 3.11.9 (pinned by `DOME-HUB/.python-version`)
 - **Venv:** `DOME-HUB/.venv` (root) — shared with the rest of DOME-HUB
 - **Node:** 20 (pinned by `.nvmrc`, needed for the `pptxgenjs` slide path)
-- **OS:** macOS 26+ on Apple Silicon (M1/M2/M3/M4, MPS-capable) · Linux sandbox for Bash tool
+- **OS:** macOS 26.3 (Apple M3 Pro, MPS-capable) · Linux sandbox for Bash tool
 
 ## Install
 
 ```bash
-cd "$DOME_ROOT"   # e.g. ~/DSH
+cd ~/DOME-HUB
 source .venv/bin/activate
 pip install -r compute/requirements.txt
 
@@ -45,9 +45,10 @@ Copy `.env.example` → `.env` at the repo root (never commit `.env`).
 
 | Resource | Value |
 |----------|-------|
-| CPU      | Apple Silicon (ARM64) — M1/M2/M3/M4 series |
-| GPU      | Integrated Apple GPU with MPS backend |
-| RAM      | ≥16 GB recommended (≥24 GB for `sovereign` tier) |
+| CPU      | 12-core M4 Pro (8P + 4E, ARM64) |
+| GPU      | 16-core (Apple MPS) |
+| Neural Engine | 38 TOPS |
+| RAM      | 24 GB unified memory |
 | Disk     | FileVault-encrypted |
 
 For PyTorch workloads use the MPS backend (see `MANUAL.md § 5`).

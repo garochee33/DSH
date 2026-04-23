@@ -1,6 +1,6 @@
 # DOME-HUB Knowledge Base
 
-Root: `$DOME_ROOT/kb/` (default: `~/DSH/kb/`)
+Root: `~/DOME-HUB/kb/`
 
 ## Structure
 
@@ -8,6 +8,7 @@ Root: `$DOME_ROOT/kb/` (default: `~/DSH/kb/`)
 kb/
 ├── README.md                  ← this file
 ├── developer-context.md       ← Trinity Consortium, node identity, architecture
+├── language-landscape-2026.md ← 2026 language strategy and learning paths
 ├── kiro-skills.md             ← Kiro agent capabilities and skill domains
 ├── claude/                    ← Claude agent KB
 │   ├── architecture.md        ← Claude agent architecture
@@ -23,6 +24,7 @@ kb/
 | File | Purpose |
 |------|---------|
 | `developer-context.md` | Node identity, Trinity Consortium context, build goals |
+| `language-landscape-2026.md` | 2026 language landscape, growth outlook, and learning paths |
 | `kiro-skills.md` | Kiro agent capabilities, skill domains, tool access |
 | `claude/architecture.md` | Claude agent design and session model |
 | `claude/claude-skills.md` | Claude packaged skills and invocation patterns |
@@ -42,10 +44,23 @@ results = rag.query("your question here", n_results=5)
 
 ### Via ingest (re-index all KB files)
 ```bash
-cd "$DOME_ROOT"   # e.g. ~/DSH
+cd ~/DOME-HUB
 source .venv/bin/activate
 python3 scripts/ingest.py
 ```
+
+### Annual language landscape rollover
+
+Creates `kb/language-landscape-<YEAR>.md` when a new year is missing (copies from the latest file on disk, rewrites year tokens) and optionally ingests only the new paths into `dome-kb`.
+
+```bash
+cd "$DOME_ROOT"
+source .venv/bin/activate
+python3 scripts/rollover-language-landscape.py --ingest
+# preview: python3 scripts/rollover-language-landscape.py --year 2028 --dry-run
+```
+
+macOS LaunchAgent template: `scripts/launchd/com.dome.language-landscape.plist` (Jan 1 08:00; set `DOME_ROOT` if not `~/DOME-HUB`).
 
 ### Via Kiro CLI
 Ask Kiro directly — it has access to this KB via the knowledge tool (context IDs in `.kiro/`).

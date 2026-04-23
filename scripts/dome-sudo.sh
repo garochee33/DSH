@@ -4,6 +4,8 @@
 # Usage: dome-sudo <command>
 # Example: dome-sudo "launchctl load /Library/LaunchDaemons/something.plist"
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOME_ROOT="${DOME_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 CMD="$*"
 
 if [ -z "$CMD" ]; then
@@ -12,7 +14,6 @@ if [ -z "$CMD" ]; then
 fi
 
 # Require approval
-DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
 bash "$DOME_ROOT/scripts/dome-approve.sh" "sudo" "$CMD"
 if [ $? -ne 0 ]; then exit 1; fi
 

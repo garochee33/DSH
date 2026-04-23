@@ -9,11 +9,11 @@
 # Run interactively. You'll be prompted ONCE for a GPG passphrase.
 set -euo pipefail
 
-DOME_ROOT="${DOME_ROOT:-$HOME/DSH}"
+DOME_ROOT="${DOME_ROOT:-$HOME/DOME-HUB}"
 cd "$DOME_ROOT"
 
-GPG_USER_NAME="$(git config --global user.name || whoami)"
-GPG_USER_EMAIL="$(git config --global user.email || whoami@local)"
+GPG_USER_NAME="$(git config --global user.name || echo enzo)"
+GPG_USER_EMAIL="$(git config --global user.email || echo enzo@local)"
 
 echo "==> DOME-HUB sovereign secrets"
 echo "    identity: $GPG_USER_NAME <$GPG_USER_EMAIL>"
@@ -128,4 +128,4 @@ echo "  pass ls dome/"
 echo "  git config --global --get-regexp 'user.signingkey|commit.gpgsign'"
 echo ""
 echo "To source .env with resolved secrets in zsh:"
-echo "  set -a; source \"\$DOME_ROOT/.env\"; set +a"
+echo "  set -a; source ~/DOME-HUB/.env; set +a"

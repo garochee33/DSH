@@ -1,7 +1,7 @@
 # DOME-HUB Index
 
 Complete reference of all files, directories, and their purpose.
-Last updated: 2026-04-17
+Last updated: 2026-04-22
 
 ---
 
@@ -68,6 +68,14 @@ Infrastructure configs, compute specs, deployment manifests.
 | `compute/requirements.txt` | Shared Python deps (pinned) |
 | `compute/bootstrap-claude.sh` | Idempotent environment bootstrap |
 
+### `/config`
+Export and policy configuration files.
+
+| Path | Purpose |
+|------|---------|
+| `config/public-export.allowlist` | Repo-relative allowlist for private -> public export |
+| `config/public-export.denylist` | Repo-relative denylist for export safety and exclusions |
+
 ### `/db`
 Local databases and data stores.
 
@@ -76,6 +84,14 @@ Local databases and data stores.
 | `db/dome.db` | SQLite — sessions, stack, agents, skills, tools |
 | `db/episodic.db` | SQLite — episodic memory (session facts) |
 | `db/chroma/` | ChromaDB vector store (dome-kb, 141 chunks) |
+
+### `/docs`
+Documentation and operational runbooks.
+
+| Path | Purpose |
+|------|---------|
+| `docs/REPO_FLOW_PRIVATE_PUBLIC.md` | Canonical workflow for DOME-HUB -> DSH export and safety gates |
+| `docs/PUBLIC_PROD_HARDENING.md` | Production/public hardening notes and residual remediation checklist |
 
 ### `/kb`
 Knowledge bases.

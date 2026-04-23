@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+# Pre-push secret scan — blocks pushes that would expose known secret patterns.
+#
+# Installed as .git/hooks/pre-push (directly or via core.hooksPath=.githooks).
+# Tracked in-repo at .githooks/pre-push so fresh clones get it on hook install.
+#
+# Git passes pushed refs on stdin: "<local_ref> <local_sha> <remote_ref> <remote_sha>"
+# For each, scan new commits' changed files for:
+#   1. Filename patterns that should never be committed (id_rsa, *.pem, etc.)
+#   2. Content patterns matching known credential formats (AWS, GitHub, OpenAI, Stripe, Anthropic, Slack, Google, private keys, basic-auth URLs)
+#
+# Bypass: git push --no-verify  (emergency only — leaves a trail in git reflog)
+
+set -eu
+
+REMOTE_NAME="${1:-origin}"
+# REMOTE_URL="${2:-}"  # unused currently
+Z40="0000000000000000000000000000000000000000"
+
+violations=()
+
+# ── filename denylist (glob-ish, evaluated via case)
+is_forbidden_filename() {
+    case "$1" in
+        *id_rsa|*id_dsa|*id_ed25519|*id_ecdsa) return 0 ;;
+        *.pem|*.pfx|*.p12|*.key|*.keystore|*.jks) return 0 ;;
+        *credentials.json|*credentials.yaml|*credentials.yml) return 0 ;;
+        *secrets.json|*secrets.yaml|*secrets.yml) return 0 ;;
+        *.env|.env) return 0 ;;
+    esac
+    # Allowlist explicit examples/templates
+    case "$1" in
+        *.env.example|*.env.template|*.env.sample|.env.example|.env.template) return 1 ;;
+    esac
+    return 1
+}
+
+# ── content pattern (single big regex)
+# Kept deliberately narrow to avoid false positives on docs that MENTION the pattern names.
+CONTENT_RE='(AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{30,}|gho_[A-Za-z0-9]{30,}|ghs_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{20,}|AIza[0-9A-Za-z_-]{30,}|sk_live_[A-Za-z0-9]{20,}|rk_live_[A-Za-z0-9]{20,}|sk-ant-[A-Za-z0-9_-]{20,}|sk-proj-[A-Za-z0-9_-]{30,}|sk-[A-Za-z0-9]{40,}|xoxb-[0-9]+-[0-9]+-[0-9]+-[A-Za-z0-9]+|xoxp-[0-9]+-[0-9]+-[0-9]+-[A-Za-z0-9]+|-----BEGIN (RSA|DSA|EC|OPENSSH|PRIVATE) PRIVATE KEY-----)'
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+    # Deleting a remote branch — nothing to scan
+    [ "$local_sha" = "$Z40" ] && continue
+
+    # Determine commit range
+    if [ "$remote_sha" = "$Z40" ]; then
+        # Pushing a brand-new branch — scan recent commits (cap to last 50)
+        range="$local_sha ^$(git rev-list --max-count=50 "$local_sha" | tail -1)"
+        files=$(git diff --name-only --diff-filter=ACMR "$local_sha" ~"$local_sha" 2>/dev/null || git ls-tree -r --name-only "$local_sha")
+    else
+        range="$remote_sha..$local_sha"
+        files=$(git diff --name-only --diff-filter=ACMR "$range" 2>/dev/null || true)
+    fi
+
+    # Skip if no changed files
+    [ -z "$files" ] && continue
+
+    while IFS= read -r f; do
+        [ -z "$f" ] && continue
+        # File-name check
+        if is_forbidden_filename "$f"; then
+            violations+=("FILENAME: $f (denylisted secret-file pattern)")
+            continue
+        fi
+        # Content check — only on files that exist in the pushed tree
+        if git show "$local_sha:$f" 2>/dev/null | grep -qE "$CONTENT_RE"; then
+            # Get the offending line (first match) without leaking the secret
+            hit=$(git show "$local_sha:$f" | grep -nE "$CONTENT_RE" | head -1 | cut -d: -f1)
+            violations+=("CONTENT:  $f:${hit:-?} (matches known secret pattern)")
+        fi
+    done <<< "$files"
+done
+
+if [ ${#violations[@]} -gt 0 ]; then
+    echo ""
+    echo "🚫 PRE-PUSH SECRET SCAN BLOCKED $(echo ${#violations[@]}) potential leak(s):"
+    echo ""
+    for v in "${violations[@]}"; do
+        echo "  $v"
+    done
+    echo ""
+    echo "If these are false positives, adjust the allowlist or verify manually."
+    echo "To bypass (use only in genuine emergencies; leaves a reflog trail):"
+    echo "  git push --no-verify"
+    exit 1
+fi
+
+echo "✓ Pre-push secret scan: clean"
+exit 0

@@ -38,7 +38,7 @@ The foundation of this node is built and ready to receive Trinity's seed:
 |-------|-------|
 | Network | Trinity Consortium — Mycelium Neural Mesh |
 | Node type | Sovereign compute + KB + agent orchestration |
-| GitHub repo | gadikedoshim/DOME-HUB |
+| GitHub repo | garochee33/DSH |
 | Approved principals | Trinity Consortium members (operational config) |
 
 ## Build Goals

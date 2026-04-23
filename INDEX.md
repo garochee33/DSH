@@ -213,4 +213,4 @@ VS Code settings.
 | Vector Store | `~/DOME-HUB/db/chroma` |
 | Trinity KB | `~/DOME-HUB/kb/trinity-unified-ai` |
 | API Server | `http://127.0.0.1:8000` |
-| GitHub | `https://github.com/gadikedoshim/DOME-HUB` |
+| GitHub | `https://github.com/garochee33/DSH` |

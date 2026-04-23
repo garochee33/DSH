@@ -1,7 +1,7 @@
 # DOME-HUB Index
 
 Complete reference of all files, directories, and their purpose.
-Last updated: 2026-04-22
+Last updated: 2026-04-22 (cross-validation pass)
 
 ---
 
@@ -55,6 +55,22 @@ AI agents — autonomous, orchestrated, or tool-using agents.
 | `agents/local/ollama.py` | Local LLM integration (Ollama) |
 | `agents/workers/queue.py` | Redis-backed async task queue |
 
+### `/.audit`
+Session artifacts, baseline scans, and evidence packs.
+
+| Path | Purpose |
+|------|---------|
+| `.audit/worklogs/chat_session_2026-04-22_codex.md` | Full session worklog from shell setup through cross-validation |
+| `.audit/reports/cross_validation_state_2026-04-22.md` | Current system state, validation outcomes, and next-phase plan |
+| `.audit/phase1_20260422_205039/` | Phase-1 sovereign baseline audit bundle (inventories, manifests, checksums) |
+
+### `/.github`
+Repository automation and CI.
+
+| Path | Purpose |
+|------|---------|
+| `.github/workflows/ci.yml` | Cross-language CI (TypeScript, Python syntax, secret scan, dependency audit) |
+
 ### `/codebase`
 Shared libraries, utilities, and core code used across projects.
 
@@ -92,6 +108,7 @@ Documentation and operational runbooks.
 |------|---------|
 | `docs/REPO_FLOW_PRIVATE_PUBLIC.md` | Canonical workflow for DOME-HUB -> DSH export and safety gates |
 | `docs/PUBLIC_PROD_HARDENING.md` | Production/public hardening notes and residual remediation checklist |
+| `docs/TASKS_PHASE2_EXECUTION_2026-04-22.md` | Phase plan with next tasks, blockers, and validation gates |
 
 ### `/kb`
 Knowledge bases.
@@ -148,9 +165,15 @@ Automation, security, and utility scripts.
 | `dome-sudo.sh` | Privileged command wrapper (requires approval) |
 | `daemon-watch.sh` | Daemon watchdog — removes unauthorized launch agents |
 | `ingest.py` | Populate ChromaDB vector store from KB, logs, docs |
+| `phase1_sovereign_baseline_audit.sh` | Phase-1 workstation baseline capture (inventory + integrity manifests) |
 | `rollover-language-landscape.py` | Create next `kb/language-landscape-<year>.md` from latest + optional ingest |
 | `rollover-language-landscape.sh` | Wrapper: venv + rollover + ingest (cron / launchd) |
+| `launchd/com.dome.language-landscape.plist` | launchd job definition for language-landscape rollover |
 | `register-claude.py` | Populate dome.db with Claude agent + skills + tools |
+| `ollama-init.sh` | Local-first model bootstrap for canonical Trinity model set |
+| `secrets-doctor.sh` | Validates required secrets per provider mode with explicit remediation commands |
+| `rotate-secrets-keychain.sh` | Rotates and re-stores keychain-backed runtime secrets |
+| `trinity-workspaces.sh` | Multi-repo workspace command runner (`list`, `status`, `path`, `run`) |
 | `public-safety-check.sh` | Public export gate for secrets, key signatures, and path leaks |
 | `export-to-dsh.sh` | Allowlist/denylist-driven DOME-HUB -> DSH export pipeline |
 

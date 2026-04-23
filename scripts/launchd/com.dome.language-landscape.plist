@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Annual rollover: Jan 1 08:00 — creates kb/language-landscape-<YEAR>.md if missing
+  and re-ingests into ChromaDB.
+
+  Install (edit DOME_ROOT path first):
+    cp scripts/launchd/com.dome.language-landscape.plist ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/com.dome.language-landscape.plist
+
+  Unload:
+    launchctl unload ~/Library/LaunchAgents/com.dome.language-landscape.plist
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.dome.language-landscape</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-lc</string>
+    <string>export DOME_ROOT=&quot;${DOME_ROOT:-$HOME/DOME-HUB}&quot;; &quot;$DOME_ROOT/scripts/rollover-language-landscape.sh&quot;</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Month</key>
+    <integer>1</integer>
+    <key>Day</key>
+    <integer>1</integer>
+    <key>Hour</key>
+    <integer>8</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/tmp/dome-language-landscape-rollover.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/dome-language-landscape-rollover.err</string>
+</dict>
+</plist>

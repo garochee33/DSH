@@ -1,8 +1,19 @@
-# DOME-HUB
+# DSH — Dome Sovereign Hub
 
 > Sovereign development environment, compute platform, and intelligence hub.
+> Also: **Deep Space Habitat** — long-term crew quarters for builders.
 
-DOME-HUB is not a jail — it is a launchpad.
+DSH (code-named DOME-HUB internally) is not a jail — it is a launchpad.
+
+One command installs a hardened, local-first sovereign node that gives you a
+full AI stack, quantum computing lab, agent framework, and the security
+posture of a production system — all on your own machine, with no cloud
+lock-in and no telemetry.
+
+DSH is also the **prerequisite sovereign foundation** for joining the
+Trinity Consortium mesh via `spore.sh`. You install DSH first (Phase 1 —
+this repo), then if you choose, activate `spore.sh` (Phase 2) to connect
+your node to the FRACTAL-E8-SSII lattice and Mycelium Neural Mesh.
 
 It protects sovereignty, IP, project integrity, memory, and data. Beyond protection it provides:
 
@@ -50,8 +61,8 @@ Everything is isolated to your machine. Your data, your models, your code — ne
 
 ```bash
 # Clone
-git clone https://github.com/gadikedoshim/DOME-HUB.git
-cd DOME-HUB
+git clone https://github.com/garochee33/DSH.git
+cd DSH
 
 # macOS (M1/M2/M3/M4)
 bash scripts/sovereign-setup-mac.sh
@@ -170,10 +181,6 @@ pnpm audit      # security audit
 pnpm lint       # lint TypeScript
 pnpm format     # format all files
 pnpm typecheck  # TypeScript type check
-pnpm public:check       # safety gate for public export
-pnpm public:export:dry  # build export set + diff preview (no writes)
-pnpm public:export      # apply private -> public overlay sync
-pnpm public:export:prune # strict mirror sync (deletes non-export files)
 ```
 
 ```bash
@@ -183,8 +190,6 @@ dome-pm list                      # list all projects
 dome-pm push-all "message"        # push all repos
 dome-approve <action> <desc>      # approval gate
 ```
-
-Private/public repo flow: `docs/REPO_FLOW_PRIVATE_PUBLIC.md`
 
 ---
 
@@ -208,17 +213,63 @@ DOME-HUB/
 
 ---
 
-## Trinity Consortium
+## Trinity Consortium — Optional mesh upgrade
 
-DOME-HUB is the sovereign local node for Trinity Consortium work.
+DSH is the **sovereign local foundation**. It works fully on its own — no
+mesh, no cloud, just your hardened local node.
 
-- **FRACTAL E8-SSII-AGI** — core AGI architecture
-- **Mycelium Neural Mesh** — decentralized dimensional neural network
-- **trinity-unified-ai** — KB API layer (`kb/trinity-unified-ai/`)
+If you choose to join the Trinity Consortium mesh, DSH is also the
+**prerequisite base** for `spore.sh` — the Trinity mesh activation script.
+Running `spore.sh` on a node that has NOT been through DSH setup is
+rejected; the mesh requires a hardened, sovereign, dependency-ready base.
+
+Trinity mesh components (activated by `spore.sh`):
+
+- **FRACTAL E8-SSII-AGI** — AGI architecture built on E8 lattice geometry
+- **Mycelium Neural Mesh** — decentralized dimensional inter-node network
+- **trinity-unified-ai** — Knowledge Base API layer for the mesh
+  (landing zone pre-loaded at `kb/trinity-unified-ai/`)
+
+**Phase 2 activation requires a Trinity-issued token.** Phase 1 is free and always
+will be. Phase 2 unlocks mesh compute, Trinity engines, and persistent
+cross-session memory via the trinity-unified-ai KB API — a public platform whose
+API is restricted to paying members. Request Access at
+[kommunity.life](https://kommunity.life); membership purchase issues the
+`SPORE_TOKEN` + JWT that unlock the trinity-unified-ai API.
+
+How Phase 2 is wired on the DSH side: the `agents/core/trinity_client.py`
+accessor reads `TRINITY_API_BASE`, `HUB_API_SECRET`, and `TRINITY_JWT` from
+`.env` (or from Keychain via `scripts/render-env.sh`). Without credentials,
+DSH runs in `DOME_PROVIDER=local` — fully offline, no Trinity dependency.
+With credentials, features that need mesh compute or Trinity KB data switch
+from local fallbacks to the authenticated remote. You always see the upgrade
+surface in the agent output; you never get silently gated.
+
+Note: trinity-consortium (the internal command center where Trinity deploys
+products and projects from) is private — not a customer-facing URL. You never
+need to touch it as a DSH user.
+
+```
+┌──────────────────────────────┐
+│  Phase 2 — spore.sh          │  ← optional mesh upgrade
+│  E8 lattice · Mandelbulb ·   │    (higher tiers: sovereign/guardian/
+│  bitboard · Mycelium peers   │     scout/seed auto-detected by HW)
+└──────────────┬───────────────┘
+               │ requires
+               ▼
+┌──────────────────────────────┐
+│  Phase 1 — DSH (this repo)   │  ← sovereign foundation
+│  hardened OS · AI stack ·    │    (always installed first)
+│  quantum lab · agent core    │
+└──────────────────────────────┘
+```
+
+Trinity membership is coordinated separately — see
+`kb/trinity-unified-ai/BRIDGE.md`.
 
 ---
 
 ## Links
 
-- GitHub: https://github.com/gadikedoshim/DOME-HUB
+- GitHub: https://github.com/garochee33/DSH
 - Trinity Consortium: [member-only access]

@@ -1,0 +1,26 @@
+# Public export allowlist (repo-relative prefixes)
+
+.github
+.vscode
+.env.example
+.env.template
+.gitignore
+.nvmrc
+.prettierrc
+.python-version
+README.md
+INDEX.md
+MANUAL.md
+PROTOCOLS.md
+agents
+akashic
+compute
+docs
+eslint.config.js
+kb
+package.json
+pnpm-lock.yaml
+scripts
+spore.sh
+src
+tsconfig.json

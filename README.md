@@ -72,7 +72,23 @@ pwsh scripts/sovereign-setup-windows.ps1
 ```
 
 That's it. The script handles everything — languages, databases, AI stack, security, shell config, and prompts you to pick your AI assistant at the end.
-It now renders a live `"[step/20]"` phase tracker so users can see what is currently being installed/loaded.
+It now renders a live `"[step/total]"` phase tracker so users can see what is currently being installed/loaded.
+For video onboarding, use [docs/SETUP_VIDEO_RUNBOOK.md](docs/SETUP_VIDEO_RUNBOOK.md).
+
+---
+
+## Local Node Payload (What Gets Downloaded and Materialized)
+
+Each installer run builds a fully local sovereign node under your cloned `DSH` folder.
+
+- `agents/` is loaded as the local agent runtime + skills surface.
+- `kb/` is loaded as the local knowledge corpus and ingested into Chroma.
+- `db/dome.db` is initialized as your local node catalog (sessions/stack/agents/tools).
+- `db/chroma/` stores local vector memory built from your node KB.
+
+The setup scripts now include a **Local Node Payload Verification** phase that reports
+agent file counts, KB file counts, and local DB/Chroma readiness so users can see
+exactly what was materialized into their node.
 
 ---
 

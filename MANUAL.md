@@ -22,6 +22,16 @@ cd DSH
 pwsh scripts/sovereign-setup-windows.ps1
 ```
 
+The setup flow now includes explicit phase progress plus a **Local Node Payload Verification** step.
+That verification confirms your local node has:
+- agent runtime files under `agents/`
+- KB corpus files under `kb/`
+- SQLite node catalog at `db/dome.db`
+- Chroma vector path at `db/chroma/`
+
+For a guided screen-recorded walkthrough, use:
+- `docs/SETUP_VIDEO_RUNBOOK.md`
+
 ---
 
 ## 2. Daily Usage

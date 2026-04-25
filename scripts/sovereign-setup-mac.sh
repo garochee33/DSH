@@ -5,7 +5,7 @@
 set -euo pipefail
 
 DOME_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-TOTAL_STEPS=20
+TOTAL_STEPS=21
 CURRENT_STEP=0
 CURRENT_PHASE="bootstrap"
 
@@ -37,6 +37,10 @@ echo "DOME-HUB Sovereign Setup (Phase 1)"
 echo "Root: $DOME_ROOT"
 echo "Chip: $(sysctl -n machdep.cpu.brand_string)"
 echo "This installer is safe to re-run. Existing installs are reused when possible."
+echo "This run localizes your sovereign node payload into this repo:"
+echo "  - agents/   -> local agent runtime + skills"
+echo "  - kb/       -> local knowledge corpus to ingest"
+echo "  - db/       -> local SQLite + Chroma vector state"
 
 phase "Xcode CLI Tools"
 if ! xcode-select -p &>/dev/null; then
@@ -219,6 +223,24 @@ cd "$DOME_ROOT" && python3 scripts/ingest.py 2>/dev/null || warn "Ingest skipped
 phase "Claude Agent Registration"
 info "Registering Claude profile in dome.db"
 python3 scripts/register-claude.py 2>/dev/null || true
+
+phase "Local Node Payload Verification"
+info "Verifying sovereign payload was materialized into local repo/KB/DB..."
+AGENT_FILE_COUNT="$(find "$DOME_ROOT/agents" -type f 2>/dev/null | wc -l | tr -d ' ')"
+KB_FILE_COUNT="$(find "$DOME_ROOT/kb" -type f 2>/dev/null | wc -l | tr -d ' ')"
+if [ -f "$DOME_ROOT/db/dome.db" ]; then
+  info "SQLite ready: db/dome.db"
+else
+  warn "SQLite file missing: db/dome.db"
+fi
+if [ -d "$DOME_ROOT/db/chroma" ]; then
+  info "Chroma path ready: db/chroma"
+else
+  warn "Chroma path missing: db/chroma (run: pnpm ingest)"
+fi
+info "Agent files detected: $AGENT_FILE_COUNT"
+info "KB files detected: $KB_FILE_COUNT"
+info "Node scope: all runtime assets are local to $DOME_ROOT"
 
 phase "Git Hook and Scheduler"
 info "Installing pre-push hook (protocol check gate)"

@@ -9,18 +9,72 @@ TOTAL_STEPS=21
 CURRENT_STEP=0
 CURRENT_PHASE="bootstrap"
 BAR_WIDTH=34
+CINEMATIC_MODE="${DOME_CINEMATIC:-1}"
+ANIMATIONS_ENABLED=1
+PREVIEW_CINEMATIC=0
+
+usage() {
+  cat <<'USAGE'
+Usage:
+  bash scripts/sovereign-setup-mac.sh [options]
+
+Options:
+  --cinematic          Force cinematic visual mode (default in interactive TTY)
+  --no-cinematic       Disable sacred-geometry cinematic visuals
+  --no-animations      Disable all animation timing (fast/headless)
+  --preview-cinematic  Render cinematic intro/phase preview and exit
+  -h, --help           Show help
+USAGE
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --cinematic)
+      CINEMATIC_MODE=1
+      ANIMATIONS_ENABLED=1
+      ;;
+    --no-cinematic)
+      CINEMATIC_MODE=0
+      ;;
+    --no-animations)
+      ANIMATIONS_ENABLED=0
+      ;;
+    --preview-cinematic)
+      PREVIEW_CINEMATIC=1
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+  shift
+done
+
+if [[ ! -t 1 ]]; then
+  ANIMATIONS_ENABLED=0
+  if [[ "$PREVIEW_CINEMATIC" -ne 1 ]]; then
+    CINEMATIC_MODE=0
+  fi
+fi
 
 if [[ -t 1 ]] && command -v tput >/dev/null 2>&1 && [[ "$(tput colors 2>/dev/null || echo 0)" -ge 8 ]]; then
   C_RESET="$(tput sgr0)"
   C_CYAN="$(tput setaf 6)"
   C_GREEN="$(tput setaf 2)"
   C_YELLOW="$(tput setaf 3)"
+  C_MAGENTA="$(tput setaf 5)"
   C_DIM="$(tput dim)"
 else
   C_RESET=""
   C_CYAN=""
   C_GREEN=""
   C_YELLOW=""
+  C_MAGENTA=""
   C_DIM=""
 fi
 
@@ -38,12 +92,53 @@ progress_bar() {
 
 pulse() {
   local message="$1"
+  if [[ "$ANIMATIONS_ENABLED" -ne 1 ]]; then
+    printf "    %s...\n" "$message"
+    return
+  fi
   printf "    %s" "$message"
   for _ in 1 2 3; do
     printf "."
     sleep 0.11
   done
   printf "\n"
+}
+
+lattice_spin() {
+  local message="$1"
+  local frames=( "|" "/" "-" "\\" )
+  if [[ "$ANIMATIONS_ENABLED" -ne 1 ]]; then
+    printf "    -> %s\n" "$message"
+    return
+  fi
+  for f in "${frames[@]}"; do
+    printf "\r    -> %s %s" "$message" "$f"
+    sleep 0.06
+  done
+  printf "\r    -> %s done\n" "$message"
+}
+
+sacred_scene() {
+  local label="$1"
+  [[ "$CINEMATIC_MODE" -eq 1 ]] || return 0
+  printf "%s    +----------------------------------------------------------+%s\n" "$C_DIM" "$C_RESET"
+  printf "%s    | %sSacred Geometry Mesh%s                               |%s\n" "$C_DIM" "$C_MAGENTA" "$C_DIM" "$C_RESET"
+  printf "%s    | phase: %-49.49s |%s\n" "$C_DIM" "$label" "$C_RESET"
+  printf "%s    |            o---o---o---o---o                           |%s\n" "$C_DIM" "$C_RESET"
+  printf "%s    |          o---o---o---o---o---o                         |%s\n" "$C_DIM" "$C_RESET"
+  printf "%s    |            o---o---o---o---o                           |%s\n" "$C_DIM" "$C_RESET"
+  printf "%s    +----------------------------------------------------------+%s\n" "$C_DIM" "$C_RESET"
+  lattice_spin "Weaving lattice harmonics"
+}
+
+cinematic_intro() {
+  [[ "$CINEMATIC_MODE" -eq 1 ]] || return 0
+  echo
+  printf "%s+==================================================================+%s\n" "$C_MAGENTA" "$C_RESET"
+  printf "%s|                 D O M E   S O V E R E I G N   N O D E            |%s\n" "$C_MAGENTA" "$C_RESET"
+  printf "%s|                     C I N E M A T I C   M O D E                  |%s\n" "$C_MAGENTA" "$C_RESET"
+  printf "%s+==================================================================+%s\n" "$C_MAGENTA" "$C_RESET"
+  sacred_scene "BOOT SEQUENCE"
 }
 
 phase() {
@@ -53,6 +148,7 @@ phase() {
   printf "%s[%d/%d]%s %s%s%s\n" "$C_CYAN" "$CURRENT_STEP" "$TOTAL_STEPS" "$C_RESET" "$C_GREEN" "$CURRENT_PHASE" "$C_RESET"
   printf "%s%s%s\n" "$C_DIM" "$(progress_bar "$CURRENT_STEP" "$TOTAL_STEPS")" "$C_RESET"
   echo "------------------------------------------------------------"
+  sacred_scene "$CURRENT_PHASE"
 }
 
 info() {
@@ -70,6 +166,24 @@ on_error() {
 }
 
 trap on_error ERR
+
+if [[ "$PREVIEW_CINEMATIC" -eq 1 ]]; then
+  cinematic_intro
+  phase "Core CLI and Infra Packages"
+  info "Loading git, shells, languages, databases, cloud CLIs, and security tooling..."
+  pulse "Preparing package resolver"
+  phase "Python Runtime and Package Stacks"
+  info "Loading AI/ML stack (LangChain, ChromaDB, Transformers, Torch, analytics)"
+  pulse "Resolving AI/ML dependencies"
+  phase "Local Node Payload Verification"
+  info "SQLite ready: db/dome.db"
+  info "Chroma path ready: db/chroma"
+  echo
+  echo "Cinematic preview complete."
+  exit 0
+fi
+
+cinematic_intro
 
 echo "DOME-HUB Sovereign Setup (Phase 1)"
 echo "Root: $DOME_ROOT"

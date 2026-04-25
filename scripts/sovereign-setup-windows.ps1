@@ -8,6 +8,35 @@ $DOME_ROOT = Split-Path -Parent $PSScriptRoot
 $TotalSteps = 17
 $CurrentStep = 0
 $BarWidth = 34
+$CinematicMode = $true
+$AnimationsEnabled = $true
+$PreviewCinematic = $false
+
+function Show-Usage {
+  Write-Host "Usage: .\scripts\sovereign-setup-windows.ps1 [options]"
+  Write-Host "Options:"
+  Write-Host "  --cinematic          Force cinematic visual mode"
+  Write-Host "  --no-cinematic       Disable sacred-geometry cinematic visuals"
+  Write-Host "  --no-animations      Disable animation timing (fast/headless)"
+  Write-Host "  --preview-cinematic  Render cinematic preview and exit"
+  Write-Host "  -h, --help           Show help"
+}
+
+foreach ($arg in $args) {
+  switch ($arg) {
+    "--cinematic" { $CinematicMode = $true; $AnimationsEnabled = $true }
+    "--no-cinematic" { $CinematicMode = $false }
+    "--no-animations" { $AnimationsEnabled = $false }
+    "--preview-cinematic" { $PreviewCinematic = $true }
+    "-h" { Show-Usage; exit 0 }
+    "--help" { Show-Usage; exit 0 }
+    default {
+      Write-Host "Unknown argument: $arg" -ForegroundColor Red
+      Show-Usage
+      exit 2
+    }
+  }
+}
 
 function Show-Phase([string]$Name) {
   $script:CurrentStep++
@@ -19,6 +48,7 @@ function Show-Phase([string]$Name) {
   Write-Host ("[{0}/{1}] {2}" -f $script:CurrentStep, $script:TotalSteps, $Name) -ForegroundColor Cyan
   Write-Host ("[{0}] {1}%" -f $bar, $pct) -ForegroundColor DarkCyan
   Write-Host "------------------------------------------------------------" -ForegroundColor DarkGray
+  Show-SacredCard $Name
 }
 
 function Info([string]$Message) {
@@ -26,6 +56,10 @@ function Info([string]$Message) {
 }
 
 function Pulse([string]$Message) {
+  if (-not $script:AnimationsEnabled) {
+    Write-Host "    $Message..."
+    return
+  }
   Write-Host -NoNewline "    $Message"
   1..3 | ForEach-Object {
     Write-Host -NoNewline "."
@@ -33,6 +67,58 @@ function Pulse([string]$Message) {
   }
   Write-Host ""
 }
+
+function LatticeSpin([string]$Message) {
+  if (-not $script:CinematicMode) { return }
+  if (-not $script:AnimationsEnabled) {
+    Write-Host "    -> $Message done"
+    return
+  }
+  $frames = @("|", "/", "-", "\")
+  foreach ($f in $frames) {
+    Write-Host -NoNewline ("`r    -> {0} {1}" -f $Message, $f)
+    Start-Sleep -Milliseconds 60
+  }
+  Write-Host ("`r    -> {0} done" -f $Message)
+}
+
+function Show-SacredCard([string]$Label) {
+  if (-not $script:CinematicMode) { return }
+  Write-Host "    +----------------------------------------------------------+" -ForegroundColor DarkGray
+  Write-Host "    | Sacred Geometry Mesh                                     |" -ForegroundColor Magenta
+  Write-Host ("    | phase: {0,-49} |" -f ($Label.Substring(0, [Math]::Min($Label.Length, 49)))) -ForegroundColor DarkGray
+  Write-Host "    |            o---o---o---o---o                           |" -ForegroundColor DarkGray
+  Write-Host "    |          o---o---o---o---o---o                         |" -ForegroundColor DarkGray
+  Write-Host "    |            o---o---o---o---o                           |" -ForegroundColor DarkGray
+  Write-Host "    +----------------------------------------------------------+" -ForegroundColor DarkGray
+  LatticeSpin "Weaving lattice harmonics"
+}
+
+function Show-CinematicIntro {
+  if (-not $script:CinematicMode) { return }
+  Write-Host ""
+  Write-Host "+==================================================================+" -ForegroundColor Magenta
+  Write-Host "|                 D O M E   S O V E R E I G N   N O D E            |" -ForegroundColor Magenta
+  Write-Host "|                     C I N E M A T I C   M O D E                  |" -ForegroundColor Magenta
+  Write-Host "+==================================================================+" -ForegroundColor Magenta
+  Show-SacredCard "BOOT SEQUENCE"
+}
+
+if ($PreviewCinematic) {
+  Show-CinematicIntro
+  Show-Phase "Core Tools and Infra Packages"
+  Pulse "Preparing package resolver"
+  Show-Phase "Python Runtime and Package Stacks"
+  Pulse "Resolving Python dependency graph"
+  Show-Phase "Local Node Payload Verification"
+  Info "SQLite ready: db\dome.db"
+  Info "Chroma path ready: db\chroma"
+  Write-Host ""
+  Write-Host "Cinematic preview complete."
+  exit 0
+}
+
+Show-CinematicIntro
 
 Write-Host "DOME-HUB Sovereign Setup (Windows Phase 1)" -ForegroundColor Cyan
 Write-Host "Root: $DOME_ROOT"

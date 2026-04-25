@@ -28,7 +28,11 @@ That verification confirms your local node has:
 - KB corpus files under `kb/`
 - SQLite node catalog at `db/dome.db`
 - Chroma vector path at `db/chroma/`
-It also includes terminal animations (progress bar + loading pulses) to make long install phases easier to follow live.
+It also includes terminal animations (progress bar + loading pulses) and sacred-geometry cinematic cards to make long install phases easier to follow live.
+
+Visual control flags:
+- macOS: `bash scripts/sovereign-setup-mac.sh --cinematic|--no-cinematic|--no-animations|--preview-cinematic`
+- Windows: `pwsh scripts/sovereign-setup-windows.ps1 --cinematic|--no-cinematic|--no-animations|--preview-cinematic`
 
 For a guided screen-recorded walkthrough, use:
 - `docs/SETUP_VIDEO_RUNBOOK.md`

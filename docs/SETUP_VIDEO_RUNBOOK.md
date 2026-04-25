@@ -23,6 +23,10 @@ cd DSH
 bash scripts/sovereign-setup-mac.sh
 ```
 - Call out live `[step/total]` phase output.
+- Optional pre-roll visual-only demo:
+```bash
+bash scripts/sovereign-setup-mac.sh --preview-cinematic
+```
 
 3. Highlight payload materialization (2-3 min)
 - Show setup phases:

@@ -72,6 +72,7 @@ pwsh scripts/sovereign-setup-windows.ps1
 ```
 
 That's it. The script handles everything — languages, databases, AI stack, security, shell config, and prompts you to pick your AI assistant at the end.
+It now renders a live `"[step/20]"` phase tracker so users can see what is currently being installed/loaded.
 
 ---
 

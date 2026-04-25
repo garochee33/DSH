@@ -2,29 +2,61 @@
 # DOME-HUB Sovereign Setup — macOS (M1 / M2 / M3 / M4)
 # Run: bash scripts/sovereign-setup-mac.sh
 
-set -e
-DOME_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-echo "==> DOME-HUB Sovereign Setup"
-echo "    Root: $DOME_ROOT"
-echo "    Chip: $(sysctl -n machdep.cpu.brand_string)"
+set -euo pipefail
 
-# ── 1. Xcode CLI Tools ────────────────────────────────────────────────────────
+DOME_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+TOTAL_STEPS=20
+CURRENT_STEP=0
+CURRENT_PHASE="bootstrap"
+
+phase() {
+  CURRENT_STEP=$((CURRENT_STEP + 1))
+  CURRENT_PHASE="$1"
+  echo
+  echo "[$CURRENT_STEP/$TOTAL_STEPS] $CURRENT_PHASE"
+  echo "------------------------------------------------------------"
+}
+
+info() {
+  echo "    -> $*"
+}
+
+warn() {
+  echo "    WARN: $*"
+}
+
+on_error() {
+  echo
+  echo "Setup failed during step $CURRENT_STEP/$TOTAL_STEPS: $CURRENT_PHASE"
+  echo "Fix the blocker above and re-run: bash scripts/sovereign-setup-mac.sh"
+}
+
+trap on_error ERR
+
+echo "DOME-HUB Sovereign Setup (Phase 1)"
+echo "Root: $DOME_ROOT"
+echo "Chip: $(sysctl -n machdep.cpu.brand_string)"
+echo "This installer is safe to re-run. Existing installs are reused when possible."
+
+phase "Xcode CLI Tools"
 if ! xcode-select -p &>/dev/null; then
-  echo "==> Installing Xcode CLI Tools..."
+  info "Installing Xcode CLI Tools..."
   xcode-select --install
-  echo "    Wait for install to complete, then re-run this script."
+  warn "Xcode install launched. Wait for completion, then re-run this script."
   exit 0
 fi
+info "Xcode CLI Tools already present."
 
-# ── 2. Homebrew ───────────────────────────────────────────────────────────────
+phase "Homebrew"
 if ! command -v brew &>/dev/null; then
-  echo "==> Installing Homebrew..."
+  info "Installing Homebrew..."
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 eval "$(/opt/homebrew/bin/brew shellenv)"
+info "Homebrew ready: $(brew --version | head -n 1)"
 
-# ── 3. Core CLI tools ─────────────────────────────────────────────────────────
-echo "==> Installing core tools..."
+phase "Core CLI and Infra Packages"
+info "Loading git, shells, languages, databases, cloud CLIs, and security tooling..."
 brew install git curl wget jq yq tree htop tmux ripgrep fzf zoxide \
   pyenv nvm go rust node \
   postgresql@18 redis sqlite \
@@ -32,41 +64,39 @@ brew install git curl wget jq yq tree htop tmux ripgrep fzf zoxide \
   gnupg pinentry-mac pass dnscrypt-proxy \
   starship zsh-autosuggestions zsh-syntax-highlighting
 
-# ── 4. Python ─────────────────────────────────────────────────────────────────
-echo "==> Setting up Python..."
+phase "Python Runtime and Package Stacks"
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 PY_VER="${DOME_PYTHON_VERSION:-3.14.3}"
+info "Ensuring Python via pyenv: $PY_VER"
 pyenv install "$PY_VER" 2>/dev/null || true
 pyenv global "$PY_VER"
+info "Upgrading pip + env tooling"
 pip3 install --upgrade pip pipenv poetry
 
-# Core AI/ML
+info "Loading AI/ML stack (LangChain, ChromaDB, Transformers, Torch, analytics)"
 pip3 install openai anthropic claude-agent-sdk langchain chromadb sentence-transformers \
   torch transformers sqlalchemy psycopg2-binary redis pandas numpy \
   scipy sympy statsmodels scikit-learn numba matplotlib networkx psutil tiktoken
 
-# Local inference (Apple Silicon)
+info "Loading local inference stack (Apple Silicon)"
 pip3 install mlx mlx-lm ollama
 
-# Quantum computing stack
+info "Loading quantum stack"
 pip3 install qiskit qiskit-aer pennylane pennylane-qiskit cirq-core qutip pyquil amazon-braket-sdk
 
-# Document creation
+info "Loading document pipeline stack"
 pip3 install python-docx python-pptx openpyxl reportlab pypdf pdfplumber
 
-# Web research
-pip3 install requests beautifulsoup4 httpx
+info "Loading web research + API stack"
+pip3 install requests beautifulsoup4 httpx python-dotenv pydantic rich typer uvicorn fastapi
 
-# Dev/API
-pip3 install python-dotenv pydantic rich typer uvicorn fastapi
-
-# ── 5. Node ───────────────────────────────────────────────────────────────────
-echo "==> Setting up Node..."
-mkdir -p ~/.nvm
+phase "Node and pnpm"
+mkdir -p "$HOME/.nvm"
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && source "/opt/homebrew/opt/nvm/nvm.sh"
+info "Installing Node 20 and global TypeScript runtime tools"
 nvm install 20
 nvm alias default 20
 npm install -g pnpm
@@ -75,35 +105,35 @@ export PNPM_HOME="$HOME/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 pnpm add -g tsx typescript ts-node
 
-# ── 6. VS Code ────────────────────────────────────────────────────────────────
-echo "==> Installing VS Code..."
+phase "VS Code and Extensions"
+info "Installing VS Code (if missing) and extension baseline"
 brew install --cask visual-studio-code 2>/dev/null || true
 for ext in esbenp.prettier-vscode dbaeumer.vscode-eslint ms-python.python \
   ms-python.vscode-pylance ms-python.black-formatter golang.go \
   rust-lang.rust-analyzer ms-azuretools.vscode-docker hashicorp.terraform \
   amazonwebservices.aws-toolkit-vscode eamodio.gitlens usernamehw.errorlens \
   mikestead.dotenv bradlc.vscode-tailwindcss prisma.prisma redhat.vscode-yaml; do
-  code --install-extension $ext --force 2>/dev/null || true
+  code --install-extension "$ext" --force 2>/dev/null || true
 done
 
-# ── 7. Root venv ──────────────────────────────────────────────────────────────
-echo "==> Creating root Python venv..."
+phase "Root Python Virtual Environment"
 python3 -m venv "$DOME_ROOT/.venv"
 source "$DOME_ROOT/.venv/bin/activate"
+info "Installing pinned project requirements into $DOME_ROOT/.venv"
 pip install --upgrade pip wheel
 pip install -r "$DOME_ROOT/compute/requirements.txt"
 
-# ── 8. Databases ──────────────────────────────────────────────────────────────
-echo "==> Starting databases..."
+phase "PostgreSQL and Redis Services"
+info "Starting postgres@18 and redis via brew services"
 brew services start postgresql@18
 brew services start redis
 
-# ── 9. GPG + pass ─────────────────────────────────────────────────────────────
-echo "==> Setting up GPG..."
-mkdir -p ~/.gnupg
-echo "pinentry-program $(brew --prefix)/bin/pinentry-mac" > ~/.gnupg/gpg-agent.conf
-chmod 700 ~/.gnupg
+phase "GPG and pass Secret Store"
+mkdir -p "$HOME/.gnupg"
+echo "pinentry-program $(brew --prefix)/bin/pinentry-mac" > "$HOME/.gnupg/gpg-agent.conf"
+chmod 700 "$HOME/.gnupg"
 if ! gpg --list-secret-keys 2>/dev/null | grep -q "sec"; then
+  info "Generating local GPG key (no passphrase, local-only bootstrap key)"
   gpg --batch --gen-key <<GPGEOF
 Key-Type: RSA
 Key-Length: 4096
@@ -113,14 +143,15 @@ Expire-Date: 0
 %no-protection
 GPGEOF
 fi
-GPG_ID=$(gpg --list-secret-keys --keyid-format LONG 2>/dev/null | grep sec | head -1 | awk '{print $2}' | cut -d'/' -f2)
+GPG_ID="$(gpg --list-secret-keys --keyid-format LONG 2>/dev/null | grep sec | head -1 | awk '{print $2}' | cut -d'/' -f2)"
 pass init "$GPG_ID" 2>/dev/null || true
 git config --global user.signingkey "$GPG_ID"
 git config --global commit.gpgsign true
-git config --global gpg.program "$(which gpg)"
+git config --global gpg.program "$(command -v gpg)"
+info "Git signing key active: $GPG_ID"
 
-# ── 10. Security hardening ────────────────────────────────────────────────────
-echo "==> Hardening security..."
+phase "Security Hardening"
+info "Applying macOS firewall, stealth, power, and telemetry hardening defaults"
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on
 sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on
 sudo pmset -a sms 0
@@ -139,22 +170,21 @@ defaults write com.apple.dock autohide-delay -float 0
 defaults write com.apple.dock launchanim -bool false
 killall Dock 2>/dev/null || true
 
-# ── 11. Private DNS ───────────────────────────────────────────────────────────
-echo "==> Switching to private DNS..."
+phase "Private DNS"
+info "Switching Wi-Fi DNS to localhost resolver and starting dnscrypt-proxy"
 sudo networksetup -setdnsservers Wi-Fi 127.0.0.1 2>/dev/null || true
 sudo brew services start dnscrypt-proxy 2>/dev/null || true
 
-# ── 12. Shell config ──────────────────────────────────────────────────────────
-echo "==> Configuring shell..."
-grep -q "zshrc-dome" ~/.zshrc 2>/dev/null || \
-  echo "source $DOME_ROOT/scripts/zshrc-dome.sh" >> ~/.zshrc
+phase "Shell Configuration"
+grep -q "zshrc-dome" "$HOME/.zshrc" 2>/dev/null || \
+  echo "source $DOME_ROOT/scripts/zshrc-dome.sh" >> "$HOME/.zshrc"
+info "zsh hook ready"
 
-# ── 13. DOME-HUB directory structure
-echo "==> Creating DOME-HUB structure..."
+phase "DOME-HUB Directory Structure"
 mkdir -p "$DOME_ROOT"/{projects,platforms,software,compute,agents,models,kb,db,codebase,logs,scripts}
+info "Core folders ensured"
 
-# ── 14. SQLite DB init
-echo "==> Initializing SQLite DB..."
+phase "SQLite Initialization"
 source "$DOME_ROOT/.venv/bin/activate"
 python3 -c "
 import sqlite3
@@ -168,60 +198,62 @@ db.commit()
 db.close()
 print('DB ready')
 " 2>/dev/null || true
+info "dome.db initialized (or already present)"
 
-# ── 15. pnpm install ──────────────────────────────────────────────────────────
+phase "Repository Dependencies"
+info "Installing Node dependencies in repository root"
 cd "$DOME_ROOT" && pnpm install 2>/dev/null || true
 
-# ── 16. .env setup ────────────────────────────────────────────────────────────
-echo "==> Setting up .env..."
+phase ".env Bootstrap"
 if [ ! -f "$DOME_ROOT/.env" ]; then
   cp "$DOME_ROOT/.env.example" "$DOME_ROOT/.env"
-  echo "    ⚠️  .env created from .env.example — add your API keys before running agents"
+  warn ".env created from .env.example; add API keys before running agents."
+else
+  info ".env already present"
 fi
 
-# ── 17. ChromaDB ingest ───────────────────────────────────────────────────────
-echo "==> Ingesting KB into ChromaDB..."
-cd "$DOME_ROOT" && python3 scripts/ingest.py 2>/dev/null || echo "    (ingest skipped — run: pnpm ingest)"
+phase "ChromaDB Ingest"
+info "Building knowledge index from kb/ into ChromaDB"
+cd "$DOME_ROOT" && python3 scripts/ingest.py 2>/dev/null || warn "Ingest skipped. Run later: pnpm ingest"
 
-# ── 18. Register Claude agent ─────────────────────────────────────────────────
-echo "==> Registering Claude agent in dome.db..."
+phase "Claude Agent Registration"
+info "Registering Claude profile in dome.db"
 python3 scripts/register-claude.py 2>/dev/null || true
 
-# ── 19. Git hooks + cron ──────────────────────────────────────────────────────
-echo "==> Installing git pre-push hook..."
+phase "Git Hook and Scheduler"
+info "Installing pre-push hook (protocol check gate)"
 HOOK="$DOME_ROOT/.git/hooks/pre-push"
 cat > "$HOOK" <<'HOOK_EOF'
 #!/bin/bash
 echo "==> DOME-HUB pre-push protocol check..."
 bash "$(git rev-parse --show-toplevel)/scripts/dome-check.sh" || exit 1
-echo "✅ Protocols OK — pushing"
+echo "Protocols OK - pushing"
 HOOK_EOF
 chmod +x "$HOOK"
 
-echo "==> Installing dome-check cron (every 6h)..."
+info "Installing dome-check cron (every 6h)"
 CRON_JOB="0 */6 * * * cd $DOME_ROOT && bash scripts/dome-check.sh >> logs/dome-check.log 2>&1"
 (crontab -l 2>/dev/null | grep -v "dome-check"; echo "$CRON_JOB") | crontab -
 
-# ── 20. AI Assistant ──────────────────────────────────────────────────────────
-echo ""
-echo "==> AI Assistant — choose one to install:"
-echo "    1) Kiro CLI       (npm install -g kiro-cli)"
-echo "    2) Claude Code    (npm install -g @anthropic-ai/claude-code)"
-echo "    3) Cursor         (brew install --cask cursor)"
-echo "    4) GitHub Copilot (gh extension install github/gh-copilot)"
-echo "    5) Aider          (pip install aider-chat)"
-echo "    6) Skip"
-read -rp "    Enter choice [1-6]: " AI_CHOICE
+phase "AI Assistant Choice"
+echo "Pick your default assistant bootstrap:"
+echo "  1) Kiro CLI       (npm install -g kiro-cli)"
+echo "  2) Claude Code    (npm install -g @anthropic-ai/claude-code)"
+echo "  3) Cursor         (brew install --cask cursor)"
+echo "  4) GitHub Copilot (gh extension install github/gh-copilot)"
+echo "  5) Aider          (pip install aider-chat)"
+echo "  6) Skip"
+read -rp "Enter choice [1-6]: " AI_CHOICE
 case "$AI_CHOICE" in
   1) npm install -g kiro-cli ;;
   2) npm install -g @anthropic-ai/claude-code ;;
   3) brew install --cask cursor ;;
   4) gh extension install github/gh-copilot ;;
   5) pip install aider-chat ;;
-  *) echo "    Skipping AI assistant install." ;;
+  *) info "Skipping assistant install." ;;
 esac
 
-echo ""
-echo "✅ DOME-HUB Sovereign Setup Complete"
-echo "   Run: source ~/.zshrc"
-echo "   Then: bash scripts/audit.sh"
+echo
+echo "DOME-HUB Sovereign Setup Complete"
+echo "Run: source ~/.zshrc"
+echo "Then: bash scripts/audit.sh"

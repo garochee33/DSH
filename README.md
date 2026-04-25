@@ -72,7 +72,7 @@ pwsh scripts/sovereign-setup-windows.ps1
 ```
 
 That's it. The script handles everything — languages, databases, AI stack, security, shell config, and prompts you to pick your AI assistant at the end.
-It now renders a live `"[step/total]"` phase tracker so users can see what is currently being installed/loaded.
+It now renders a live `"[step/total]"` phase tracker with terminal animations (progress bar + loading pulses) so users can see what is currently being installed/loaded.
 For video onboarding, use [docs/SETUP_VIDEO_RUNBOOK.md](docs/SETUP_VIDEO_RUNBOOK.md).
 
 ---

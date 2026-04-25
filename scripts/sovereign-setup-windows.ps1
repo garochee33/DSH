@@ -7,16 +7,31 @@ $ErrorActionPreference = "Stop"
 $DOME_ROOT = Split-Path -Parent $PSScriptRoot
 $TotalSteps = 17
 $CurrentStep = 0
+$BarWidth = 34
 
 function Show-Phase([string]$Name) {
   $script:CurrentStep++
+  $filled = [Math]::Floor(($script:CurrentStep * $script:BarWidth) / $script:TotalSteps)
+  $empty = $script:BarWidth - $filled
+  $bar = ("#" * $filled) + ("-" * $empty)
+  $pct = [Math]::Floor(($script:CurrentStep * 100) / $script:TotalSteps)
   Write-Host ""
   Write-Host ("[{0}/{1}] {2}" -f $script:CurrentStep, $script:TotalSteps, $Name) -ForegroundColor Cyan
+  Write-Host ("[{0}] {1}%" -f $bar, $pct) -ForegroundColor DarkCyan
   Write-Host "------------------------------------------------------------" -ForegroundColor DarkGray
 }
 
 function Info([string]$Message) {
   Write-Host "    -> $Message"
+}
+
+function Pulse([string]$Message) {
+  Write-Host -NoNewline "    $Message"
+  1..3 | ForEach-Object {
+    Write-Host -NoNewline "."
+    Start-Sleep -Milliseconds 110
+  }
+  Write-Host ""
 }
 
 Write-Host "DOME-HUB Sovereign Setup (Windows Phase 1)" -ForegroundColor Cyan
@@ -49,6 +64,7 @@ Info "Chocolatey ready."
 # ── 3. Core tools ─────────────────────────────────────────────────────────────
 Show-Phase "Core Tools and Infra Packages"
 Info "Loading languages, databases, cloud CLIs, and security tooling..."
+Pulse "Preparing package resolver"
 choco install -y git curl wget jq yq tree ripgrep fzf
 choco install -y python311 nodejs-lts golang rust
 choco install -y postgresql17 redis sqlite
@@ -58,6 +74,7 @@ choco install -y gnupg vscode
 # ── 4. Python ─────────────────────────────────────────────────────────────────
 Show-Phase "Python Runtime and Package Stacks"
 Info "Loading AI/ML, analytics, and agent-runtime dependencies..."
+Pulse "Resolving Python dependency graph"
 python -m pip install --upgrade pip pipenv poetry
 python -m pip install openai anthropic langchain chromadb sentence-transformers `
   torch transformers sqlalchemy psycopg2-binary redis pandas numpy `
@@ -66,6 +83,7 @@ python -m pip install openai anthropic langchain chromadb sentence-transformers 
 # ── 5. Node / pnpm ────────────────────────────────────────────────────────────
 Show-Phase "Node and pnpm"
 Info "Installing Node package runtime tooling..."
+Pulse "Preparing Node global toolchain"
 npm install -g pnpm
 pnpm setup
 pnpm add -g tsx typescript ts-node
@@ -137,6 +155,7 @@ if (-not (Test-Path $PROFILE) -or -not (Select-String -Path $PROFILE -Pattern "D
 # ── 11. pnpm install ──────────────────────────────────────────────────────────
 Show-Phase "Repository Dependencies"
 Info "Installing repository Node dependencies..."
+Pulse "Resolving repository dependency graph"
 Set-Location $DOME_ROOT
 pnpm install 2>$null
 
@@ -171,6 +190,7 @@ $pyInit | python -
 # ── 14. ChromaDB ingest ───────────────────────────────────────────────────────
 Show-Phase "ChromaDB Ingest"
 Info "Ingesting local kb/ corpus into db/chroma..."
+Pulse "Vectorizing local knowledge corpus"
 python scripts/ingest.py 2>$null
 
 # ── 15. Register Claude agent ─────────────────────────────────────────────────

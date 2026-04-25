@@ -8,21 +8,59 @@ DOME_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TOTAL_STEPS=21
 CURRENT_STEP=0
 CURRENT_PHASE="bootstrap"
+BAR_WIDTH=34
+
+if [[ -t 1 ]] && command -v tput >/dev/null 2>&1 && [[ "$(tput colors 2>/dev/null || echo 0)" -ge 8 ]]; then
+  C_RESET="$(tput sgr0)"
+  C_CYAN="$(tput setaf 6)"
+  C_GREEN="$(tput setaf 2)"
+  C_YELLOW="$(tput setaf 3)"
+  C_DIM="$(tput dim)"
+else
+  C_RESET=""
+  C_CYAN=""
+  C_GREEN=""
+  C_YELLOW=""
+  C_DIM=""
+fi
+
+progress_bar() {
+  local step="$1"
+  local total="$2"
+  local filled=$((step * BAR_WIDTH / total))
+  local empty=$((BAR_WIDTH - filled))
+  local bar
+  bar="$(printf '%*s' "$filled" '' | tr ' ' '#')"
+  bar="${bar}$(printf '%*s' "$empty" '' | tr ' ' '-')"
+  local pct=$((step * 100 / total))
+  printf "[%s] %3d%%" "$bar" "$pct"
+}
+
+pulse() {
+  local message="$1"
+  printf "    %s" "$message"
+  for _ in 1 2 3; do
+    printf "."
+    sleep 0.11
+  done
+  printf "\n"
+}
 
 phase() {
   CURRENT_STEP=$((CURRENT_STEP + 1))
   CURRENT_PHASE="$1"
   echo
-  echo "[$CURRENT_STEP/$TOTAL_STEPS] $CURRENT_PHASE"
+  printf "%s[%d/%d]%s %s%s%s\n" "$C_CYAN" "$CURRENT_STEP" "$TOTAL_STEPS" "$C_RESET" "$C_GREEN" "$CURRENT_PHASE" "$C_RESET"
+  printf "%s%s%s\n" "$C_DIM" "$(progress_bar "$CURRENT_STEP" "$TOTAL_STEPS")" "$C_RESET"
   echo "------------------------------------------------------------"
 }
 
 info() {
-  echo "    -> $*"
+  printf "    %s->%s %s\n" "$C_CYAN" "$C_RESET" "$*"
 }
 
 warn() {
-  echo "    WARN: $*"
+  printf "    %sWARN%s: %s\n" "$C_YELLOW" "$C_RESET" "$*"
 }
 
 on_error() {
@@ -61,6 +99,7 @@ info "Homebrew ready: $(brew --version | head -n 1)"
 
 phase "Core CLI and Infra Packages"
 info "Loading git, shells, languages, databases, cloud CLIs, and security tooling..."
+pulse "Preparing package resolver"
 brew install git curl wget jq yq tree htop tmux ripgrep fzf zoxide \
   pyenv nvm go rust node \
   postgresql@18 redis sqlite \
@@ -77,23 +116,29 @@ info "Ensuring Python via pyenv: $PY_VER"
 pyenv install "$PY_VER" 2>/dev/null || true
 pyenv global "$PY_VER"
 info "Upgrading pip + env tooling"
+pulse "Bootstrapping Python package manager state"
 pip3 install --upgrade pip pipenv poetry
 
 info "Loading AI/ML stack (LangChain, ChromaDB, Transformers, Torch, analytics)"
+pulse "Resolving AI/ML dependencies"
 pip3 install openai anthropic claude-agent-sdk langchain chromadb sentence-transformers \
   torch transformers sqlalchemy psycopg2-binary redis pandas numpy \
   scipy sympy statsmodels scikit-learn numba matplotlib networkx psutil tiktoken
 
 info "Loading local inference stack (Apple Silicon)"
+pulse "Resolving local inference packages"
 pip3 install mlx mlx-lm ollama
 
 info "Loading quantum stack"
+pulse "Resolving quantum compute packages"
 pip3 install qiskit qiskit-aer pennylane pennylane-qiskit cirq-core qutip pyquil amazon-braket-sdk
 
 info "Loading document pipeline stack"
+pulse "Resolving document pipeline packages"
 pip3 install python-docx python-pptx openpyxl reportlab pypdf pdfplumber
 
 info "Loading web research + API stack"
+pulse "Resolving web/API packages"
 pip3 install requests beautifulsoup4 httpx python-dotenv pydantic rich typer uvicorn fastapi
 
 phase "Node and pnpm"
@@ -101,6 +146,7 @@ mkdir -p "$HOME/.nvm"
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && source "/opt/homebrew/opt/nvm/nvm.sh"
 info "Installing Node 20 and global TypeScript runtime tools"
+pulse "Preparing Node runtime environment"
 nvm install 20
 nvm alias default 20
 npm install -g pnpm
@@ -206,6 +252,7 @@ info "dome.db initialized (or already present)"
 
 phase "Repository Dependencies"
 info "Installing Node dependencies in repository root"
+pulse "Resolving repository dependency graph"
 cd "$DOME_ROOT" && pnpm install 2>/dev/null || true
 
 phase ".env Bootstrap"
@@ -218,6 +265,7 @@ fi
 
 phase "ChromaDB Ingest"
 info "Building knowledge index from kb/ into ChromaDB"
+pulse "Vectorizing local knowledge corpus"
 cd "$DOME_ROOT" && python3 scripts/ingest.py 2>/dev/null || warn "Ingest skipped. Run later: pnpm ingest"
 
 phase "Claude Agent Registration"

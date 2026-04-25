@@ -28,6 +28,7 @@ That verification confirms your local node has:
 - KB corpus files under `kb/`
 - SQLite node catalog at `db/dome.db`
 - Chroma vector path at `db/chroma/`
+It also includes terminal animations (progress bar + loading pulses) to make long install phases easier to follow live.
 
 For a guided screen-recorded walkthrough, use:
 - `docs/SETUP_VIDEO_RUNBOOK.md`

@@ -10,7 +10,7 @@ ollama>=0.2.0
 
 # --- Cloud LLM SDKs (secondary — use only when local is insufficient) ---
 # Anthropic Claude (preferred cloud provider — no OpenAI dependency)
-anthropic>=0.39.0,<1.0.0
+anthropic>=0.97.0,<1.0.0
 claude-agent-sdk>=0.1.0; python_version >= "3.11"
 # OpenAI SDK kept for Ollama OpenAI-compat endpoint only — avoid direct OpenAI API use
 openai>=1.30.0

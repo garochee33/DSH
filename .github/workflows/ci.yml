@@ -50,12 +50,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install numpy scipy sympy numba torch qiskit pennylane cirq \
                       matplotlib networkx mpmath pandas chromadb \
-                      sentence-transformers
+                      sentence-transformers pytest httpx fastapi
 
       - name: Python syntax check
         run: |
           python -m py_compile scripts/*.py akashic/*.py agents/**/*.py || true
           python -m pyflakes scripts/ akashic/ agents/ || true
+
+      - name: Run test suite
+        run: KMP_DUPLICATE_LIB_OK=TRUE python -m pytest tests/ -v --tb=short
 
       - name: Pre-spore skill verify
         run: python scripts/pre-spore-verify.py

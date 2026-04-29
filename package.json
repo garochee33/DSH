@@ -23,6 +23,7 @@
     "public:export:prune": "bash scripts/export-to-dsh.sh --apply --prune",
     "sync": "git pull && python3 scripts/ingest.py && git add -A && git commit -m \"sync: auto\" && git push",
     "check": "bash scripts/dome-check.sh",
+    "test": "KMP_DUPLICATE_LIB_OK=TRUE python3 -m pytest tests/ -v",
     "precommit": "bash scripts/audit.sh"
   },
   "devDependencies": {

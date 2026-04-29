@@ -24,7 +24,7 @@
 ## Data Integrity
 - SQLite DB updated after every session.
 - KB re-ingested after any new content.
-- Git: all changes committed and pushed to master.
+- Git: all changes committed and pushed to main.
 
 ## Maintenance
 - Run `bash scripts/audit.sh` — must be all green.

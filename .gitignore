@@ -68,3 +68,5 @@ build/
 .idea/
 *.swp
 .DS_Store
+.fractalmap/
+AGENTS.md

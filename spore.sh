@@ -57,6 +57,27 @@ SPORE_TOKEN="${SPORE_TOKEN:-__SPORE_TOKEN__}"
 API_BASE="${API_BASE:-https://trinity-consortium.com}"
 USER_ID="${USER_ID:-__USER_ID__}"
 
+# ── DSH prerequisite check ──────────────────────────────────────────────────
+DOME_ROOT="${DOME_ROOT:-$HOME/DSH}"
+if [ ! -f "$DOME_ROOT/.env" ] || [ ! -d "$DOME_ROOT/agents" ] || [ ! -d "$DOME_ROOT/kb" ]; then
+  echo "ERROR: DSH sovereign setup not detected at $DOME_ROOT"
+  echo "spore.sh requires a completed DSH installation (Phase 1) before mesh activation."
+  echo ""
+  echo "Run first:"
+  echo "  git clone https://github.com/garochee33/DSH.git && cd DSH"
+  echo "  bash scripts/sovereign-setup-mac.sh"
+  echo ""
+  echo "Then re-run spore.sh."
+  exit 1
+fi
+if [ -f "$DOME_ROOT/scripts/pre-spore-verify.py" ]; then
+  echo "==> Running pre-spore verification..."
+  if ! python3 "$DOME_ROOT/scripts/pre-spore-verify.py"; then
+    echo "ERROR: Pre-spore verification failed. Fix the issues above and re-run."
+    exit 1
+  fi
+fi
+
 # ── Colors ──────────────────────────────────────────────────────────────────
 G='\033[0;32m'; Y='\033[1;33m'; C='\033[0;36m'; ER='\033[0;31m'; N='\033[0m'
 B='\033[1m'; D='\033[2m'; P='\033[0;35m'; W='\033[1;37m'

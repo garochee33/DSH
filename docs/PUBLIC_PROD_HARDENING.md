@@ -40,7 +40,7 @@ Removing them from the working tree (done — `git rm --cached`) does **not** re
 ```bash
 # Option A (recommended): git-filter-repo
 brew install git-filter-repo
-cd /Users/enzogaroche/DSH
+cd ~/DSH
 git filter-repo --path 'google drive' --invert-paths --force
 git filter-repo --path 'models/embeddings' --invert-paths --force
 
@@ -54,7 +54,7 @@ git branch -m master
 
 ### P0.2 — DOME-HUB private push also blocked
 
-Same large files in history block `gadikedoshim/DOME-HUB` push too. Either:
+Same large files in history block the private DOME-HUB push too. Either:
 - rewrite history (risks confusing collaborators)
 - accept that private repo stays local-only until cleanup
 
@@ -64,7 +64,7 @@ Same large files in history block `gadikedoshim/DOME-HUB` push too. Either:
 
 ## P1 — Personal identity / credential exposure
 
-### P1.1 — GitHub URL references still point to `gadikedoshim/DOME-HUB`
+### P1.1 — GitHub URL references still point to private DOME-HUB
 
 | File | Line |
 |------|------|
@@ -79,18 +79,18 @@ Same large files in history block `gadikedoshim/DOME-HUB` push too. Either:
 
 | File | Line | Current | Target |
 |------|------|---------|--------|
-| `MANUAL.md` | 344 | `cd /Users/gadikedoshim/DOME-HUB` | `cd ~/DSH` |
-| `MANUAL.md` | 365 | `cd /Users/gadikedoshim/DOME-HUB` | `cd ~/DSH` |
-| `MANUAL.md` | 313 | `psql -U gadikedoshim -d postgres` | `psql -U "$USER" -d postgres` |
-| `INDEX.md` | 166–173 | 7 rows with `/Users/gadikedoshim/DOME-HUB` | `$HOME/DSH/...` or `~/DSH/...` |
+| `MANUAL.md` | 344 | `cd ~/DOME-HUB` | `cd ~/DSH` |
+| `MANUAL.md` | 365 | `cd ~/DOME-HUB` | `cd ~/DSH` |
+| `MANUAL.md` | 313 | `psql -U <username> -d postgres` | `psql -U "$USER" -d postgres` |
+| `INDEX.md` | 166–173 | 7 rows with `~/DOME-HUB` | `$HOME/DSH/...` or `~/DSH/...` |
 
 ### P1.3 — Personal identity attribution in CLAUDE.md
 
-`CLAUDE.md:199` — "DOME-HUB is Gadi's sovereign node in the Trinity network."
+`CLAUDE.md:199` — "DOME-HUB is the operator's sovereign node in the Trinity network."
 
 `CLAUDE.md` is also `.gitignore`d already — but it's still in git history. If we purge, make sure the purge covers it everywhere.
 
-### P1.4 — Scripts with hardcoded `/Users/gadikedoshim/DOME-HUB`
+### P1.4 — Scripts with hardcoded absolute paths
 
 2 already fixed (`scripts/pre-spore-verify.py`, `scripts/dome-check.sh`). Still hardcoded:
 
@@ -105,8 +105,8 @@ Same large files in history block `gadikedoshim/DOME-HUB` push too. Either:
 | `scripts/new-project.sh` | 2 refs |
 | `scripts/zshrc-dome.sh` | 1 ref (`export DOME_ROOT=...`) |
 | `scripts/akashic-start.sh` | 1 ref |
-| `scripts/ingest.py` | hardcodes `/Users/enzogaroche/DOME-HUB` (even worse) |
-| `akashic/record.py:13` | `DOME_ROOT = os.environ.get("DOME_ROOT", "/Users/gadikedoshim/DOME-HUB")` |
+| `scripts/ingest.py` | hardcodes absolute home path |
+| `akashic/record.py:13` | `DOME_ROOT = os.environ.get("DOME_ROOT", "~/DSH")` |
 | `agents/example.py` | check for refs |
 
 **Canonical fix pattern:**
@@ -124,13 +124,13 @@ Same large files in history block `gadikedoshim/DOME-HUB` push too. Either:
 ### P1.6 — Session log history with GPG key ID + member names
 
 Earlier session logs (now untracked in DSH, but may still be in git history) referenced:
-- GPG key ID `1EAB79C5C7DCA719`
-- "EGD33 deposit"
+- GPG key ID (redacted)
+- Member deposit references
 - Trinity member identities
 
 Purging history (P0.1) should remove these. Verify after purge via:
 ```bash
-git log --all -p | grep -iE "EGD33|Gadi|enzogaroche|1EAB79C" || echo "clean"
+git log --all -p | grep -iE "personal-id-patterns" || echo "clean"
 ```
 
 ---
@@ -247,7 +247,7 @@ Public README should affirm "no telemetry. No analytics. No phone-home. No LLM c
 2. **Run `pnpm audit` + `pip-audit`** and fix findings
 3. **Fix 11 hardcoded-path scripts** (P1.4) — follow canonical fix pattern
 4. **Globalize GitHub URL references** (P1.1) — sed across docs
-5. **Strip personal identity from docs** (P1.2, P1.3) — fresh voice, no "Gadi"
+5. **Strip personal identity from docs** (P1.2, P1.3) — fresh voice, no personal names
 6. **Add `LICENSE`, `SECURITY.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`** (P2.1)
 7. **Add CI workflow** (P2.2)
 8. **Remove `latest` npm dep** (P2.3)

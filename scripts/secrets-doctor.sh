@@ -6,7 +6,7 @@
 #   claude -> Anthropic key required (all agents on Claude)
 set -euo pipefail
 
-DOME_ROOT="${DOME_ROOT:-$HOME/DOME-HUB}"
+DOME_ROOT="${DOME_ROOT:-$HOME/DSH}"
 MODE="${1:-}"
 if [[ -z "$MODE" ]]; then
   MODE="$(awk -F= '$1=="DOME_PROVIDER"{print $2}' "$DOME_ROOT/.env" 2>/dev/null || true)"

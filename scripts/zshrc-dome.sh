@@ -1,5 +1,5 @@
 # DOME-HUB environment
-export DOME_ROOT="${DOME_ROOT:-$HOME/DOME-HUB}"
+export DOME_ROOT="${DOME_ROOT:-$HOME/DSH}"
 export PATH="$DOME_ROOT/scripts:$PATH"
 
 # Pin all AI/ML model caches inside DOME-HUB — nothing leaks to ~/

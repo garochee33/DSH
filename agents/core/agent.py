@@ -119,7 +119,7 @@ class Agent:
         return msgs
 
     def clear_memory(self):
-        self.mem.working.messages.clear()
+        self.mem.working.clear()
 
     # ── Tool execution ────────────────────────────────────────────────────────
 

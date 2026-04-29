@@ -45,7 +45,7 @@ else
 fi
 echo ""
 echo "--- DOME-HUB ---"
-DOME_ROOT="${DOME_ROOT:-$HOME/DOME-HUB}"
+DOME_ROOT="${DOME_ROOT:-$HOME/DSH}"
 [ -f "$DOME_ROOT/.env" ] && \
   echo "⚠️  .env file exists — ensure it's in .gitignore" || \
   echo "✅ No exposed .env"

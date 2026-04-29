@@ -3,7 +3,7 @@
 # Does not touch git config or remote state.
 set -euo pipefail
 
-DOME_ROOT="${DOME_ROOT:-$HOME/DOME-HUB}"
+DOME_ROOT="${DOME_ROOT:-$HOME/DSH}"
 
 rotate_hub_secret() {
   local value

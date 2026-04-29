@@ -1,6 +1,6 @@
-# DOME-HUB Manual
+# DSH Manual
 
-Complete usage guide for the DOME-HUB sovereign build environment.  
+Complete usage guide for the DSH sovereign build environment.  
 For developers, engineers, creatives, artists, designers, entrepreneurs, and researchers.  
 Last updated: 2026-04-17
 
@@ -41,9 +41,9 @@ For a guided screen-recorded walkthrough, use:
 
 ## 2. Daily Usage
 
-### Open DOME-HUB
+### Open DSH
 ```bash
-dome          # jump to DOME-HUB from anywhere
+dome          # jump to DSH from anywhere
 code .        # open in VS Code
 ```
 
@@ -54,7 +54,7 @@ source .venv/bin/activate
 
 ### Start databases
 ```bash
-brew services start postgresql@17
+brew services start postgresql@18
 brew services start redis
 ```
 
@@ -99,7 +99,7 @@ Log: `logs/dome-check.log`
 ---
 
 ### `dome-pm`
-Project manager for all DOME-HUB repos and projects.
+Project manager for all DSH repos and projects.
 
 ```bash
 dome-pm <command> [args]
@@ -177,7 +177,7 @@ Log: `logs/daemon-watch.log`
 
 ## 4. pnpm Scripts
 
-Run from the DOME-HUB root directory.
+Run from the DSH root directory.
 
 | Command | Description |
 |---------|-------------|
@@ -333,7 +333,7 @@ psql -U "$USER" -d postgres
 redis-cli
 ```
 
-### SQLite (DOME-HUB internal DB)
+### SQLite (DSH internal DB)
 ```bash
 sqlite3 db/dome.db
 .tables
@@ -374,7 +374,7 @@ results = vm.query("your query here", n_results=5)
 
 ---
 
-## 13. Updating DOME-HUB
+## 13. Updating DSH
 
 ```bash
 cd "$DOME_ROOT"   # e.g. ~/DSH
@@ -390,7 +390,7 @@ pnpm ingest
 
 ## 14. Customization Guide
 
-DOME-HUB is fully modular. Every component can be replaced, extended, or removed.
+DSH is fully modular. Every component can be replaced, extended, or removed.
 
 ### Switch AI provider
 Edit `.env`:
@@ -456,7 +456,7 @@ pip install motor           # async MongoDB driver
 Edit `scripts/harden.sh` — add or remove rules, adjust firewall ports, modify telemetry blocks.
 
 ### Use a different shell or editor
-DOME-HUB works with any shell or editor. The zsh config is in `scripts/zshrc-dome.sh` — adapt it for bash, fish, or PowerShell. VS Code settings are in `.vscode/` — swap for any editor.
+DSH works with any shell or editor. The zsh config is in `scripts/zshrc-dome.sh` — adapt it for bash, fish, or PowerShell. VS Code settings are in `.vscode/` — swap for any editor.
 
 ---
 

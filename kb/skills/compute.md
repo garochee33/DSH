@@ -26,7 +26,7 @@ Domain: `build` | Depth: `axiom`
 
 ## Key Functions
 - `jit_compute(fn, *args)` — JIT-compile and run a function
-- `optimize(fn, x0)` — numerical optimization
+- `optimize_fn(fn, x0)` — numerical optimization
 - `fft(signal)` — fast Fourier transform
-- `quantum_circuit(gates)` — build and simulate a quantum circuit
+- `quantum_circuit(n_qubits)` — build and simulate a quantum circuit
 - `gpu_tensor(data)` — move tensor to MPS (Apple GPU)

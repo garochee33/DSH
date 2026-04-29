@@ -3,7 +3,7 @@ DOME-HUB Task Queue — Redis-backed with SQLite persistence
 """
 
 from __future__ import annotations
-import asyncio, json, sqlite3, time, uuid
+import asyncio, json, os, sqlite3, time, uuid
 from pathlib import Path
 from typing import Optional
 
@@ -12,7 +12,7 @@ import redis.asyncio as aioredis
 
 from agents.core.registry import make_dome_orchestrator
 
-DB_PATH = Path.home() / "DOME-HUB" / "db" / "tasks.db"
+DB_PATH = Path(os.environ.get("DOME_ROOT", Path.home() / "DSH")) / "db" / "tasks.db"
 REDIS_URL = "redis://localhost:6379"
 QUEUE_KEY = "dome:queue"
 QUEUE_HIGH = "dome:queue:high"

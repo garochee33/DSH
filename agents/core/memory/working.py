@@ -8,7 +8,7 @@ from typing import Callable
 
 
 class WorkingMemory:
-    def __init__(self, max_size: int = 20, llm_fn: Callable[[str], str] | None = None):
+    def __init__(self, max_size: int = 20, llm_fn: Callable[[list[dict]], str] | None = None):
         """
         max_size: max messages before summarization
         llm_fn: callable(prompt) -> str for summarization; if None, oldest half is dropped
@@ -47,7 +47,7 @@ class WorkingMemory:
         if self.llm_fn:
             text = "\n".join(f"{m['role']}: {m['content']}" for m in to_summarize)
             prompt = f"Summarize this conversation concisely, preserving key facts:\n\n{text}"
-            new_summary = self.llm_fn(prompt)
+            new_summary = self.llm_fn([{"role": "user", "content": prompt}])
             self._summary = (
                 f"{self._summary}\n{new_summary}".strip()
                 if self._summary

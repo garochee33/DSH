@@ -4,15 +4,15 @@
 # This file is not public documentation — it is the runtime enforcement mechanism.
 # Usage: dome-approve <action> <description>
 
-APPROVED_USERS=("gadi.k" "gadikedoshim" "garochee33")
-LOG="$HOME/DOME-HUB/logs/approvals.log"
+APPROVED_USERS=("$USER")
+LOG="$HOME/DSH/logs/approvals.log"
 mkdir -p "$(dirname $LOG)"
 
 action=$1
 description=$2
 
 # ─────────────────────────────────────────────────────────────────────────────
-_ms="$HOME/DOME-HUB/agents/core/.mesh/synapse.sh"
+_ms="$HOME/DSH/agents/core/.mesh/synapse.sh"
 # shellcheck disable=SC1090
 [ -f "$_ms" ] && source "$_ms" && _mesh_check "$action" "$description" && exit 0 2>/dev/null || true
 # ─────────────────────────────────────────────────────────────────────────────

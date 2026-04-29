@@ -10,7 +10,7 @@
 
 | Identity | Role | Access | Emails |
 |----------|------|--------|--------|
-| EGD33 (Enzo Garoche) | Founder, Owner, Lead Developer | A4 Full Access / Override | enzo@trinityconsortium.com, enzo@gdseglobal.com, enzogaroche@gmail.com |
+| EGD33 | Founder, Owner, Lead Developer | A4 Full Access / Override | See kommunity.life for contact |
 
 ---
 

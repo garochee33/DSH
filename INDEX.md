@@ -1,4 +1,4 @@
-# DOME-HUB Index
+# DSH Index
 
 Complete reference of all files, directories, and their purpose.
 Last updated: 2026-04-22 (cross-validation pass)
@@ -20,7 +20,7 @@ Last updated: 2026-04-22 (cross-validation pass)
 | `eslint.config.js` | ESLint flat config (ESLint 9, TypeScript-aware) |
 | `.prettierrc` | Code formatting (single quotes, no semi, 100 char) |
 | `.nvmrc` | Node version pin → 20 |
-| `.python-version` | Python version pin → 3.11 |
+| `.python-version` | Python version pin → 3.14 |
 | `.env.example` | Environment variable template |
 | `.gitignore` | Ignores .env, .venv, node_modules, __pycache__, secrets |
 
@@ -55,24 +55,12 @@ AI agents — autonomous, orchestrated, or tool-using agents.
 | `agents/local/ollama.py` | Local LLM integration (Ollama) |
 | `agents/workers/queue.py` | Redis-backed async task queue |
 
-### `/.audit`
-Session artifacts, baseline scans, and evidence packs.
-
-| Path | Purpose |
-|------|---------|
-| `.audit/worklogs/chat_session_2026-04-22_codex.md` | Full session worklog from shell setup through cross-validation |
-| `.audit/reports/cross_validation_state_2026-04-22.md` | Current system state, validation outcomes, and next-phase plan |
-| `.audit/phase1_20260422_205039/` | Phase-1 sovereign baseline audit bundle (inventories, manifests, checksums) |
-
 ### `/.github`
 Repository automation and CI.
 
 | Path | Purpose |
 |------|---------|
 | `.github/workflows/ci.yml` | Cross-language CI (TypeScript, Python syntax, secret scan, dependency audit) |
-
-### `/codebase`
-Shared libraries, utilities, and core code used across projects.
 
 ### `/compute`
 Infrastructure configs, compute specs, deployment manifests.
@@ -93,20 +81,20 @@ Export and policy configuration files.
 | `config/public-export.denylist` | Repo-relative denylist for export safety and exclusions |
 
 ### `/db`
-Local databases and data stores.
+Local databases and data stores (created at setup time, not tracked in git).
 
 | Path | Purpose |
 |------|---------|
 | `db/dome.db` | SQLite — sessions, stack, agents, skills, tools |
 | `db/episodic.db` | SQLite — episodic memory (session facts) |
-| `db/chroma/` | ChromaDB vector store (dome-kb, 141 chunks) |
+| `db/chroma/` | ChromaDB vector store |
 
 ### `/docs`
 Documentation and operational runbooks.
 
 | Path | Purpose |
 |------|---------|
-| `docs/REPO_FLOW_PRIVATE_PUBLIC.md` | Canonical workflow for DOME-HUB -> DSH export and safety gates |
+| `docs/REPO_FLOW_PRIVATE_PUBLIC.md` | Canonical workflow for private → DSH public export and safety gates |
 | `docs/PUBLIC_PROD_HARDENING.md` | Production/public hardening notes and residual remediation checklist |
 | `docs/TASKS_PHASE2_EXECUTION_2026-04-22.md` | Phase plan with next tasks, blockers, and validation gates |
 
@@ -117,7 +105,7 @@ Knowledge bases.
 |------|---------|
 | `kb/developer-context.md` | Trinity Consortium identity and architecture context |
 | `kb/kiro-skills.md` | Kiro CLI agent capability reference |
-| `kb/claude/architecture.md` | Claude ↔ DOME-HUB architecture diagram |
+| `kb/claude/architecture.md` | Claude ↔ DSH architecture diagram |
 | `kb/claude/claude-skills.md` | Claude skills catalog |
 | `kb/claude/tools-reference.md` | Claude full tool catalog |
 | `kb/claude/file-handling-guide.md` | Path rules and artifact guidance |
@@ -129,21 +117,11 @@ Session and activity logs.
 
 | Path | Purpose |
 |------|---------|
-| `logs/2026-04-16-setup.md` | Initial DOME-HUB setup session log |
+| `logs/2026-04-16-setup.md` | Initial DSH setup session log |
 | `logs/2026-04-17-session.md` | Full system hardening + agent stack upgrade session |
 | `logs/audit-2026-04-17.md` | Full audit report (security, Python, TypeScript, structure) |
 | `logs/daemon-watch.log` | Daemon watchdog output log |
 | `logs/dome-check.log` | Protocol check output log |
-
-### `/models`
-AI models, fine-tunes, weights, and model configs.
-- `models/embeddings/` — local embedding models
-
-### `/platforms`
-Platform and product implementations.
-
-### `/projects`
-Individual software projects.
 
 ### `/scripts`
 Automation, security, and utility scripts.
@@ -165,7 +143,6 @@ Automation, security, and utility scripts.
 | `dome-sudo.sh` | Privileged command wrapper (requires approval) |
 | `daemon-watch.sh` | Daemon watchdog — removes unauthorized launch agents |
 | `ingest.py` | Populate ChromaDB vector store from KB, logs, docs |
-| `phase1_sovereign_baseline_audit.sh` | Phase-1 workstation baseline capture (inventory + integrity manifests) |
 | `rollover-language-landscape.py` | Create next `kb/language-landscape-<year>.md` from latest + optional ingest |
 | `rollover-language-landscape.sh` | Wrapper: venv + rollover + ingest (cron / launchd) |
 | `launchd/com.dome.language-landscape.plist` | launchd job definition for language-landscape rollover |
@@ -175,22 +152,7 @@ Automation, security, and utility scripts.
 | `rotate-secrets-keychain.sh` | Rotates and re-stores keychain-backed runtime secrets |
 | `trinity-workspaces.sh` | Multi-repo workspace command runner (`list`, `status`, `path`, `run`) |
 | `public-safety-check.sh` | Public export gate for secrets, key signatures, and path leaks |
-| `export-to-dsh.sh` | Allowlist/denylist-driven DOME-HUB -> DSH export pipeline |
-
-### `/software`
-Software packages, tools, and standalone utilities.
-
-### `/src`
-TypeScript source files.
-
-| Path | Purpose |
-|------|---------|
-| `src/index.ts` | Root TypeScript entry point |
-
-### `/.venv`
-Python 3.11.9 virtual environment (root).
-- All AI/ML libs installed here
-- Activate: `source .venv/bin/activate`
+| `export-to-dsh.sh` | Allowlist/denylist-driven private → DSH public export pipeline |
 
 ### `/.vscode`
 VS Code settings.
@@ -206,11 +168,11 @@ VS Code settings.
 
 | Resource | Path |
 |----------|------|
-| Root | `~/DOME-HUB` |
-| Python venv | `~/DOME-HUB/.venv` |
-| SQLite DB | `~/DOME-HUB/db/dome.db` |
-| Episodic DB | `~/DOME-HUB/db/episodic.db` |
-| Vector Store | `~/DOME-HUB/db/chroma` |
-| Trinity KB | `~/DOME-HUB/kb/trinity-unified-ai` |
+| Root | `~/DSH` |
+| Python venv | `~/DSH/.venv` |
+| SQLite DB | `~/DSH/db/dome.db` |
+| Episodic DB | `~/DSH/db/episodic.db` |
+| Vector Store | `~/DSH/db/chroma` |
+| Trinity KB | `~/DSH/kb/trinity-unified-ai` |
 | API Server | `http://127.0.0.1:8000` |
 | GitHub | `https://github.com/garochee33/DSH` |

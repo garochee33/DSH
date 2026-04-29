@@ -1,6 +1,6 @@
 # DOME-HUB Knowledge Base
 
-Root: `~/DOME-HUB/kb/`
+Root: `~/DSH/kb/`
 
 ## Structure
 
@@ -10,6 +10,16 @@ kb/
 ├── developer-context.md       ← Trinity Consortium, node identity, architecture
 ├── language-landscape-2026.md ← 2026 language strategy and learning paths
 ├── kiro-skills.md             ← Kiro agent capabilities and skill domains
+├── skills/                    ← Skill documentation (math, compute, sacred_geometry, etc.)
+│   ├── math.md
+│   ├── compute.md
+│   ├── sacred_geometry.md
+│   ├── fractals.md
+│   ├── algorithms.md
+│   ├── frequency.md
+│   ├── cognitive.md
+│   ├── skill-creator.md
+│   └── greenergyfl-finance/
 ├── claude/                    ← Claude agent KB
 │   ├── architecture.md        ← Claude agent architecture
 │   ├── claude-skills.md       ← Claude skill definitions
@@ -44,7 +54,7 @@ results = rag.query("your question here", n_results=5)
 
 ### Via ingest (re-index all KB files)
 ```bash
-cd ~/DOME-HUB
+cd ~/DSH
 source .venv/bin/activate
 python3 scripts/ingest.py
 ```
@@ -60,7 +70,7 @@ python3 scripts/rollover-language-landscape.py --ingest
 # preview: python3 scripts/rollover-language-landscape.py --year 2028 --dry-run
 ```
 
-macOS LaunchAgent template: `scripts/launchd/com.dome.language-landscape.plist` (Jan 1 08:00; set `DOME_ROOT` if not `~/DOME-HUB`).
+macOS LaunchAgent template: `scripts/launchd/com.dome.language-landscape.plist` (Jan 1 08:00; set `DOME_ROOT` if not `~/DSH`).
 
 ### Via Kiro CLI
 Ask Kiro directly — it has access to this KB via the knowledge tool (context IDs in `.kiro/`).

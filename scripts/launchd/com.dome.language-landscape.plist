@@ -19,7 +19,7 @@
   <array>
     <string>/bin/bash</string>
     <string>-lc</string>
-    <string>export DOME_ROOT=&quot;${DOME_ROOT:-$HOME/DOME-HUB}&quot;; &quot;$DOME_ROOT/scripts/rollover-language-landscape.sh&quot;</string>
+    <string>export DOME_ROOT=&quot;${DOME_ROOT:-$HOME/DSH}&quot;; &quot;$DOME_ROOT/scripts/rollover-language-landscape.sh&quot;</string>
   </array>
   <key>StartCalendarInterval</key>
   <dict>

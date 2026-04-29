@@ -25,7 +25,7 @@ Domain: `build` | Depth: `axiom`
 - `shortest_path(graph, src, dst)` — Dijkstra shortest path
 - `mst(graph)` — minimum spanning tree
 - `centrality(graph)` — betweenness + eigenvector centrality
-- `astar(grid, start, goal, heuristic)` — A* pathfinding
+- `astar(grid, start, goal)` — A* pathfinding
 - `genetic_optimize(fitness_fn, population, generations)` — genetic algorithm
 - `entropy(data)` — Shannon entropy
 - `topological_sort(dag)` — topological ordering

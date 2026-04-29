@@ -121,7 +121,7 @@ async def get_memory(name: str):
     agent = orc.agents[name]
     return {
         "agent": name,
-        "memory": [{"role": m.role, "content": m.content} for m in agent.memory],
+        "memory": agent.mem.context(),
     }
 
 

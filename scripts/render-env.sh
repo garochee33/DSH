@@ -8,7 +8,7 @@
 
 set -euo pipefail
 
-DOME_ROOT="${DOME_ROOT:-$HOME/DOME-HUB}"
+DOME_ROOT="${DOME_ROOT:-$HOME/DSH}"
 TPL="$DOME_ROOT/.env.template"
 OUT="$DOME_ROOT/.env"
 

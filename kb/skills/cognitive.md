@@ -34,5 +34,5 @@ Domain: `agent` | Depth: `axiom`
 - `confidence(logits)` — softmax confidence from raw scores
 - `bayesian_update(prior, likelihood, evidence)` — posterior belief
 - `attention_score(query, keys)` — dot-product attention weights
-- `summarize_context(turns, max_tokens)` — compress working memory
+- `summarize_context(turns, max_chars)` — compress working memory
 - `retrieve_relevant(concept, memory, n)` — semantic memory retrieval

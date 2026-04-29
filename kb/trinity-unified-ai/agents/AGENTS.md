@@ -6,9 +6,9 @@ This file provides context for AI assistants working across all Trinity projects
 
 | Project | Path | Type | Priority |
 |---------|------|------|----------|
-| the-womb | `/Users/enzogaroche/projects/the-womb/the-womb` | Full-stack AI platform | HIGH |
-| trinity-consortium | `/Users/enzogaroche/trinity-consortium` | Next.js web app | MEDIUM |
-| trinity-dev-console | `/Users/enzogaroche/projects/trinity-dev-console` | Dev tools | MEDIUM |
+| the-womb | `~/projects/the-womb/the-womb` | Full-stack AI platform | HIGH |
+| trinity-consortium | `~/trinity-consortium` | Next.js web app | MEDIUM |
+| trinity-dev-console | `~/projects/trinity-dev-console` | Dev tools | MEDIUM |
 
 ## Quick Navigation
 

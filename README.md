@@ -49,7 +49,7 @@ One command installs and configures everything:
 - **Web & app dev** — Node 20, TypeScript, React-ready, FastAPI, PostgreSQL, Redis
 - **Creative tools** — document generation (Word, PDF, PowerPoint, Excel), image pipelines
 - **Data science** — NumPy, Pandas, SciPy, scikit-learn, Matplotlib, SymPy, Numba
-- **Infra & cloud** — AWS CLI, Terraform, GitHub CLI, Docker
+- **Infra & cloud** — AWS CLI, Terraform, GitHub CLI
 - **Security** — encrypted disk, private DNS, GPG signing, firewall, no telemetry
 - **Your choice of AI assistant** — Kiro, Claude Code, Cursor, Copilot, Aider
 
@@ -122,19 +122,19 @@ pnpm ingest
 
 ## Customize everything
 
-DOME-HUB is designed to be fully customized. Every piece is modular:
+DSH is designed to be fully customized. Every piece is modular:
 
 | What | Where | How |
 |------|-------|-----|
 | AI agents | `agents/` | Add new agents, tools, skills, memory backends |
 | Knowledge bases | `kb/` | Drop in any `.md`, `.txt`, `.pdf` — auto-indexed into ChromaDB |
-| Models | `models/` | Store fine-tunes, embeddings, weights locally |
+| Models | `models/` | Store fine-tunes, embeddings, weights locally (created at setup) |
 | Databases | `db/` | SQLite, PostgreSQL, Redis, ChromaDB — all local |
 | Scripts | `scripts/` | Add your own automation, hooks, workflows |
 | Environment | `.env` | Switch providers, models, modes per project |
 | Shell | `scripts/zshrc-dome.sh` | Add aliases, functions, env vars |
 | Security | `scripts/harden.sh` | Adjust hardening rules to your needs |
-| Projects | `projects/`, `platforms/`, `software/` | Fully isolated per-project environments |
+| Projects | via `newproject` | Fully isolated per-project environments |
 
 ---
 
@@ -142,19 +142,19 @@ DOME-HUB is designed to be fully customized. Every piece is modular:
 
 | Category | Tools |
 |----------|-------|
-| Languages | Python 3.11, Node 20, TypeScript, Go, Rust |
+| Languages | Python 3.14, Node 20, TypeScript, Go, Rust |
 | Local AI | Ollama, MLX, mlx-lm (Apple Silicon native) |
 | Cloud AI | Anthropic Claude, OpenAI (optional) |
 | AI/ML | PyTorch (MPS/GPU), LangChain, ChromaDB, Transformers, sentence-transformers |
 | Quantum | Qiskit, PennyLane, Cirq, QuTiP, PyQuil, Amazon Braket |
 | Data | NumPy, Pandas, SciPy, scikit-learn, SymPy, Numba, Matplotlib |
-| Databases | PostgreSQL 17, Redis 8, SQLite, ChromaDB |
+| Databases | PostgreSQL 18, Redis 8, SQLite, ChromaDB |
 | Web/API | FastAPI, uvicorn, httpx, requests, BeautifulSoup |
 | Documents | python-docx, python-pptx, openpyxl, reportlab, pypdf |
-| Infra | AWS CLI, Terraform, GitHub CLI, Docker |
+| Infra | AWS CLI, Terraform, GitHub CLI |
 | Editor | VS Code + 16 extensions |
 | Security | FileVault, GPG, pass, dnscrypt-proxy, Firewall + Stealth |
-| Shell | zsh, Starship, zoxide, fzf, tmux, ripgrep |
+| Shell | zsh, Starship, zoxide, fzf, tmux, ripgrep, jq, yq, tree, htop, curl, wget |
 
 ---
 
@@ -174,7 +174,7 @@ The setup script prompts you to pick one. Install manually anytime:
 
 ## Security
 
-DOME-HUB is hardened by default. Every setup runs:
+DSH is hardened by default. Every setup runs:
 
 | Check | Status |
 |-------|--------|
@@ -219,18 +219,16 @@ dome-approve <action> <desc>      # approval gate
 ## Structure
 
 ```
-DOME-HUB/
+DSH/
 ├── agents/          # AI agents — core, claude, api, workers, local
-├── codebase/        # Shared libraries
+├── akashic/         # Akashic record — watcher, assembler, schema
 ├── compute/         # Compute configs & requirements
-├── db/              # Databases (SQLite, ChromaDB)
+├── config/          # Export allowlist/denylist
+├── db/              # Databases (SQLite, ChromaDB) — created at setup
+├── docs/            # Setup runbook, hardening log
 ├── kb/              # Knowledge bases (auto-indexed)
-├── logs/            # Session & activity logs
-├── models/          # Local AI models & fine-tunes
-├── platforms/       # Platforms & products
-├── projects/        # Individual projects
+├── logs/            # Session & activity logs — created at setup
 ├── scripts/         # Automation & setup scripts
-├── software/        # Software packages & tools
 └── src/             # TypeScript source
 ```
 

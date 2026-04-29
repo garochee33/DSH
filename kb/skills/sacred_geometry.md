@@ -29,7 +29,7 @@ Domain: `trinity` | Depth: `axiom`
 
 ## Key Functions
 - `e8_roots()` — all 240 E8 root vectors
-- `platonic(name)` — vertices/faces for tetrahedron, cube, octahedron, dodecahedron, icosahedron
+- `platonic(name)` — vertices/faces for tetrahedron, cube, octahedron, icosahedron
 - `golden_ratio()` — exact symbolic phi
 - `flower_of_life(rings)` — circle centers for n rings
 - `merkaba()` — star tetrahedron vertex coordinates

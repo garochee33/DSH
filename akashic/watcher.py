@@ -20,7 +20,7 @@ from watchdog.events import FileSystemEventHandler
 
 from akashic.record import write
 
-WATCH_DIRS = ["logs", "kb", "projects", "agents"]
+WATCH_DIRS = ["logs", "kb", "agents"]
 EXTENSIONS = {".md", ".txt", ".py", ".ts"}
 
 # domain inference from path

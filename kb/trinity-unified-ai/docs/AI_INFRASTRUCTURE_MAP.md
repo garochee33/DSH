@@ -296,7 +296,7 @@ Estimated monthly savings vs. LLM calls: $150–500
 
 ### ── Primary App: Trinity Consortium ───────────────────
 
-/Users/enzogaroche/projects/trinity-consortium/
+~/projects/trinity-consortium/
 ├── AGENTS.md
 ├── CLAUDE.md
 ├── PROJECT_HANDOFF.md                                   # ⚠️ SENSITIVE — creds inside
@@ -341,7 +341,7 @@ trinityconsortium.shop | trinityconsortium.xyz | trinityglobalpartners.org
 
 ### ── Core AI Platform: The Womb (Monorepo) ────────────
 
-/Users/enzogaroche/projects/the-womb/the-womb/
+~/projects/the-womb/the-womb/
 ├── AGENTS.md | CLAUDE.md | MANIFESTO.md | DEPLOYMENT.md
 ├── pnpm-workspace.yaml | docker-compose.yml | Dockerfile
 └── packages/                                            # 18 packages
@@ -360,19 +360,19 @@ trinityconsortium.shop | trinityconsortium.xyz | trinityglobalpartners.org
 
 ### ── Trinity Consortium2 (Next.js Variant) ─────────────
 
-/Users/enzogaroche/trinity-consortium2/
+~/trinity-consortium2/
 ├── AGENTS.md | CLAUDE.md | TRINITY_STANDARDS.md
 ├── app/ (Next.js App Router — layout.tsx, page.tsx)
 └── Stack: Next.js 16 | React 19 | TypeScript 5 | Tailwind v4
 
 ### ── Dev Console ────────────────────────────────────────
 
-/Users/enzogaroche/projects/trinity-dev-console/
+~/projects/trinity-dev-console/
 ├── src/ | next.config.ts | drizzle.config.ts
 
 ### ── Tax God v3.0 (Standalone AI Platform) ─────────────
 
-/Users/enzogaroche/07_Code/Projects/tax_god_algorithms/  # Core algorithms (EXTRACTED)
+~/07_Code/Projects/tax_god_algorithms/  # Core algorithms (EXTRACTED)
 ├── dtda.py   → Dynamic Task Decomposition Algorithm
 │              DAG-based task breakdown | 7 task categories | parallel/sequential plans
 │              ExecutionPlan: DIRECT | PARALLEL_SWARM | SEQUENTIAL_SPECIALIZED
@@ -399,15 +399,15 @@ Status: Algorithms production-ready | Full-stack deployment spec complete
 
 ### ── Other Active Projects ─────────────────────────────
 
-/Users/enzogaroche/projects/trinity-vhs-dev/             # Vite app
-/Users/enzogaroche/projects/trinity-vhs-theme/           # VHS theme assets
-/Users/enzogaroche/projects/womb-3d-sacred-geometry/     # 3D sacred geometry viewer
-/Users/enzogaroche/projects/sacred-geometry-agents/      # Python+TS sacred geo agents
-/Users/enzogaroche/projects/cto-build-framework/
-/Users/enzogaroche/projects/dev-ops/
-/Users/enzogaroche/projects/trinity-merge-audit/
-/Users/enzogaroche/projects/threejs-react-app/
-/Users/enzogaroche/kimi_agent_n8n_workflow/               # n8n visual orchestration UI
+~/projects/trinity-vhs-dev/             # Vite app
+~/projects/trinity-vhs-theme/           # VHS theme assets
+~/projects/womb-3d-sacred-geometry/     # 3D sacred geometry viewer
+~/projects/sacred-geometry-agents/      # Python+TS sacred geo agents
+~/projects/cto-build-framework/
+~/projects/dev-ops/
+~/projects/trinity-merge-audit/
+~/projects/threejs-react-app/
+~/kimi_agent_n8n_workflow/               # n8n visual orchestration UI
 
 
 ---
@@ -416,7 +416,7 @@ Status: Algorithms production-ready | Full-stack deployment spec complete
 ## 12. TRINITY AI STANDARDS REPO
 ## ════════════════════════════════════════════════════════════
 
-/Users/enzogaroche/trinity-ai-standards/
+~/trinity-ai-standards/
 ├── TRINITY_STANDARDS.md | AGENTS.md | README.md | TRINITY_ROADMAP.md | QUICKSTART.md
 ├── install.sh | install-all.sh
 │
@@ -478,7 +478,7 @@ Status: Algorithms production-ready | Full-stack deployment spec complete
     └── traditions.md           (436 lines, 7/10)
 
 ### External download copy (original source):
-/Users/enzogaroche/Downloads/trinity-sacred-geometry/
+~/Downloads/trinity-sacred-geometry/
   Duplicates to ignore: trinity-sacred-geometry 2/ | trinity-sacred-geometry 3/
 
 ### Key formulas:
@@ -747,7 +747,7 @@ OpenClaw Config (~/.openclaw/openclaw.json):
   model:         gpt-5.3-codex (primary)
   maxConcurrent: 4 agents | 8 subagents | 32 parallel threads
   gateway:       localhost:18789
-  remote:        ws://openclaw.local:18789 (SSH: enzogaroche@openclaw.local)
+  remote:        ws://openclaw.local:18789 (SSH: $USER@openclaw.local)
   tailscale:     configured (mode: off)
   skills API:    goplaces, local-places, sag (sacred-geometry)
   mcp:           same 8 servers as all other tools (unified-memory, shared-knowledge, etc.)
@@ -882,7 +882,7 @@ Memory:    Working | Long-term | Entity graph (GraphRAG) | Episodic (mem0)
 ## ════════════════════════════════════════════════════════════
 
 ```
-## Trinity AI Context — enzogaroche
+## Trinity AI Context — $USER
 
 UNIFIED AI:   ~/trinity-unified-ai/                     ← SINGLE SOURCE OF TRUTH
 INFRA MAP:    ~/trinity-unified-ai/AI_INFRASTRUCTURE_MAP.md
@@ -1006,7 +1006,7 @@ db-migrate       → Drizzle migrations
 db-studio        → Drizzle Studio UI
 
 # Git
-gh repo list enzogaroche    → all repos
+gh repo list $USER    → all repos
 # origin = git@github.com:garochee33/trinity_consortium_v3.git
 ```
 

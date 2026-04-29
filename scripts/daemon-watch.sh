@@ -3,7 +3,7 @@
 # Monitors LaunchAgents/Daemons and permanently removes unauthorized ones
 # Run: bash scripts/daemon-watch.sh (or add to cron)
 
-LOG="$HOME/DOME-HUB/logs/daemon-watch.log"
+LOG="$HOME/DSH/logs/daemon-watch.log"
 mkdir -p "$(dirname $LOG)"
 
 APPROVED=(

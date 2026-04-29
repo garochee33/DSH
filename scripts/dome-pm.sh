@@ -97,7 +97,7 @@ EOF
   publish)
     DIR=${1:?usage: dome-pm publish <path>}
     NAME=$(basename "$DIR")
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+    eval "$(brew shellenv 2>/dev/null || true)"
     gh repo create "$NAME" --private --source="$DIR" --remote=origin --push
     echo "✓ published: https://github.com/$(gh api user -q .login)/$NAME"
     ;;

@@ -27,7 +27,7 @@ block_if_exists /usr/libexec/rapportd
 # OpenAI codex CLI
 for p in \
   /usr/local/bin/codex \
-  /opt/homebrew/bin/codex \
+  "$(command -v codex || echo codex)" \
   "$HOME/.codex/bin/codex" \
   "$HOME/.local/bin/codex"; do
   block_if_exists "$p"

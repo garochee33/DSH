@@ -2,7 +2,7 @@
 # DOME-HUB: Finish security + optimization setup
 # Run once: bash "$HOME/DSH/scripts/finish-security.sh"
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(brew shellenv 2>/dev/null || true)"
 set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOME_ROOT="${DOME_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"

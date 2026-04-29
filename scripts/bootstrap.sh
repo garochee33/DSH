@@ -4,7 +4,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOME_ROOT="${DOME_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 echo "==> DOME-HUB Bootstrap"
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(brew shellenv 2>/dev/null || true)"
 
 # Shell enhancements
 brew install starship zsh-autosuggestions zsh-syntax-highlighting
@@ -12,7 +12,9 @@ brew install starship zsh-autosuggestions zsh-syntax-highlighting
 # nvm setup
 mkdir -p ~/.nvm
 export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && source "/opt/homebrew/opt/nvm/nvm.sh"
+NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && source "$NVM_DIR/nvm.sh"
+[ -s "$(brew --prefix 2>/dev/null)/opt/nvm/nvm.sh" ] && source "$(brew --prefix)/opt/nvm/nvm.sh"
 nvm install 20
 nvm alias default 20
 npm install -g pnpm

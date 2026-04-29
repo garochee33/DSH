@@ -3,7 +3,7 @@
 # Runs all core checks and auto-fixes what it can
 # Usage: bash scripts/dome-check.sh
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(brew shellenv 2>/dev/null || true)"
 DOME_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOG="$DOME_ROOT/logs/dome-check.log"
 PASS=0; FAIL=0; FIXED=0
@@ -64,7 +64,7 @@ defaults read com.apple.screensaver askForPassword 2>/dev/null | grep -q "1" && 
 # If you use Keychain (the sovereign default), this check passes when the entry exists.
 if security find-generic-password -s "dome/HUB_API_SECRET" -w >/dev/null 2>&1; then
   ok "Secrets in Keychain"
-elif /opt/homebrew/bin/gpg --list-secret-keys 2>/dev/null | grep -q "sec"; then
+elif gpg --list-secret-keys 2>/dev/null | grep -q "sec"; then
   ok "GPG key present (pass-based secrets)"
 else
   fail "No secret backend found (Keychain or GPG)"

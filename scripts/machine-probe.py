@@ -178,7 +178,7 @@ def probe_security() -> dict:
     stealth_on = "on" in stealth.lower()
 
     # GPG / pass
-    has_gpg = bool(_sh(["/opt/homebrew/bin/gpg", "--list-secret-keys"]))
+    has_gpg = bool(_sh(["gpg", "--list-secret-keys"]))
     pass_init = (pathlib.Path.home() / ".password-store").is_dir()
 
     # Keychain (sovereign default per DOME-HUB baseline)

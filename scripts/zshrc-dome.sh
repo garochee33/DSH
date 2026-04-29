@@ -17,7 +17,7 @@ export DOME_PROVIDER="mixed"
 export DOME_LOCAL_MODEL="llama3.1:8b"
 
 # Homebrew
-eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(brew shellenv 2>/dev/null || true)"
 
 # pyenv
 export PYENV_ROOT="$HOME/.pyenv"
@@ -26,7 +26,8 @@ command -v pyenv &>/dev/null && eval "$(pyenv init -)"
 
 # nvm
 export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && source "/opt/homebrew/opt/nvm/nvm.sh"
+_BREW_PREFIX="$(brew --prefix 2>/dev/null || echo /opt/homebrew)"
+[ -s "$_BREW_PREFIX/opt/nvm/nvm.sh" ] && source "$_BREW_PREFIX/opt/nvm/nvm.sh"
 
 # go
 export GOPATH="$HOME/go"
@@ -39,10 +40,10 @@ command -v starship &>/dev/null && eval "$(starship init zsh)"
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh)"
 
 # zsh plugins (only if installed)
-[ -f "/opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
-  source "/opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-[ -f "/opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && \
-  source "/opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+[ -f "$_BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && \
+  source "$_BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[ -f "$_BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && \
+  source "$_BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
 # DOME-HUB aliases
 alias dome="cd $DOME_ROOT"

@@ -18,7 +18,7 @@ check "FileVault ON"       "fdesetup status"                          "FileVault
 check "SIP enabled"        "csrutil status"                           "enabled"
 check "Gatekeeper ON"      "spctl --status"                           "enabled"
 check "Firewall ON"        "/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate" "enabled"
-/opt/homebrew/bin/gpg --list-secret-keys 2>/dev/null | grep -q "sec" && echo "✅ GPG key present" || echo "⚠️  No GPG key"
+gpg --list-secret-keys 2>/dev/null | grep -q "sec" && echo "✅ GPG key present" || echo "⚠️  No GPG key"
 check "Screen lock ON"     "/usr/bin/defaults read com.apple.screensaver askForPassword" "1"
 echo ""
 echo "--- Network ---"

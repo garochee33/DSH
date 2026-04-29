@@ -103,3 +103,49 @@ jobs:
         run: |
           pip install pip-audit
           pip-audit -r compute/requirements.txt || true
+
+  windows:
+    name: Windows setup script validation
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: PowerShell syntax check
+        shell: pwsh
+        run: |
+          $null = [System.Management.Automation.Language.Parser]::ParseFile(
+            "$PWD/scripts/sovereign-setup-windows.ps1",
+            [ref]$null,
+            [ref]$errors
+          )
+          if ($errors.Count -gt 0) {
+            $errors | ForEach-Object { Write-Error $_.ToString() }
+            exit 1
+          }
+          Write-Host "PowerShell syntax: PASS — 0 parse errors"
+
+      - name: Validate script structure
+        shell: pwsh
+        run: |
+          $content = Get-Content scripts/sovereign-setup-windows.ps1 -Raw
+          $checks = @(
+            @{ Name = "Show-Phase function"; Pattern = "function Show-Phase" },
+            @{ Name = "Python install";      Pattern = "python|pyenv|winget.*Python" },
+            @{ Name = "Node install";        Pattern = "node|nvm|winget.*Node" },
+            @{ Name = "PostgreSQL";          Pattern = "postgresql|postgres" },
+            @{ Name = "Redis";               Pattern = "redis" },
+            @{ Name = "VS Code";             Pattern = "visual-studio-code|code --install" },
+            @{ Name = "GPG/security";        Pattern = "gpg|gnupg|signing" },
+            @{ Name = "AI assistant choice"; Pattern = "Kiro|Claude|Cursor|Copilot|Aider" }
+          )
+          $fail = 0
+          foreach ($c in $checks) {
+            if ($content -match $c.Pattern) {
+              Write-Host "✅ $($c.Name)"
+            } else {
+              Write-Host "❌ $($c.Name) — pattern not found: $($c.Pattern)"
+              $fail++
+            }
+          }
+          if ($fail -gt 0) { exit 1 }
+          Write-Host "Structure validation: PASS"

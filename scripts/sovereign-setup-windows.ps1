@@ -153,7 +153,7 @@ Info "Loading languages, databases, cloud CLIs, and security tooling..."
 Pulse "Preparing package resolver"
 choco install -y git curl wget jq yq tree ripgrep fzf
 choco install -y python311 nodejs-lts golang rust
-choco install -y postgresql17 redis sqlite
+choco install -y postgresql18 redis sqlite
 choco install -y awscli terraform gh
 choco install -y gnupg vscode
 
@@ -165,6 +165,18 @@ python -m pip install --upgrade pip pipenv poetry
 python -m pip install openai anthropic langchain chromadb sentence-transformers `
   torch transformers sqlalchemy psycopg2-binary redis pandas numpy `
   scipy sympy statsmodels scikit-learn numba matplotlib networkx psutil
+
+Info "Loading quantum stack..."
+Pulse "Resolving quantum compute packages"
+python -m pip install qiskit qiskit-aer pennylane cirq-core
+
+Info "Loading document pipeline stack..."
+Pulse "Resolving document pipeline packages"
+python -m pip install python-docx python-pptx openpyxl reportlab pypdf pdfplumber
+
+Info "Loading web/API stack..."
+Pulse "Resolving web/API packages"
+python -m pip install requests beautifulsoup4 httpx python-dotenv pydantic rich typer uvicorn fastapi
 
 # ── 5. Node / pnpm ────────────────────────────────────────────────────────────
 Show-Phase "Node and pnpm"
@@ -257,14 +269,15 @@ Show-Phase "SQLite Initialization"
 Info "Initializing local db\dome.db catalog..."
 $dbPath = Join-Path $DOME_ROOT "db\dome.db"
 $pyInit = @"
-import sqlite3
+import sqlite3, os
+os.makedirs(os.path.dirname(r"$dbPath"), exist_ok=True)
 db = sqlite3.connect(r"$dbPath")
 for sql in [
   "CREATE TABLE IF NOT EXISTS sessions (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, title TEXT, content TEXT, tags TEXT, created_at TEXT)",
-  "CREATE TABLE IF NOT EXISTS stack (id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT, name TEXT, version TEXT, status TEXT, updated_at TEXT)",
-  "CREATE TABLE IF NOT EXISTS agents (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, type TEXT, model TEXT, status TEXT, registered_at TEXT)",
-  "CREATE TABLE IF NOT EXISTS skills (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id INTEGER, name TEXT, description TEXT)",
-  "CREATE TABLE IF NOT EXISTS tools (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id INTEGER, name TEXT, description TEXT)",
+  "CREATE TABLE IF NOT EXISTS stack (id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT, name TEXT, version TEXT, status TEXT, updated_at TEXT, UNIQUE(category, name))",
+  "CREATE TABLE IF NOT EXISTS agents (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, vendor TEXT, version TEXT, surface TEXT, role TEXT, kb_path TEXT, entrypoint TEXT, updated_at TEXT)",
+  "CREATE TABLE IF NOT EXISTS skills (id INTEGER PRIMARY KEY AUTOINCREMENT, agent TEXT, name TEXT, description TEXT, path TEXT, updated_at TEXT, UNIQUE(agent, name))",
+  "CREATE TABLE IF NOT EXISTS tools (id INTEGER PRIMARY KEY AUTOINCREMENT, agent TEXT, name TEXT, category TEXT, description TEXT, updated_at TEXT, UNIQUE(agent, name))",
 ]:
   db.execute(sql)
 db.commit()
@@ -315,4 +328,4 @@ switch ($aiChoice) {
 
 Write-Host ""
 Write-Host "DOME-HUB Sovereign Setup Complete" -ForegroundColor Green
-Write-Host "   Restart PowerShell, then run: bash scripts/audit.sh"
+Write-Host "   Restart PowerShell, then run: pnpm check"

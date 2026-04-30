@@ -50,7 +50,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install numpy scipy sympy numba torch qiskit pennylane cirq \
                       matplotlib networkx mpmath pandas chromadb \
-                      sentence-transformers pytest httpx fastapi
+                      sentence-transformers pytest httpx fastapi psutil
 
       - name: Python syntax check
         run: |
@@ -113,13 +113,15 @@ jobs:
       - name: PowerShell syntax check
         shell: pwsh
         run: |
+          $tokens = $null
+          $parseErrors = $null
           $null = [System.Management.Automation.Language.Parser]::ParseFile(
             "$PWD/scripts/sovereign-setup-windows.ps1",
-            [ref]$null,
-            [ref]$errors
+            [ref]$tokens,
+            [ref]$parseErrors
           )
-          if ($errors.Count -gt 0) {
-            $errors | ForEach-Object { Write-Error $_.ToString() }
+          if ($parseErrors.Count -gt 0) {
+            $parseErrors | ForEach-Object { Write-Error $_.ToString() }
             exit 1
           }
           Write-Host "PowerShell syntax: PASS — 0 parse errors"

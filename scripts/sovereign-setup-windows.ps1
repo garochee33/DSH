@@ -98,8 +98,8 @@ function Show-CinematicIntro {
   if (-not $script:CinematicMode) { return }
   Write-Host ""
   Write-Host "+==================================================================+" -ForegroundColor Magenta
-  Write-Host "|                 D O M E   S O V E R E I G N   N O D E            |" -ForegroundColor Magenta
-  Write-Host "|                     C I N E M A T I C   M O D E                  |" -ForegroundColor Magenta
+  Write-Host "|          D S H   —   D O M E   S O V E R E I G N   H U B        |" -ForegroundColor Magenta
+  Write-Host "|              S O V E R E I G N   N O D E   S E T U P             |" -ForegroundColor Magenta
   Write-Host "+==================================================================+" -ForegroundColor Magenta
   Show-SacredCard "BOOT SEQUENCE"
 }

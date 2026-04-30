@@ -135,8 +135,8 @@ cinematic_intro() {
   [[ "$CINEMATIC_MODE" -eq 1 ]] || return 0
   echo
   printf "%s+==================================================================+%s\n" "$C_MAGENTA" "$C_RESET"
-  printf "%s|                 D O M E   S O V E R E I G N   N O D E            |%s\n" "$C_MAGENTA" "$C_RESET"
-  printf "%s|                     C I N E M A T I C   M O D E                  |%s\n" "$C_MAGENTA" "$C_RESET"
+  printf "%s|          D S H   —   D O M E   S O V E R E I G N   H U B        |%s\n" "$C_MAGENTA" "$C_RESET"
+  printf "%s|              S O V E R E I G N   N O D E   S E T U P             |%s\n" "$C_MAGENTA" "$C_RESET"
   printf "%s+==================================================================+%s\n" "$C_MAGENTA" "$C_RESET"
   sacred_scene "BOOT SEQUENCE"
 }

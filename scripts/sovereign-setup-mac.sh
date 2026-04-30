@@ -67,7 +67,7 @@ if [[ -t 1 ]] && command -v tput >/dev/null 2>&1 && [[ "$(tput colors 2>/dev/nul
   C_CYAN="$(tput setaf 6)"
   C_GREEN="$(tput setaf 2)"
   C_YELLOW="$(tput setaf 3)"
-  C_MAGENTA="$(tput setaf 5)"
+  C_MAGENTA="$(tput setaf 3)"
   C_DIM="$(tput dim)"
 else
   C_RESET=""

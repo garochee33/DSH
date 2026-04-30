@@ -462,3 +462,5 @@ printf "%s    ⭐ If DSH helped you — star the repo and leave a review:%s\n" "
 printf "%s    → https://github.com/garochee33/DSH%s\n" "$C_CYAN" "$C_RESET"
 echo "    Your feedback helps us build better sovereign tools for everyone."
 echo
+printf "%s    📖 What's next? Read NEXT_STEPS.md for post-setup guide.%s\n" "$C_DIM" "$C_RESET"
+echo

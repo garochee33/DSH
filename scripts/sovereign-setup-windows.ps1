@@ -340,3 +340,5 @@ Write-Host "    ⭐ If DSH helped you — star the repo and leave a review:" -Fo
 Write-Host "    → https://github.com/garochee33/DSH" -ForegroundColor Cyan
 Write-Host "    Your feedback helps us build better sovereign tools for everyone."
 Write-Host ""
+Write-Host "    📖 What's next? Read NEXT_STEPS.md for post-setup guide." -ForegroundColor DarkGray
+Write-Host ""

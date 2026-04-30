@@ -452,6 +452,13 @@ case "$AI_CHOICE" in
 esac
 
 echo
-echo "DOME-HUB Sovereign Setup Complete"
-echo "Run: source ~/.zshrc"
-echo "Then: bash scripts/audit.sh"
+printf "%s" "$C_GREEN"
+echo "    ✦ DSH Sovereign Setup Complete"
+printf "%s" "$C_RESET"
+echo "    Run: source ~/.zshrc"
+echo "    Then: pnpm check"
+echo
+printf "%s    ⭐ If DSH helped you — star the repo and leave a review:%s\n" "$C_YELLOW" "$C_RESET"
+printf "%s    → https://github.com/garochee33/DSH%s\n" "$C_CYAN" "$C_RESET"
+echo "    Your feedback helps us build better sovereign tools for everyone."
+echo

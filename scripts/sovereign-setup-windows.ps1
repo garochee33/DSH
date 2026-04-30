@@ -333,5 +333,10 @@ switch ($aiChoice) {
 }
 
 Write-Host ""
-Write-Host "DOME-HUB Sovereign Setup Complete" -ForegroundColor Green
-Write-Host "   Restart PowerShell, then run: pnpm check"
+Write-Host "    ✦ DSH Sovereign Setup Complete" -ForegroundColor Green
+Write-Host "    Restart PowerShell, then run: pnpm check"
+Write-Host ""
+Write-Host "    ⭐ If DSH helped you — star the repo and leave a review:" -ForegroundColor Yellow
+Write-Host "    → https://github.com/garochee33/DSH" -ForegroundColor Cyan
+Write-Host "    Your feedback helps us build better sovereign tools for everyone."
+Write-Host ""

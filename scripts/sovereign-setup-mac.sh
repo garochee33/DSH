@@ -84,50 +84,56 @@ progress_bar() {
   local filled=$((step * BAR_WIDTH / total))
   local empty=$((BAR_WIDTH - filled))
   local bar
-  bar="$(printf '%*s' "$filled" '' | tr ' ' '#')"
-  bar="${bar}$(printf '%*s' "$empty" '' | tr ' ' '-')"
+  bar="$(printf '%*s' "$filled" '' | tr ' ' '█')"
+  bar="${bar}$(printf '%*s' "$empty" '' | tr ' ' '░')"
   local pct=$((step * 100 / total))
-  printf "[%s] %3d%%" "$bar" "$pct"
+  printf "    ▐%s▌ %3d%%" "$bar" "$pct"
 }
 
 pulse() {
   local message="$1"
   if [[ "$ANIMATIONS_ENABLED" -ne 1 ]]; then
-    printf "    %s...\n" "$message"
+    printf "    ▸ %s...\n" "$message"
     return
   fi
-  printf "    %s" "$message"
+  printf "    %s▸ %s%s" "$C_YELLOW" "$message" "$C_RESET"
   for _ in 1 2 3; do
-    printf "."
-    sleep 0.11
+    printf "%s●%s" "$C_MAGENTA" "$C_RESET"
+    sleep 0.15
   done
   printf "\n"
 }
 
 lattice_spin() {
   local message="$1"
-  local frames=( "|" "/" "-" "\\" )
+  local frames=( "◐" "◓" "◑" "◒" )
   if [[ "$ANIMATIONS_ENABLED" -ne 1 ]]; then
-    printf "    -> %s\n" "$message"
+    printf "    ▸ %s\n" "$message"
     return
   fi
   for f in "${frames[@]}"; do
-    printf "\r    -> %s %s" "$message" "$f"
-    sleep 0.06
+    printf "\r    %s%s %s%s" "$C_MAGENTA" "$f" "$message" "$C_RESET"
+    sleep 0.08
   done
-  printf "\r    -> %s done\n" "$message"
+  printf "\r    %s✦ %s done%s\n" "$C_GREEN" "$message" "$C_RESET"
 }
 
 sacred_scene() {
   local label="$1"
   [[ "$CINEMATIC_MODE" -eq 1 ]] || return 0
-  printf "%s    +----------------------------------------------------------+%s\n" "$C_DIM" "$C_RESET"
-  printf "%s    | %sSacred Geometry Mesh%s                               |%s\n" "$C_DIM" "$C_MAGENTA" "$C_DIM" "$C_RESET"
-  printf "%s    | phase: %-49.49s |%s\n" "$C_DIM" "$label" "$C_RESET"
-  printf "%s    |            o---o---o---o---o                           |%s\n" "$C_DIM" "$C_RESET"
-  printf "%s    |          o---o---o---o---o---o                         |%s\n" "$C_DIM" "$C_RESET"
-  printf "%s    |            o---o---o---o---o                           |%s\n" "$C_DIM" "$C_RESET"
-  printf "%s    +----------------------------------------------------------+%s\n" "$C_DIM" "$C_RESET"
+  printf "%s\n" "$C_MAGENTA"
+  printf '    ╔══════════════════════════════════════════════════════════╗\n'
+  printf '    ║  ▓▓▓ Sacred Geometry Mesh ▓▓▓                          ║\n'
+  printf '    ║                                                        ║\n'
+  printf '    ║       ◆───◆───◆───◆───◆                                ║\n'
+  printf '    ║      ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲                              ║\n'
+  printf '    ║     ◆───◆───◆───◆───◆───◆                              ║\n'
+  printf '    ║      ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱                              ║\n'
+  printf '    ║       ◆───◆───◆───◆───◆                                ║\n'
+  printf '    ║                                                        ║\n'
+  printf "    ║  %-54.54s  ║\n" "$label"
+  printf '    ╚══════════════════════════════════════════════════════════╝\n'
+  printf "%s" "$C_RESET"
   lattice_spin "Weaving lattice harmonics"
 }
 
@@ -152,14 +158,15 @@ phase() {
   CURRENT_STEP=$((CURRENT_STEP + 1))
   CURRENT_PHASE="$1"
   echo
-  printf "%s[%d/%d]%s %s%s%s\n" "$C_CYAN" "$CURRENT_STEP" "$TOTAL_STEPS" "$C_RESET" "$C_GREEN" "$CURRENT_PHASE" "$C_RESET"
+  printf "%s    ┌─────────────────────────────────────────────┐%s\n" "$C_CYAN" "$C_RESET"
+  printf "%s    │  ▶  [%d/%d]  %-33.33s│%s\n" "$C_CYAN" "$CURRENT_STEP" "$TOTAL_STEPS" "$CURRENT_PHASE" "$C_RESET"
+  printf "%s    └─────────────────────────────────────────────┘%s\n" "$C_CYAN" "$C_RESET"
   printf "%s%s%s\n" "$C_DIM" "$(progress_bar "$CURRENT_STEP" "$TOTAL_STEPS")" "$C_RESET"
-  echo "------------------------------------------------------------"
   sacred_scene "$CURRENT_PHASE"
 }
 
 info() {
-  printf "    %s->%s %s\n" "$C_CYAN" "$C_RESET" "$*"
+  printf "    %s▸%s %s\n" "$C_CYAN" "$C_RESET" "$*"
 }
 
 warn() {

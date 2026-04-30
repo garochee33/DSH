@@ -58,41 +58,7 @@ ollama pull nomic-embed-text  # 274MB — embeddings (recommended)
 
 ---
 
-## 4. Start Building
-
-### Create a new project
-
-```bash
-newproject projects my-app        # web app, API, tool
-newproject agents my-agent        # AI agent
-newproject platforms my-platform  # product or SaaS
-newproject models my-model        # ML model or fine-tune
-```
-
-Each project gets its own Python venv, Node, `.env`, `.gitignore`.
-
-### Bring in existing projects
-
-Move or symlink your existing repos into DSH:
-
-```bash
-# Option A: symlink (recommended — keeps original location)
-ln -s ~/my-existing-project ~/DSH/projects/my-existing-project
-
-# Option B: move
-mv ~/my-existing-project ~/DSH/projects/
-```
-
-### Start the AI agent server
-
-```bash
-pnpm serve       # http://localhost:8000
-pnpm worker      # async task queue (requires Redis)
-```
-
----
-
-## 5. Customize Your Stack
+## 4. Customize Your Stack
 
 ### Add to your knowledge base
 
@@ -131,7 +97,7 @@ brew install mysql mongodb-community   # or any DB you need
 
 ---
 
-## 6. Optimize for Your Hardware
+## 5. Optimize for Your Hardware
 
 ```bash
 # Check what DSH detected about your machine
@@ -155,7 +121,7 @@ device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 
 ---
 
-## 7. Security Maintenance
+## 6. Security Maintenance
 
 ```bash
 pnpm check              # daily protocol check
@@ -168,6 +134,40 @@ Secrets go in `pass` (GPG-encrypted), never in `.env` files committed to git:
 ```bash
 pass insert dome/my-secret
 export MY_SECRET=$(pass dome/my-secret)
+```
+
+---
+
+## 7. Start Building
+
+### Create a new project
+
+```bash
+newproject projects my-app        # web app, API, tool
+newproject agents my-agent        # AI agent
+newproject platforms my-platform  # product or SaaS
+newproject models my-model        # ML model or fine-tune
+```
+
+Each project gets its own Python venv, Node, `.env`, `.gitignore`.
+
+### Bring in existing projects
+
+Move or symlink your existing repos into DSH:
+
+```bash
+# Option A: symlink (recommended — keeps original location)
+ln -s ~/my-existing-project ~/DSH/projects/my-existing-project
+
+# Option B: move
+mv ~/my-existing-project ~/DSH/projects/
+```
+
+### Start the AI agent server
+
+```bash
+pnpm serve       # http://localhost:8000
+pnpm worker      # async task queue (requires Redis)
 ```
 
 ---

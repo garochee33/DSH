@@ -134,10 +134,17 @@ sacred_scene() {
 cinematic_intro() {
   [[ "$CINEMATIC_MODE" -eq 1 ]] || return 0
   echo
-  printf "%s+==================================================================+%s\n" "$C_MAGENTA" "$C_RESET"
-  printf "%s|          D S H   —   D O M E   S O V E R E I G N   H U B        |%s\n" "$C_MAGENTA" "$C_RESET"
-  printf "%s|              S O V E R E I G N   N O D E   S E T U P             |%s\n" "$C_MAGENTA" "$C_RESET"
-  printf "%s+==================================================================+%s\n" "$C_MAGENTA" "$C_RESET"
+  printf "%s\n" "$C_MAGENTA"
+  printf '    ██████╗  ███████╗ ██╗  ██╗\n'
+  printf '    ██╔══██╗ ██╔════╝ ██║  ██║\n'
+  printf '    ██║  ██║ ███████╗ ███████║\n'
+  printf '    ██║  ██║ ╚════██║ ██╔══██║\n'
+  printf '    ██████╔╝ ███████║ ██║  ██║\n'
+  printf '    ╚═════╝  ╚══════╝ ╚═╝  ╚═╝\n'
+  printf "%s" "$C_RESET"
+  printf "%s    ═══ D O M E   S O V E R E I G N   H U B ═══%s\n" "$C_CYAN" "$C_RESET"
+  printf "%s    Sovereign Node Setup · Phase 1%s\n" "$C_DIM" "$C_RESET"
+  echo
   sacred_scene "BOOT SEQUENCE"
 }
 

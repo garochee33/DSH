@@ -97,10 +97,16 @@ function Show-SacredCard([string]$Label) {
 function Show-CinematicIntro {
   if (-not $script:CinematicMode) { return }
   Write-Host ""
-  Write-Host "+==================================================================+" -ForegroundColor Magenta
-  Write-Host "|          D S H   —   D O M E   S O V E R E I G N   H U B        |" -ForegroundColor Magenta
-  Write-Host "|              S O V E R E I G N   N O D E   S E T U P             |" -ForegroundColor Magenta
-  Write-Host "+==================================================================+" -ForegroundColor Magenta
+  Write-Host ""
+  Write-Host "    ██████╗  ███████╗ ██╗  ██╗" -ForegroundColor Magenta
+  Write-Host "    ██╔══██╗ ██╔════╝ ██║  ██║" -ForegroundColor Magenta
+  Write-Host "    ██║  ██║ ███████╗ ███████║" -ForegroundColor Magenta
+  Write-Host "    ██║  ██║ ╚════██║ ██╔══██║" -ForegroundColor Magenta
+  Write-Host "    ██████╔╝ ███████║ ██║  ██║" -ForegroundColor Magenta
+  Write-Host "    ╚═════╝  ╚══════╝ ╚═╝  ╚═╝" -ForegroundColor Magenta
+  Write-Host "    ═══ D O M E   S O V E R E I G N   H U B ═══" -ForegroundColor Cyan
+  Write-Host "    Sovereign Node Setup · Phase 1" -ForegroundColor DarkGray
+  Write-Host ""
   Show-SacredCard "BOOT SEQUENCE"
 }
 

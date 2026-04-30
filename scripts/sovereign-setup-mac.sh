@@ -62,12 +62,12 @@ if [[ ! -t 1 ]]; then
   fi
 fi
 
-if [[ -t 1 ]] && command -v tput >/dev/null 2>&1 && [[ "$(tput colors 2>/dev/null || echo 0)" -ge 8 ]]; then
+if [[ -t 1 ]] && command -v tput >/dev/null 2>&1 && [[ "$(tput colors 2>/dev/null || echo 0)" -ge 256 ]]; then
   C_RESET="$(tput sgr0)"
   C_CYAN="$(tput setaf 6)"
   C_GREEN="$(tput setaf 2)"
   C_YELLOW="$(tput setaf 3)"
-  C_MAGENTA="$(tput setaf 3)"
+  C_MAGENTA="$(tput setaf 178)"
   C_DIM="$(tput dim)"
 else
   C_RESET=""

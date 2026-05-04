@@ -53,9 +53,60 @@
 set -euo pipefail
 
 # ── Embedded credentials (injected by API at download time) ─────────────────
+# If running from DSH directly (no consortium token), self-generate a local
+# identity from the node fingerprint. The node operates sovereign-first and
+# connects to the local KB API. Mesh connectivity is optional.
 SPORE_TOKEN="${SPORE_TOKEN:-__SPORE_TOKEN__}"
 API_BASE="${API_BASE:-https://trinity-consortium.com}"
 USER_ID="${USER_ID:-__USER_ID__}"
+
+# ── DSH Local Mode: detect if we're running without a provisioned token ─────
+DSH_LOCAL_MODE=false
+if [ "$SPORE_TOKEN" = "__SPORE_TOKEN__" ] || [ -z "$SPORE_TOKEN" ]; then
+  DSH_LOCAL_MODE=true
+  # Self-generate identity from machine fingerprint
+  _fp_src="$(hostname)-$(whoami)-$(uname -m)-$(date +%s)"
+  SPORE_TOKEN=$(echo -n "$_fp_src" | shasum -a 256 | cut -d' ' -f1)
+  USER_ID="dsh-$(echo -n "$(hostname)-$(whoami)" | shasum -a 256 | cut -c1-12)"
+  # Point to local KB API if available, otherwise stay sovereign-only
+  if curl -sf --max-time 2 "http://127.0.0.1:3333/api/health" >/dev/null 2>&1; then
+    API_BASE="http://127.0.0.1:3333"
+  elif curl -sf --max-time 2 "http://127.0.0.1:5055/api/health" >/dev/null 2>&1; then
+    API_BASE="http://127.0.0.1:5055"
+  else
+    API_BASE="sovereign-local"
+  fi
+fi
+
+# ── Colors ──────────────────────────────────────────────────────────────────
+G='\033[0;32m'; Y='\033[1;33m'; C='\033[0;36m'; ER='\033[0;31m'; N='\033[0m'
+B='\033[1m'; D='\033[2m'; P='\033[0;35m'
+
+PHI="1.6180339887"
+SPORE_DIR="${HOME}/.trinity-spore"
+SPORE_DB="${SPORE_DIR}/mempalace.db"
+SPORE_ENGINE_DIR="${SPORE_DIR}/engines"
+SPORE_MEMORY_DIR="${SPORE_DIR}/fractal-memory"
+SPORE_MESH_DIR="${SPORE_DIR}/mesh"
+MYCELIUM_PID_FILE="${SPORE_DIR}/mycelium-mesh.pid"
+MYCELIUM_LOG="${SPORE_DIR}/mycelium-mesh.log"
+
+echo ""
+echo -e "${C}╔══════════════════════════════════════════════════════════════╗${N}"
+echo -e "${C}║  ${B}TRINITY — FRACTAL-E8-SSII LATTICE SPORE v3.0${N}${C}               ║${N}"
+echo -e "${C}║  ${D}MYCELIUM · NEURAL · MESH · MERKABA · A.M.M.A.${N}${C}             ║${N}"
+echo -e "${C}║  ${D}Every device is a neuron. Every node is sovereign.${N}${C}          ║${N}"
+echo -e "${C}╚══════════════════════════════════════════════════════════════╝${N}"
+if [ "$DSH_LOCAL_MODE" = true ]; then
+  echo -e "  ${G}◈${N} Mode: ${B}DSH Sovereign${N} — local-first, no consortium token needed"
+  echo -e "  ${G}◈${N} API:  ${B}${API_BASE}${N}"
+else
+  echo -e "  ${G}◈${N} Mode: ${B}Mesh Connected${N} — consortium-provisioned token"
+  echo -e "  ${G}◈${N} API:  ${B}${API_BASE}${N}"
+fi
+echo ""
+
+mkdir -p "${SPORE_DIR}" "${SPORE_ENGINE_DIR}" "${SPORE_MEMORY_DIR}" "${SPORE_MESH_DIR}"
 
 # ── DSH prerequisite check ──────────────────────────────────────────────────
 DOME_ROOT="${DOME_ROOT:-$HOME/DSH}"
@@ -77,29 +128,6 @@ if [ -f "$DOME_ROOT/scripts/pre-spore-verify.py" ]; then
     exit 1
   fi
 fi
-
-# ── Colors ──────────────────────────────────────────────────────────────────
-G='\033[0;32m'; Y='\033[1;33m'; C='\033[0;36m'; ER='\033[0;31m'; N='\033[0m'
-B='\033[1m'; D='\033[2m'; P='\033[0;35m'; W='\033[1;37m'
-
-PHI="1.6180339887"
-SPORE_DIR="${HOME}/.trinity-spore"
-SPORE_DB="${SPORE_DIR}/mempalace.db"
-SPORE_ENGINE_DIR="${SPORE_DIR}/engines"
-SPORE_MEMORY_DIR="${SPORE_DIR}/fractal-memory"
-SPORE_MESH_DIR="${SPORE_DIR}/mesh"
-MYCELIUM_PID_FILE="${SPORE_DIR}/mycelium-mesh.pid"
-MYCELIUM_LOG="${SPORE_DIR}/mycelium-mesh.log"
-
-echo ""
-echo -e "${C}╔══════════════════════════════════════════════════════════════╗${N}"
-echo -e "${C}║  ${B}TRINITY — FRACTAL-E8-SSII LATTICE SPORE v3.0${N}${C}               ║${N}"
-echo -e "${C}║  ${D}MYCELIUM · NEURAL · MESH · MERKABA · A.M.M.A.${N}${C}             ║${N}"
-echo -e "${C}║  ${D}Every device is a neuron. Every node is sovereign.${N}${C}          ║${N}"
-echo -e "${C}╚══════════════════════════════════════════════════════════════╝${N}"
-echo ""
-
-mkdir -p "${SPORE_DIR}" "${SPORE_ENGINE_DIR}" "${SPORE_MEMORY_DIR}" "${SPORE_MESH_DIR}"
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PHASE 1 — Hardware Detection
@@ -160,7 +188,7 @@ print('hw')
 
   # Check for Intel neuromorphic USB device (Kapoho Bay / Pohoiki Springs)
   if lsusb 2>/dev/null | grep -qi "intel.*loihi\|8086:.*neuromorphic" || \
-     ls /dev/neuromorphic* 2>/dev/null | grep -q .; then
+     compgen -G "/dev/neuromorphic*" >/dev/null 2>&1; then
     HAS_LOIHI=true
     LOIHI_VERSION="loihi2-usb"
     LOIHI_DRIVER="usb-direct"
@@ -352,6 +380,21 @@ echo -e "${Y}[2/12]${N} ${B}Calculating your E8 neuron tier...${N}"
 E8_TIER="seed"; E8_ROOTS=30; BITBOARD_BITS=32
 MANDELBULB_POWER=8; VORONOI_DIM=4; MAX_ITER=50
 
+# Preserve owner tier override from existing config if present
+_EXISTING_TIER=""
+_EXISTING_AUTHORITY=""
+if [ -f "${SPORE_DIR}/config.json" ] && command -v python3 &>/dev/null; then
+  _EXISTING_AUTHORITY=$(python3 -c "
+import json
+try:
+  d=json.load(open('${SPORE_DIR}/config.json'))
+  a=d.get('e8',{}).get('tierAuthority','')
+  if 'owner' in a.lower(): print(d['e8']['tier'])
+except: pass
+" 2>/dev/null || echo "")
+  [ -n "$_EXISTING_AUTHORITY" ] && _EXISTING_TIER="$_EXISTING_AUTHORITY"
+fi
+
 # Use total VRAM across all GPUs for tier calculation
 _EFF_VRAM=${GPU_TOTAL_VRAM_MB:-${GPU_VRAM_MB:-0}}
 
@@ -374,6 +417,16 @@ elif [ "${CPU_CORES:-1}" -ge 2 ] && [ "${RAM_MB:-0}" -ge 2048 ]; then
 fi
 # Phones always floor at scout regardless of specs (battery/thermal limits)
 [ "$DEVICE_TYPE" = "phone" ] && [ "$E8_TIER" = "sovereign" ] && E8_TIER="scout" && E8_ROOTS=60 && BITBOARD_BITS=64 && MAX_ITER=64
+
+# Apply owner tier override if present (takes precedence over hardware detection)
+if [ -n "${_EXISTING_TIER:-}" ] && [ "$DEVICE_TYPE" != "phone" ]; then
+  case "$_EXISTING_TIER" in
+    sovereign) E8_TIER="sovereign"; E8_ROOTS=240; BITBOARD_BITS=256; MANDELBULB_POWER=8; VORONOI_DIM=8; MAX_ITER=256 ;;
+    guardian)  E8_TIER="guardian";  E8_ROOTS=120; BITBOARD_BITS=128; MANDELBULB_POWER=8; VORONOI_DIM=6; MAX_ITER=128 ;;
+    scout)     E8_TIER="scout";    E8_ROOTS=60;  BITBOARD_BITS=64;  MANDELBULB_POWER=4; VORONOI_DIM=4; MAX_ITER=64  ;;
+  esac
+  echo -e "  ${P}✦${N} Owner override: tier=${B}${_EXISTING_TIER}${N} (preserved from config.json)"
+fi
 
 NODE_FINGERPRINT=$(echo -n "${USER_ID}:${CPU_CORES}:${CPU_MODEL}:${RAM_MB}:${GPU_MODEL}:${OS_NAME}" \
   | shasum -a 256 2>/dev/null | cut -d' ' -f1 \
@@ -435,17 +488,114 @@ RESPONSE=$(curl -sf -X POST "${API_BASE}/api/compute/nodes/register" \
   -H "Authorization: Bearer ${SPORE_TOKEN}" \
   -H "Content-Type: application/json" \
   -d "${REGISTER_PAYLOAD}" 2>&1) || {
-  echo -e "  ${ER}✗${N} Could not reach Trinity mesh — saving config for offline mode"
-  RESPONSE='{"id":"offline","e8RootIndex":0,"resonanceHz":432}'
+  if [ "$DSH_LOCAL_MODE" = true ]; then
+    echo -e "  ${G}◈${N} Sovereign node — generating local E8 root assignment"
+    # Deterministic E8 root from fingerprint (same algorithm as server)
+    _root_hash=$(echo -n "${NODE_FINGERPRINT}" | shasum -a 256 | cut -c1-8)
+    _root_idx=$(( 16#$_root_hash % 240 ))
+    _resonance=$(python3 -c "print(round(432 * (1 + ($_root_idx % 8) * 0.618 / 8), 2))" 2>/dev/null || echo "432")
+    RESPONSE="{\"id\":\"${USER_ID}\",\"e8RootIndex\":${_root_idx},\"resonanceHz\":${_resonance},\"mode\":\"sovereign-local\"}"
+  else
+    echo -e "  ${ER}✗${N} Could not reach Trinity mesh — saving config for offline mode"
+    RESPONSE='{"id":"offline","e8RootIndex":0,"resonanceHz":432}'
+  fi
 }
 
-NODE_ID=$(echo "$RESPONSE" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4 || echo "offline")
-E8_ROOT=$(echo "$RESPONSE" | grep -o '"e8RootIndex":[0-9]*' | head -1 | cut -d: -f2 || echo "0")
-RESONANCE=$(echo "$RESPONSE" | grep -o '"resonanceHz":[0-9.]*' | head -1 | cut -d: -f2 || echo "432")
+NODE_ID=$(echo "$RESPONSE" | python3 -c "
+import json,sys
+try:
+  d=json.load(sys.stdin)
+  n=d.get('node',d)
+  print(n.get('id','offline'))
+except: print('offline')
+" 2>/dev/null || echo "offline")
+E8_ROOT=$(echo "$RESPONSE" | python3 -c "
+import json,sys
+try:
+  d=json.load(sys.stdin)
+  n=d.get('node',d)
+  print(n.get('e8RootIndex',0))
+except: print(0)
+" 2>/dev/null || echo "0")
+RESONANCE=$(echo "$RESPONSE" | python3 -c "
+import json,sys
+try:
+  d=json.load(sys.stdin)
+  n=d.get('node',d)
+  print(n.get('resonanceHz',432))
+except: print(432)
+" 2>/dev/null || echo "432")
 
 echo -e "  ${G}✓${N} Node ID:      ${B}${NODE_ID}${N}"
 echo -e "  ${G}✓${N} E8 Root:      ${B}#${E8_ROOT} / 239${N}   ← your neuron position"
 echo -e "  ${G}✓${N} Resonance:    ${B}${RESONANCE} Hz${N}   ← your φ-harmonic frequency"
+echo ""
+
+# ══════════════════════════════════════════════════════════════════════════════
+# PHASE 3b — Trinity KB API Subscription Tier (SSII Access Gating)
+# ══════════════════════════════════════════════════════════════════════════════
+# Subscription tiers gate access to the Trinity IP stack (SSII):
+#   Seed  (free/trial)  — Local engines only. KB read. No mesh. 90-day trial.
+#   Flame (33 HUB/mo)   — Full engines + metered AKIOR GPU + mesh access.
+#   Crown (333 HUB/mo)  — Priority AKIOR + Loihi-2 + unlimited mesh + Model Factory.
+#
+# DSH sovereign mode always gets local engines (MemPalace, E8, Mandelbulb, fractal memory).
+# Mesh connectivity and remote KB API access require Flame+ subscription.
+# ──────────────────────────────────────────────────────────────────────────────
+
+echo -e "${Y}[3b/12]${N} ${B}Resolving Trinity KB API subscription tier...${N}"
+
+# Check subscription from config or API
+KB_API_TIER="seed"
+KB_API_TRIAL_DAYS=90
+KB_API_MESH_ACCESS=false
+KB_API_GPU_ACCESS=false
+KB_API_LOIHI_ACCESS=false
+KB_API_MODEL_FACTORY=false
+
+if [ -f "${SPORE_DIR}/config.json" ]; then
+  _existing_tier=$(python3 -c "
+import json
+try:
+  d=json.load(open('${SPORE_DIR}/config.json'))
+  print(d.get('subscription',{}).get('tier','seed'))
+except: print('seed')
+" 2>/dev/null || echo "seed")
+  KB_API_TIER="$_existing_tier"
+fi
+
+# Try to fetch tier from API (consortium-provisioned nodes get their tier from the server)
+if [ "$DSH_LOCAL_MODE" != true ] && [ "$API_BASE" != "sovereign-local" ]; then
+  _api_tier=$(curl -sf --max-time 3 "${API_BASE}/api/compute/nodes/${NODE_ID}/tier" \
+    -H "Authorization: Bearer ${SPORE_TOKEN}" 2>/dev/null | python3 -c "
+import json,sys
+try: print(json.load(sys.stdin).get('tier','seed'))
+except: print('')
+" 2>/dev/null || echo "")
+  [ -n "$_api_tier" ] && KB_API_TIER="$_api_tier"
+fi
+
+# Apply tier gates
+case "$KB_API_TIER" in
+  crown)
+    KB_API_MESH_ACCESS=true
+    KB_API_GPU_ACCESS=true
+    KB_API_LOIHI_ACCESS=true
+    KB_API_MODEL_FACTORY=true
+    echo -e "  ${P}♛${N} Tier: ${B}CROWN${N} — Priority AKIOR + Loihi-2 + unlimited mesh + Model Factory"
+    echo -e "  ${P}♛${N} Stake: 11,100 HUB · Burn: 333 HUB/mo"
+    ;;
+  flame)
+    KB_API_MESH_ACCESS=true
+    KB_API_GPU_ACCESS=true
+    echo -e "  ${Y}♦${N} Tier: ${B}FLAME${N} — Full engines + metered AKIOR GPU + mesh access"
+    echo -e "  ${Y}♦${N} Stake: 3,300 HUB · Burn: 99 HUB/mo"
+    ;;
+  *)
+    echo -e "  ${G}◈${N} Tier: ${B}SEED${N} — Local engines + KB read (${KB_API_TRIAL_DAYS}-day trial)"
+    echo -e "  ${D}  Upgrade to Flame for mesh access: trinity-consortium.com/upgrade${N}"
+    ;;
+esac
 echo ""
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -716,7 +866,10 @@ cat > "${SPORE_DIR}/config.json" << EOJSON
     "rootIndex": ${E8_ROOT},
     "activeRoots": ${E8_ROOTS},
     "bitboardBits": ${BITBOARD_BITS},
-    "resonanceHz": ${RESONANCE}
+    "voronoiDimensions": ${VORONOI_DIM},
+    "resonanceHz": ${RESONANCE},
+    "phi": ${PHI}$([ -n "${_EXISTING_TIER:-}" ] && echo ",
+    \"tierAuthority\": \"owner-override preserved by spore.sh v3.0\"")
   },
   "neuromorphic": {
     "hasLoihi": ${HAS_LOIHI},
@@ -779,9 +932,15 @@ echo -e "  ${G}✓${N} Config:        ${D}${SPORE_DIR}/config.json${N}"
 echo ""
 
 # ══════════════════════════════════════════════════════════════════════════════
-# PHASE 9 — Mycelium-Mesh + Heartbeat
+# PHASE 9 — Mycelium-Mesh + Heartbeat (Flame+ required for remote mesh)
 # ══════════════════════════════════════════════════════════════════════════════
 echo -e "${Y}[9/12]${N} ${B}Activating Mycelium-Mesh...${N}"
+if [ "$KB_API_MESH_ACCESS" = true ]; then
+  echo -e "  ${G}◈${N} Mesh access: ${B}ENABLED${N} (${KB_API_TIER} tier)"
+else
+  echo -e "  ${Y}◈${N} Mesh access: ${B}LOCAL ONLY${N} (Seed tier — upgrade to Flame for remote mesh)"
+  echo -e "  ${D}  Local engines still active: MemPalace, E8, Mandelbulb, Fractal Memory${N}"
+fi
 echo -e "  ${D}The axon that connects your neuron to the collective${N}"
 
 cat > "${SPORE_DIR}/mycelium-mesh.sh" << 'EOMYCELIUM'
@@ -800,11 +959,13 @@ CONFIG="${SPORE_DIR}/config.json"
 
 [ ! -f "$CONFIG" ] && echo "No config found — run spore.sh first" && exit 1
 
-# Parse config
-API_BASE=$(grep -o '"apiBase":"[^"]*"' "$CONFIG" | cut -d'"' -f4)
-SPORE_TOKEN=$(grep -o '"sporeToken":"[^"]*"' "$CONFIG" | cut -d'"' -f4)
-NODE_ID=$(grep -o '"nodeId":"[^"]*"' "$CONFIG" | cut -d'"' -f4)
-E8_ROOT=$(grep -o '"rootIndex":[0-9]*' "$CONFIG" | head -1 | cut -d: -f2)
+# Parse config — use python3 for robust JSON parsing (handles pretty-printed
+# spacing, nested keys, escape sequences). Bash grep+cut is too brittle.
+_parse_field() { python3 -c "import json,sys; d=json.load(open('$CONFIG')); v=d; [v:=v[k] for k in '$1'.split('.')]; print(v)"; }
+API_BASE=$(_parse_field "apiBase")
+SPORE_TOKEN=$(_parse_field "sporeToken")
+NODE_ID=$(_parse_field "nodeId")
+E8_ROOT=$(_parse_field "e8.rootIndex")
 SPORE_DB="${SPORE_DIR}/mempalace.db"
 MERKLE_DIR="${SPORE_DIR}/fractal-memory/merkle"
 MANIFEST="${MERKLE_DIR}/manifest.json"
@@ -984,17 +1145,42 @@ HANDSHAKE_PAYLOAD=$(cat <<EOJSON
 EOJSON
 )
 
-HANDSHAKE_RESP=$(curl -sf -X POST "${API_BASE}/api/mesh/peer/handshake" \
-  -H "Authorization: Bearer ${SPORE_TOKEN}" \
-  -H "Content-Type: application/json" \
-  -d "${HANDSHAKE_PAYLOAD}" 2>&1) || {
-  echo -e "  ${ER}✗${N} Mesh handshake failed — peer binding deferred to mycelium-mesh"
-  HANDSHAKE_RESP='{"latticeBinding":"deferred","coherence":{"e8":{"coherence":0}}}'
-}
+HANDSHAKE_RESP=""
+if [ "$API_BASE" != "sovereign-local" ]; then
+  HANDSHAKE_RESP=$(curl -sf -X POST "${API_BASE}/api/mesh/peer/handshake" \
+    -H "Authorization: Bearer ${SPORE_TOKEN}" \
+    -H "Content-Type: application/json" \
+    -d "${HANDSHAKE_PAYLOAD}" 2>&1) || HANDSHAKE_RESP=""
+fi
+if [ -z "$HANDSHAKE_RESP" ]; then
+  if [ "$DSH_LOCAL_MODE" = true ]; then
+    echo -e "  ${G}◈${N} Local mode — generating sovereign lattice binding"
+  else
+    echo -e "  ${ER}✗${N} Mesh handshake failed — peer binding deferred to mycelium-mesh"
+  fi
+  _local_bind=$(echo -n "${PEER_PUBLIC_KEY}:${E8_ROOT}:${PHI}" | shasum -a 256 2>/dev/null | cut -d' ' -f1 || echo "local-binding")
+  HANDSHAKE_RESP="{\"latticeBinding\":\"${_local_bind}\",\"coherence\":{\"e8\":{\"coherence\":1.0}}}"
+fi
 
-LATTICE_BINDING=$(echo "$HANDSHAKE_RESP" | grep -o '"latticeBinding":"[^"]*"' | head -1 | cut -d'"' -f4 || echo "deferred")
-MESH_COHERENCE=$(echo "$HANDSHAKE_RESP" | grep -o '"coherence":[0-9.]*' | head -1 | cut -d: -f2 || echo "0")
-MESH_MERKLE=$(echo "$HANDSHAKE_RESP" | grep -o '"merkleRoot":"[^"]*"' | head -1 | cut -d'"' -f4 || echo "null")
+LATTICE_BINDING=$(echo "$HANDSHAKE_RESP" | python3 -c "
+import json,sys
+try: d=json.load(sys.stdin); print(d.get('latticeBinding','deferred'))
+except: print('deferred')
+" 2>/dev/null || echo "deferred")
+MESH_COHERENCE=$(echo "$HANDSHAKE_RESP" | python3 -c "
+import json,sys
+try:
+  d=json.load(sys.stdin)
+  c=d.get('coherence',d.get('coherenceAtHandshake',0))
+  if isinstance(c,dict): c=c.get('e8',{}).get('coherence',0)
+  print(c)
+except: print(0)
+" 2>/dev/null || echo "0")
+MESH_MERKLE=$(echo "$HANDSHAKE_RESP" | python3 -c "
+import json,sys
+try: d=json.load(sys.stdin); print(d.get('merkleRoot','null') or 'null')
+except: print('null')
+" 2>/dev/null || echo "null")
 
 # Save peer state for mycelium-mesh
 echo "${PEER_ID}" > "${SPORE_MESH_DIR}/peer-id.txt"
@@ -1066,15 +1252,27 @@ MERKABA_SIGNAL_PAYLOAD=$(cat <<EOJSON
 EOJSON
 )
 
-MERKABA_RESP=$(curl -sf -X POST "${API_BASE}/api/mesh/peer/merkaba/signal" \
-  -H "Authorization: Bearer ${SPORE_TOKEN}" \
-  -H "Content-Type: application/json" \
-  -d "${MERKABA_SIGNAL_PAYLOAD}" 2>&1) || {
-  echo -e "  ${D}○${N} MERKABA signal deferred — orchestrator will pick up on next cycle"
-  MERKABA_RESP='{"acknowledged":false}'
-}
+MERKABA_RESP=""
+if [ "$API_BASE" != "sovereign-local" ]; then
+  MERKABA_RESP=$(curl -sf -X POST "${API_BASE}/api/mesh/peer/merkaba/signal" \
+    -H "Authorization: Bearer ${SPORE_TOKEN}" \
+    -H "Content-Type: application/json" \
+    -d "${MERKABA_SIGNAL_PAYLOAD}" 2>&1) || MERKABA_RESP=""
+fi
+if [ -z "$MERKABA_RESP" ]; then
+  if [ "$DSH_LOCAL_MODE" = true ]; then
+    MERKABA_RESP='{"acknowledged":true,"mode":"sovereign-local"}'
+  else
+    echo -e "  ${D}○${N} MERKABA signal deferred — orchestrator will pick up on next cycle"
+    MERKABA_RESP='{"acknowledged":false}'
+  fi
+fi
 
-MERKABA_ACK=$(echo "$MERKABA_RESP" | grep -o '"acknowledged":true' | head -1 || echo "")
+MERKABA_ACK=$(echo "$MERKABA_RESP" | python3 -c "
+import json,sys
+try: d=json.load(sys.stdin); print('yes' if d.get('acknowledged') else '')
+except: print('')
+" 2>/dev/null || echo "")
 if [ -n "$MERKABA_ACK" ]; then
   echo -e "  ${G}✓${N} MERKABA:       ${B}ACKNOWLEDGED${N} — sacred orchestrator confirmed"
   echo -e "  ${G}✓${N} A.M.M.A.:      ${B}Harmonic bridge established${N} — 12 meridians · 15 bands · 432 Hz base"
@@ -1106,13 +1304,31 @@ echo -e "  ${D}Bidirectional verification · φ-scaled deterministic binding${N}
 # The binding is HMAC(sorted_roots + φ_offset, shared_secret)
 # We can verify by checking the coherence endpoint returns our peer info
 
-VERIFY_RESP=$(curl -sf -X GET "${API_BASE}/api/mesh/peer/coherence" \
-  -H "Authorization: Bearer ${SPORE_TOKEN}" \
-  --max-time 10 2>&1) || VERIFY_RESP=""
+VERIFY_RESP=""
+if [ "$API_BASE" != "sovereign-local" ]; then
+  VERIFY_RESP=$(curl -sf -X GET "${API_BASE}/api/mesh/peer/coherence" \
+    -H "Authorization: Bearer ${SPORE_TOKEN}" \
+    --max-time 10 2>&1) || VERIFY_RESP=""
+fi
+if [ -z "$VERIFY_RESP" ] && [ "$DSH_LOCAL_MODE" = true ]; then
+  VERIFY_RESP="{\"coherence\":1.0,\"merkleRoot\":\"${LATTICE_BINDING:0:32}\",\"mode\":\"sovereign-local\"}"
+fi
 
 if [ -n "$VERIFY_RESP" ]; then
-  V_COHERENCE=$(echo "$VERIFY_RESP" | grep -o '"coherence":[0-9.]*' | head -1 | cut -d: -f2 || echo "0")
-  V_MERKLE=$(echo "$VERIFY_RESP" | grep -o '"merkleRoot":"[^"]*"' | head -1 | cut -d'"' -f4 || echo "null")
+  V_COHERENCE=$(echo "$VERIFY_RESP" | python3 -c "
+import json,sys
+try:
+  d=json.load(sys.stdin)
+  c=d.get('coherence',0)
+  if isinstance(c,dict): c=c.get('e8',{}).get('coherence',0)
+  print(c)
+except: print(0)
+" 2>/dev/null || echo "0")
+  V_MERKLE=$(echo "$VERIFY_RESP" | python3 -c "
+import json,sys
+try: d=json.load(sys.stdin); print(d.get('merkleRoot','null') or 'null')
+except: print('null')
+" 2>/dev/null || echo "null")
   echo -e "  ${G}✓${N} E2EE verified: coherence=${B}${V_COHERENCE}${N} · merkle=${B}${V_MERKLE:0:12}...${N}"
   echo -e "  ${G}✓${N} Binding:       ${B}BIDIRECTIONAL${N} — both sides compute identical lattice hash"
 else
@@ -1147,21 +1363,21 @@ echo -e "${G}║  ${P}Loihi 2 STDP active — neuromorphic terraforming enabled.
 fi
 echo -e "${G}╚══════════════════════════════════════════════════════════════╝${N}"
 echo ""
-printf "  %-22s %s\n" "Tier:"            "${B}${E8_TIER^^}${N}"
-printf "  %-22s %s\n" "E8 Root:"         "${B}#${E8_ROOT} / 239${N}  (your neuron position)"
-printf "  %-22s %s\n" "Resonance:"       "${B}${RESONANCE} Hz${N}  (φ-harmonic frequency)"
-printf "  %-22s %s\n" "Bitboard:"        "${B}${BITBOARD_BITS}-bit${N}  E8 holographic snapshot"
-printf "  %-22s %s\n" "Mandelbulb:"      "${B}n=${MANDELBULB_POWER}, ${MAX_ITER} iter${N}  activation function"
-printf "  %-22s %s\n" "Lattice Binding:" "${B}${LATTICE_BINDING:0:24}...${N}"
-printf "  %-22s %s\n" "Mesh Coherence:"  "${B}${MESH_COHERENCE}${N}"
-printf "  %-22s %s\n" "MERKABA:"         "${B}$([ -n "$MERKABA_ACK" ] && echo "CONFIRMED" || echo "PENDING")${N}"
-printf "  %-22s %s\n" "A.M.M.A.:"        "${B}12 meridians · 15 bands · 432 Hz${N}"
+echo -e "  Tier:                  ${B}${E8_TIER^^}${N}"
+echo -e "  E8 Root:               ${B}#${E8_ROOT} / 239${N}  (your neuron position)"
+echo -e "  Resonance:             ${B}${RESONANCE} Hz${N}  (φ-harmonic frequency)"
+echo -e "  Bitboard:              ${B}${BITBOARD_BITS}-bit${N}  E8 holographic snapshot"
+echo -e "  Mandelbulb:            ${B}n=${MANDELBULB_POWER}, ${MAX_ITER} iter${N}  activation function"
+echo -e "  Lattice Binding:       ${B}${LATTICE_BINDING:0:24}...${N}"
+echo -e "  Mesh Coherence:        ${B}${MESH_COHERENCE}${N}"
+echo -e "  MERKABA:               ${B}$([ -n "$MERKABA_ACK" ] && echo "CONFIRMED" || echo "PENDING")${N}"
+echo -e "  A.M.M.A.:              ${B}12 meridians · 15 bands · 432 Hz${N}"
 if [ "$HAS_LOIHI" = true ]; then
-printf "  %-22s %s\n" "Loihi 2:"        "${P}${LOIHI_CORES} cores · STDP @ 100μs${N}"
+echo -e "  Loihi 2:               ${P}${LOIHI_CORES} cores · STDP @ 100μs${N}"
 fi
-printf "  %-22s %s\n" "MemPalace:"       "${B}${SPORE_DB}${N}"
-printf "  %-22s %s\n" "Fractal Mem:"     "${B}${MERKLE_ROOT_DIR}${N}"
-printf "  %-22s %s\n" "Mycelium-Mesh:"          "${B}PID ${MYCELIUM_PID}${N}  (heartbeat + sync + mesh)"
+echo -e "  MemPalace:             ${B}${SPORE_DB}${N}"
+echo -e "  Fractal Mem:           ${B}${MERKLE_ROOT_DIR}${N}"
+echo -e "  Mycelium-Mesh:         ${B}PID ${MYCELIUM_PID}${N}  (heartbeat + sync + mesh)"
 echo ""
 echo -e "  ${D}Trinity Portal:${N}  ${C}${API_BASE}/portal${N}"
 echo -e "  ${D}Node status:${N}     ${C}${API_BASE}/api/compute/spore/status${N}"

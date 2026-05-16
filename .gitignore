@@ -33,7 +33,7 @@ credentials/
 *.gpg
 models/embeddings/
 
-# Internal mesh
+# Internal mesh (machine-local)
 agents/core/.mesh/
 
 # Akashic session context (machine-local, regenerated each terminal)
@@ -53,9 +53,6 @@ db/
 google drive/
 Google Drive/
 
-# Machine-local Trinity mesh identity
-agents/core/.mesh/
-
 # Ollama pulled model weights — downloaded per-node
 models/ollama/
 
@@ -69,4 +66,3 @@ build/
 *.swp
 .DS_Store
 .fractalmap/
-AGENTS.md

@@ -1,38 +1,83 @@
-                                 Apache License
-                           Version 2.0, January 2004
-                        http://www.apache.org/licenses/
+MIT License
 
-Copyright (c) 2024-2026 Enzo Garoche / Trinity Consortium
+Copyright (c) 2024-2026 Enzo Garoche (EGD33)
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-    http://www.apache.org/licenses/LICENSE-2.0
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
----
+───────────────────────────────────────────────────────────────────────────────
+PROPRIETARY INTELLECTUAL PROPERTY NOTICE
+───────────────────────────────────────────────────────────────────────────────
 
-## Scope notes
+The MIT License above applies SOLELY to the DSH (Dome Sovereign Hub)
+open-source foundation code contained in this repository.
 
-This license covers the DSH (Dome Sovereign Hub) shell, framework, setup
-scripts, agent-stack scaffolding, and documentation in this repository.
+The following intellectual property is the exclusive property of Trinity Global
+Partners LLC ("Trinity Consortium"), developed by Enzo Garoche
+(Founder/Developer), and is protected under applicable United States and
+international copyright, trade secret, and intellectual property laws:
 
-It does NOT cover:
+  1. TRINITY CONSORTIUM PLATFORM — All versions, releases, deployments, and
+     derivative works of the Trinity Consortium software platform, including
+     but not limited to source code, object code, compiled binaries, APIs,
+     database schemas, and configuration systems.
 
-- Trinity Consortium proprietary components (FRACTAL E8-SSII-AGI engine
-  internals, Mycelium Neural Mesh protocols, sovereign node cryptographic
-  identity) — those are governed by Trinity Consortium terms.
-- Third-party dependencies — governed by their respective licenses
-  (see `package.json`, `compute/requirements.txt`).
-- Model weights downloaded at setup time (e.g. Sentence-Transformers,
-  Ollama models) — governed by each model's license.
+  2. FRACTAL E8-SSII-AGI ENGINE SYSTEM — All engine implementations,
+     algorithms, mathematical models, sacred geometry computations, E8 lattice
+     operations, Mandelbulb fractal engines, holographic memory systems,
+     stigmergic routing protocols, Kuramoto synchronization implementations,
+     neuromorphic computing integrations, and associated subsystems.
 
-If you plan to use DSH commercially or integrate it with Trinity Consortium
-infrastructure, consult `docs/PUBLIC_PROD_HARDENING.md` and contact the
-copyright holder for Trinity-specific terms.
+  3. A.M.M.A. (Autonomous Meridian Monitoring Architecture) — All healing
+     protocols, frequency tuning algorithms, golden needle pulse systems,
+     mitosis rejuvenation engines, root stabilization controllers, and
+     quad-sensor diagnostic frameworks.
+
+  4. MYCELIUM NEURAL MESH — All mesh networking protocols, peer discovery
+     systems, HMAC authentication schemes, E2EE lattice binding protocols,
+     pheromone grid algorithms, CRDT consensus mechanisms, and distributed
+     memory synchronization systems.
+
+  5. BUSINESS STRATEGIES AND METHODOLOGIES — All monetization strategies,
+     membership tier architectures, token economics, client acquisition
+     frameworks, partnership structures, and operational playbooks.
+
+  6. KNOWLEDGE BASE AND TRAINING DATA — All curated knowledge documents,
+     agent training prompts, skill libraries, tool specifications, and
+     proprietary datasets developed for or by Trinity Consortium.
+
+  7. CLIENT DEPLOYMENTS AND SERVICES — All customizations, configurations,
+     integrations, and derivative works created for or deployed to Trinity
+     Consortium clients, partners, or service consumers.
+
+  8. ALL VERSIONS AND SUBSYSTEMS — Including but not limited to all prior
+     versions, branches, forks, mirrors, backups, archives, and any code or
+     documentation that has at any time been part of the Trinity Consortium
+     ecosystem, regardless of current repository location.
+
+NO LICENSE, EXPRESS OR IMPLIED, IS GRANTED TO ANY PARTY FOR ANY OF THE ABOVE
+PROPRIETARY SYSTEMS. Unauthorized use, reproduction, distribution, reverse
+engineering, decompilation, or creation of derivative works from any Trinity
+Consortium proprietary intellectual property constitutes infringement and may
+result in civil and criminal penalties under 17 U.S.C. § 501 et seq., the
+Computer Fraud and Abuse Act (18 U.S.C. § 1030), the Defend Trade Secrets
+Act (18 U.S.C. § 1836), and applicable state and international laws.
+
+For licensing inquiries: https://trinity-consortium.com
+IP Owner: Trinity Global Partners LLC
+Developer/Founder: Enzo Garoche (EGD33)

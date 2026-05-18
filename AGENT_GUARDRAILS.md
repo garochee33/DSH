@@ -54,28 +54,12 @@ After modifying ANY file, the agent MUST:
 - **KB API Dockerfile:** `api/Dockerfile` — uses `--no-frozen-lockfile`
 - **Changes require:** rsync to server + rebuild kb-api container
 
-## Production (Hetzner 87.99.147.1)
+## Production Deployment
 
-### Deploy Method
-```bash
-# 1. Rsync code
-rsync -avz --delete --exclude='node_modules,.git,.env,.env.hetzner,.env.local,.env.bak,.DS_Store,dist,coverage,.pnpm-store,.venv,.mypy_cache' \
-  ~/projects/trinity-consortium/ root@87.99.147.1:/opt/trinity/
-
-# 2. Rebuild
-ssh root@87.99.147.1 "cd /opt/trinity && docker compose --env-file .env.hetzner -f docker-compose.hetzner.yml up -d --build"
-```
-
-### Containers (7 total)
-| Container | Port | Notes |
-|-----------|------|-------|
-| app | 5055 | Main API + frontend |
-| kb-api | 3333 | Knowledge base (internal only) |
-| nexus-core | 8100 | Internal microservice |
-| caddy | 443 | Reverse proxy + TLS |
-| db | 5432 | PostgreSQL + pgvector |
-| ollama | 11434 | Local LLM |
-| redis | 6379 | Cache + pub/sub |
+> **Phase 2 (Trinity Mesh):** Production deployment, mesh peer connectivity, and
+> infrastructure access require a Trinity Consortium subscription. Run `spore.sh`
+> with valid `SPORE_TOKEN` and `USER_ID` to connect your node to the E8 Mycelium
+> Mesh Neuromorphic Network. See https://trinity-consortium.com for access.
 
 ### Critical Metrics to Monitor
 - SpectralMonitor CRITICALs: should be ≤1 (initial tick)

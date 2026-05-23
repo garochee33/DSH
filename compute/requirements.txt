@@ -70,7 +70,7 @@ cirq-core>=1.3.0
 # Open quantum systems, density matrices, Lindblad dynamics
 qutip>=4.7.0
 # Rigetti-style qubit programming
-pyquil>=4.0.0
+pyquil>=4.16.2
 # AWS multi-backend (IonQ, Rigetti, simulators)
 amazon-braket-sdk>=1.83.0
 # Photonic / continuous-variable quantum computing

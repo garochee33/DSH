@@ -26,7 +26,7 @@ This is the 20-step Homebrew/pyenv/nvm/VSCode/DB bootstrap. It is idempotent —
 When it finishes, verify:
 
 - `command -v brew && command -v pnpm && command -v pyenv` all print paths.
-- `"$DOME_ROOT/.venv/bin/python" --version` reports Python 3.11.x.
+- `"$DOME_ROOT/.venv/bin/python" --version` reports the version pinned in `$DOME_ROOT/.python-version` (currently Python 3.14.x).
 - `cat "$DOME_ROOT/.env"` exists (copied from `.env.example` by the setup script if it wasn't already there).
 
 ## 3. Render secrets into .env (if template backend is in use)

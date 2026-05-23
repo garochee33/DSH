@@ -37,7 +37,7 @@ langchain>=0.2.0
 
 # --- Retrieval / embeddings (for kb/ retrieval-augmented workflows) ---
 chromadb>=0.5.0
-sentence-transformers>=2.7.0
+sentence-transformers>=5.4.1
 transformers>=4.40.0
 tiktoken>=0.7.0
 

@@ -66,3 +66,24 @@ build/
 *.swp
 .DS_Store
 .fractalmap/
+
+# ── Local-only content (never push) ──
+
+# Akashic books library — PDFs, extracted text, images (653MB+, copyrighted)
+akashic/books/
+
+# UV lockfile (Python, regenerated locally)
+uv.lock
+
+# Large binary assets
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.mp3
+*.wav
+# Allow specific tracked assets via git add -f
+!docs/assets/*.png
+!README.md

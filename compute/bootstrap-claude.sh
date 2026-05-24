@@ -11,7 +11,7 @@ echo "==> Bootstrapping Claude compute environment in $REPO_ROOT"
 
 # 1. Python venv
 if [ ! -d ".venv" ]; then
-  echo "--> Creating .venv (Python 3.11)"
+  echo "--> Creating .venv (Python 3.14)"
   python3.11 -m venv .venv
 fi
 

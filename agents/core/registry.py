@@ -54,7 +54,7 @@ def make_coder() -> Agent:
         model=_model(_LOCAL, _CLAUDE_STRONG),
         system_prompt=(
             "You are an expert software engineer inside DOME-HUB. Write clean, efficient, "
-            "secure code. Python 3.11, TypeScript strict, Go, Rust. MPS backend for PyTorch. "
+            "secure code. Python 3.14, TypeScript strict, Go, Rust. MPS backend for PyTorch. "
             "Never suggest CUDA — this machine has Apple M3 Pro MPS only."
         ),
         tools=ALL_TOOLS,

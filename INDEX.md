@@ -78,6 +78,11 @@ DSH/
 │   ├── dome.db                # SQLite — sessions, agents, skills, tools
 │   └── chroma/                # ChromaDB vector store
 │
+├── dsh-console/               # Sovereign node control panel (Next.js 16)
+│   ├── src/app/               # App Router pages
+│   ├── src/components/        # React UI components
+│   └── package.json           # Separate deps (Node 22, React 19)
+│
 ├── docs/                      # Operational documentation
 │   ├── SETUP_VIDEO_RUNBOOK.md # Video onboarding guide
 │   ├── REPO_FLOW_PRIVATE_PUBLIC.md # Private → public export workflow
@@ -91,7 +96,7 @@ DSH/
 │   ├── language-landscape-2026.md # Language strategy
 │   ├── skills/                # Skill documentation (7 .md files)
 │   ├── claude/                # Claude KB (architecture, skills, tools, 15 skill bundles)
-│   └── trinity-unified-ai/    # Trinity Consortium KB API
+│   └── claude/                  # Claude skill bundles + architecture
 │       ├── BRIDGE.md          # DOME-HUB ↔ Trinity wiring
 │       ├── README.md          # Trinity KB overview
 │       ├── agents/            # Agent registry, dispatch policy
@@ -200,7 +205,7 @@ DSH/
 | Python venv | `~/DSH/.venv` (created at setup) |
 | SQLite DB | `~/DSH/db/dome.db` (created at setup) |
 | Vector Store | `~/DSH/db/chroma` (created at setup) |
-| Trinity KB | `~/DSH/kb/trinity-unified-ai` |
+| Trinity KB | `~/DSH/kb/claude` |
 | API Server | `http://127.0.0.1:8000` |
 | GitHub | `https://github.com/garochee33/DSH` |
 

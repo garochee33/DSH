@@ -1,5 +1,5 @@
 # Claude compute environment — DOME-HUB
-# Pinned to known-good versions for Python 3.11.
+# Pinned to known-good versions for Python 3.14.
 
 # --- Local inference (sovereign, air-gapped — preferred over any cloud API) ---
 # Apple MLX: native M-series silicon inference, fastest local path

@@ -49,7 +49,7 @@ DSH/
 | Layer | Tool | Version |
 |-------|------|---------|
 | Python | `.venv` at `DSH/.venv` | per `.python-version` |
-| Node | nvm, pinned `.nvmrc` | 20 |
+| Node | nvm, pinned `.nvmrc` | 22 |
 | Package mgr | pnpm (Node), pip (Python) | latest |
 | Go / Rust | available system-wide | latest stable |
 | Shell | zsh + Starship | — |

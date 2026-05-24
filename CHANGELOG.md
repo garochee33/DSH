@@ -9,15 +9,39 @@ DSH uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+- **Node 20 → 22 LTS** across entire stack: CI, .nvmrc, engines, docs, setup script
+- **GitHub Actions** bumped to v6: checkout, setup-node, setup-python, pnpm/action-setup
+- `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` added to CI workflow env
+- `compute/requirements.txt` deps bumped: sentence-transformers >=5.4.1, anthropic >=0.97.0, python-docx >=1.2.0, pypdf >=6.10.2, pyquil >=4.16.2, eslint ^10.4.0, @types/node ^25.9.1
+- `dsh-console/package.json` @types/node ^20 → ^22
+
 ### Added
-- DSH prerequisite check in `spore.sh` — now verifies `.env`, `agents/`, `kb/`
-  exist before mesh activation; runs `pre-spore-verify.py` automatically.
-- `TRINITY_JWT` added to `.env.template` and `.env.example` for JWT-based
-  Trinity API auth alongside `HUB_API_SECRET`.
-- Missing Python deps added to `compute/requirements.txt`: fastapi, uvicorn,
-  langchain, transformers, sqlalchemy, psycopg2-binary, redis, numba,
-  networkx, psutil, matplotlib, scikit-learn, statsmodels.
-- Shell tools (jq, yq, tree, htop, curl, wget) now documented in README Stack table.
+- `.gitleaks.toml` — custom secret scanning (11 rules: API keys, JWTs, connection strings, Hetzner tokens, SPORE tokens, hardcoded IPs)
+- `scripts/backup-projects-to-icloud.sh` — automated iCloud backup for local projects (cron every 4h)
+- `dsh-console/` entry added to INDEX.md repository tree
+- GitHub branch protection on main: required status checks (TS lint, Python verify, Gitleaks), linear history, strict mode
+
+### Fixed
+- CI `deps-audit` job cache path error (removed unused `cache: pnpm`)
+- Stale `kb/trinity-unified-ai/` phantom reference in INDEX.md → corrected to `kb/claude`
+- All stale Python 3.11 references updated to 3.14 (registry.py, architecture.md, requirements.txt)
+- `pnpm-lock.yaml` sync issue (Dependabot merge resolved)
+
+### Security
+- `.gitignore` hardened: blocks `akashic/books/` (653MB), all binary formats, `uv.lock`
+- GitHub repo: squash-only merges, auto-merge enabled, wiki/projects disabled
+- Dependabot security updates + vulnerability alerts enabled
+- `home/.kiro/memory/MEMORY.md` removed from DOME-HUB tracking (contained server IP)
+
+### Merged PRs
+- #8 pyquil >=4.16.2
+- #9 pypdf >=6.10.2
+- #10 sentence-transformers >=5.4.1
+- #11 anthropic >=0.97.0
+- #12 python-docx >=1.2.0
+- #24 eslint ^10.4.0
+- #25 @types/node ^25.9.1
 
 ### Fixed
 - All scripts now default to `$HOME/DSH` (was `$HOME/DOME-HUB`): zshrc-dome,

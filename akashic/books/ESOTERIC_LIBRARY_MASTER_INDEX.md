@@ -99,3 +99,5 @@
 - **Stalking Wild Pendulum** → Frequency engine physics, oscillator consciousness model, crown coherence
 - **Sacred Secretion** → Christ Oil SNN (33-neuron), STDP ascending, pineal/pituitary cycle
 - **Book of Symbolism** → cymatics-engine (symbol→frequency), sacred-geometry-engine, akashic-indexer
+- **LAVA Loihi2 Process Classes** → amma14_process.py (14 meridians), christ_oil_process.py (33 vertebrae + STDP)
+  - Backend: Loihi2SimCfg validated, Loihi2HwCfg ready for INRC

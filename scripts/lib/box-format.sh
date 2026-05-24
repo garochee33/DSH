@@ -43,7 +43,8 @@ box_footer() {
   else
     printf "${C_CYAN}║${C_RESET}  ${C_RED}❌ VERDICT: %d FAILURES — REMEDIATION REQUIRED${C_RESET}              ${C_CYAN}║${C_RESET}\n" "$FAIL"
   fi
-  printf "${C_CYAN}║${C_RESET}  Evidence: $(date -u +%%Y-%%m-%%dT%%H:%%M:%%SZ) │ Operator: EGD33%-$((BOX_WIDTH-52))s${C_CYAN}║${C_RESET}\n" ""
+  local ts; ts="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  printf "${C_CYAN}║${C_RESET}  Evidence: %s │ Operator: EGD33                ${C_CYAN}║${C_RESET}\n" "$ts"
   echo "${C_CYAN}╚$(printf '═%.0s' $(seq 1 $BOX_WIDTH))╝${C_RESET}"
 }
 
@@ -116,74 +117,14 @@ orbit() {
   printf "\r    ${C_GREEN}◉${C_RESET} %s\n" "$msg"
 }
 
-# ━━━ 3D Scenes ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-scene_merkaba() {
-  printf "${C_MAGENTA}"
-  cat << 'EOF'
-              △
-             ╱ ╲
-            ╱   ╲
-           ╱  ◆  ╲
-          ╱ ╱   ╲ ╲
-         ╱ ╱     ╲ ╲
-        ▽━━━━━━━━━━━▽
-         ╲ ╲     ╱ ╱
-          ╲ ╲   ╱ ╱
-           ╲  ◆  ╱
-            ╲   ╱
-             ╲ ╱
-              ▽
-EOF
-  printf "${C_RESET}"
-}
+# ━━━ 3D Scenes (basic/monochrome — see trinity-visuals.sh for full color) ━━━
+# Source trinity-visuals.sh for the full 15-scene library with depth coloring.
+# These remain as lightweight fallbacks for scripts that only source box-format.sh.
 
-scene_lattice() {
-  local label="${1:-E8 Lattice}"
-  printf "${C_MAGENTA}"
-  printf '    ╔══════════════════════════════════════════════════════════╗\n'
-  printf '    ║  ▓▓▓ Sacred Geometry Mesh ▓▓▓                          ║\n'
-  printf '    ║                                                        ║\n'
-  printf '    ║       ◆───◆───◆───◆───◆                                ║\n'
-  printf '    ║      ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲                              ║\n'
-  printf '    ║     ◆───◆───◆───◆───◆───◆                              ║\n'
-  printf '    ║      ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱ ╲ ╱                              ║\n'
-  printf '    ║       ◆───◆───◆───◆───◆                                ║\n'
-  printf '    ║                                                        ║\n'
-  printf "    ║  %-54.54s  ║\n" "$label"
-  printf '    ╚══════════════════════════════════════════════════════════╝\n'
-  printf "${C_RESET}"
-}
-
-scene_torus() {
-  printf "${C_MAGENTA}"
-  cat << 'EOF'
-          ╭━━━━━━━━━━━╮
-       ╭━━╯  ╭─────╮  ╰━━╮
-     ╭━╯   ╭─╯     ╰─╮   ╰━╮
-    ━╯    ╭─╯    ◆    ╰─╮    ╰━
-    ━╮    ╰─╮         ╭─╯    ╭━
-     ╰━╮   ╰─╮     ╭─╯   ╭━╯
-       ╰━━╮  ╰─────╯  ╭━━╯
-          ╰━━━━━━━━━━━╯
-EOF
-  printf "${C_RESET}"
-}
-
-scene_cube() {
-  printf "${C_MAGENTA}"
-  cat << 'EOF'
-        ┌───────────────┐
-       ╱│              ╱│
-      ╱ │             ╱ │
-     ┌───────────────┐  │
-     │  │            │  │
-     │  └────────────│──┘
-     │ ╱             │ ╱
-     │╱              │╱
-     └───────────────┘
-EOF
-  printf "${C_RESET}"
-}
+scene_merkaba() { printf "${C_MAGENTA}        ◇\n       ╱│╲\n      ╱ │ ╲\n     ╱◆─┼─◆╲\n    ▽━━━┿━━━▽\n     ╲◆─┼─◆╱\n      ╲ │ ╱\n       ╲│╱\n        ◇${C_RESET}\n"; }
+scene_torus() { printf "${C_MAGENTA}      ╭━━━━━━━━━╮\n   ╭━━╯ ╭─────╮ ╰━━╮\n  ━╯  ╭─╯ ▲◆▲ ╰─╮  ╰━\n  ━╮  ╰─╮ ▼◆▼ ╭─╯  ╭━\n   ╰━━╮ ╰─────╯ ╭━━╯\n      ╰━━━━━━━━━╯${C_RESET}\n"; }
+scene_lattice() { printf "${C_MAGENTA}    ◆────◆────◆────◆────◆\n   ╱│╲  ╱│╲  ╱│╲  ╱│╲  ╱\n  ◆─┼──◆─┼──◆─┼──◆─┼──◆\n   ╲│╱  ╲│╱  ╲│╱  ╲│╱  ╲\n    ◆────◆────◆────◆────◆${C_RESET}\n"; }
+scene_cube() { printf "${C_MAGENTA}    ┌─────────┐\n   ╱│        ╱│\n  ┌─────────┐ │\n  │ │       │ │\n  │ └───────│─┘\n  │╱        │╱\n  └─────────┘${C_RESET}\n"; }
 
 # ━━━ Banners ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 banner_dsh() {
@@ -212,3 +153,90 @@ banner_trinity() {
 EOF
   printf "${C_RESET}"
 }
+
+# ━━━ Additional Banners ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+banner_e8() {
+  printf "${C_MAGENTA}"
+  printf '    ███████╗ █████╗ \n'
+  printf '    ██╔════╝██╔══██╗\n'
+  printf '    █████╗  ╚█████╔╝\n'
+  printf '    ██╔══╝  ██╔══██╗\n'
+  printf '    ███████╗╚█████╔╝\n'
+  printf '    ╚══════╝ ╚════╝ \n'
+  printf "${C_RESET}"
+}
+
+banner_amma() {
+  printf "${C_MAGENTA}"
+  printf '     █████╗ ███╗   ███╗███╗   ███╗ █████╗ \n'
+  printf '    ██╔══██╗████╗ ████║████╗ ████║██╔══██╗\n'
+  printf '    ███████║██╔████╔██║██╔████╔██║███████║\n'
+  printf '    ██╔══██║██║╚██╔╝██║██║╚██╔╝██║██╔══██║\n'
+  printf '    ██║  ██║██║ ╚═╝ ██║██║ ╚═╝ ██║██║  ██║\n'
+  printf '    ╚═╝  ╚═╝╚═╝     ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝\n'
+  printf "${C_RESET}"
+}
+
+banner_lava() {
+  printf "${C_MAGENTA}"
+  printf '    ██╗      █████╗ ██╗   ██╗ █████╗ \n'
+  printf '    ██║     ██╔══██╗██║   ██║██╔══██╗\n'
+  printf '    ██║     ███████║██║   ██║███████║\n'
+  printf '    ██║     ██╔══██║╚██╗ ██╔╝██╔══██║\n'
+  printf '    ███████╗██║  ██║ ╚████╔╝ ██║  ██║\n'
+  printf '    ╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝  ╚═╝\n'
+  printf "${C_RESET}"
+}
+
+banner_ssii() {
+  printf "${C_MAGENTA}"
+  printf '    ███████╗███████╗██╗██╗\n'
+  printf '    ██╔════╝██╔════╝██║██║\n'
+  printf '    ███████╗███████╗██║██║\n'
+  printf '    ╚════██║╚════██║██║██║\n'
+  printf '    ███████║███████║██║██║\n'
+  printf '    ╚══════╝╚══════╝╚═╝╚═╝\n'
+  printf "${C_RESET}"
+}
+
+# ━━━ Additional Animations ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+helix() {
+  local msg="${1:-Encoding}"
+  if [[ "$ANIMATIONS_ENABLED" -ne 1 ]]; then printf "    ✦ %s\n" "$msg"; return; fi
+  local frames=("╭─╮   ╭─╮" "╱ ╳ ╲─╱ ╳ ╲" "│ ┃ ╳ ┃ │" "╲ ╳ ╱─╲ ╳ ╱" "╰─╯   ╰─╯")
+  for f in "${frames[@]}"; do
+    printf "    ${C_MAGENTA}%s${C_RESET}\n" "$f"; sleep 0.06
+  done
+  printf "    ${C_GREEN}✦${C_RESET} %s\n" "$msg"
+}
+
+cascade() {
+  local msg="$1"
+  if [[ "$ANIMATIONS_ENABLED" -ne 1 ]]; then printf "    ◆ %s\n" "$msg"; return; fi
+  local chars=("░" "▒" "▓" "█" "▓" "▒" "░" " ")
+  for c in "${chars[@]}"; do
+    printf "\r    ${C_EMBER}%s${C_RESET} %s" "$c" "$msg"; sleep 0.08
+  done
+  printf "\r    ${C_GREEN}◆${C_RESET} %s\n" "$msg"
+}
+
+converge() {
+  local msg="$1"
+  if [[ "$ANIMATIONS_ENABLED" -ne 1 ]]; then printf "    ⬢ %s\n" "$msg"; return; fi
+  local frames=("◇─────◇" "─◇───◇─" "──◇─◇──" "───◆───" "──◇─◇──" "─◇───◇─" "◇─────◇" "───◆───")
+  for f in "${frames[@]}"; do
+    printf "\r    ${C_GOLD}%s${C_RESET} %s" "$f" "$msg"; sleep 0.1
+  done
+  printf "\r    ${C_GREEN}⬢${C_RESET} %s ✓\n" "$msg"
+}
+
+# ━━━ Utility: Dividers & Separators ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+divider() { printf "${C_DIM}%s${C_RESET}\n" "────────────────────────────────────────────────────────────────────"; }
+heavy_divider() { printf "${C_BOLD}%s${C_RESET}\n" "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"; }
+double_divider() { printf "${C_CYAN}%s${C_RESET}\n" "══════════════════════════════════════════════════════════════════════"; }
+
+# ━━━ Utility: Info/Status Lines ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+info() { printf "    ${C_CYAN}▸${C_RESET} %s\n" "$*"; }
+success() { printf "    ${C_GREEN}✦${C_RESET} %s\n" "$*"; }
+error() { printf "    ${C_RED}✗${C_RESET} %s\n" "$*"; }
+dim() { printf "    ${C_DIM}%s${C_RESET}\n" "$*"; }

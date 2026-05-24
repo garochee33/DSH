@@ -507,3 +507,260 @@ scene_kb_pipeline() {
   printf "${C_GOLD}     └────────────────────────────────────────────────────┘${C_RESET}\n"
   printf "${C_DIM}                 ─── ${C_RESET}${C_GOLD}${label}${C_RESET}${C_DIM} ───${C_RESET}\n\n"
 }
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# §21 SRI YANTRA — 9 interlocking triangles, bindu point at center
+#     4 upward triangles (Shiva) · 5 downward triangles (Shakti)
+#     Central bindu = source point of creation
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+scene_sri_yantra() {
+  local label="${1:-Sri Yantra · 9 Triangles}"
+  printf "\n"
+  printf "${C_DEEP}         ╭━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╮${C_RESET}\n"
+  printf "${C_DEEP}         ┃${C_RESET}${C_PURPLE}              ╱╲              ${C_RESET}${C_DEEP}┃${C_RESET}\n"
+  printf "${C_DEEP}         ┃${C_RESET}${C_PURPLE}             ╱  ╲             ${C_RESET}${C_DEEP}┃${C_RESET}\n"
+  printf "${C_DEEP}         ┃${C_RESET}${C_PURPLE}            ╱╲  ╱╲            ${C_RESET}${C_DEEP}┃${C_RESET}\n"
+  printf "${C_DEEP}         ┃${C_RESET}${C_GOLD}           ╱╲╱╲╱╲╱╲           ${C_RESET}${C_DEEP}┃${C_RESET}\n"
+  printf "${C_DEEP}         ┃${C_RESET}${C_GOLD}          ╱──╲    ╱──╲          ${C_RESET}${C_DEEP}┃${C_RESET}\n"
+  printf "${C_DEEP}         ┃${C_RESET}${C_GOLD}         ╱╲  ╱${C_EMBER}◆${C_GOLD}╲╱  ╱╲         ${C_RESET}${C_DEEP}┃${C_RESET}\n"
+  printf "${C_DEEP}         ┃${C_RESET}${C_GOLD}        ╱──╲╱──${C_EMBER}●${C_GOLD}──╲╱──╲        ${C_RESET}${C_DEEP}┃${C_RESET}\n"
+  printf "${C_DEEP}         ┃${C_RESET}${C_GOLD}       ╱╲  ╱╲  ╱╲  ╱╲  ╱╲       ${C_RESET}${C_DEEP}┃${C_RESET}\n"
+  printf "${C_DEEP}         ┃${C_RESET}${C_PURPLE}      ╱──╲╱──╲╱──╲╱──╲╱──╲      ${C_RESET}${C_DEEP}┃${C_RESET}\n"
+  printf "${C_DEEP}         ┃${C_RESET}${C_PURPLE}     ╲──╱╲──╱╲──╱╲──╱╲──╱╲     ${C_RESET}${C_DEEP}┃${C_RESET}\n"
+  printf "${C_DEEP}         ┃${C_RESET}${C_PURPLE}      ╲╱  ╲╱  ╲╱  ╲╱  ╲╱      ${C_RESET}${C_DEEP}┃${C_RESET}\n"
+  printf "${C_DEEP}         ┃${C_RESET}${C_DEEP}       ╲──╱╲──╱╲──╱╲──╱       ${C_RESET}${C_DEEP}┃${C_RESET}\n"
+  printf "${C_DEEP}         ┃${C_RESET}${C_DEEP}        ╲╱  ╲╱  ╲╱  ╲╱        ${C_RESET}${C_DEEP}┃${C_RESET}\n"
+  printf "${C_DEEP}         ┃${C_RESET}${C_DEEP}             ╲╱╲╱             ${C_RESET}${C_DEEP}┃${C_RESET}\n"
+  printf "${C_DEEP}         ╰━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╯${C_RESET}\n"
+  printf "${C_DEEP}                 ─── ${C_RESET}${C_GOLD}${label}${C_RESET}${C_DEEP} ───${C_RESET}\n\n"
+}
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# §22 METATRON'S CUBE — 13 circles with connecting lines
+#     Contains all 5 Platonic Solids · Fruit of Life foundation
+#     Archangel Metatron's sacred blueprint
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+scene_metatrons_cube() {
+  local label="${1:-Metatrons Cube · 13 Spheres}"
+  printf "\n"
+  printf "${C_DEEP}              ╭───╮         ╭───╮${C_RESET}\n"
+  printf "${C_DEEP}             ╱${C_PURPLE} ○ ${C_DEEP}╲───────╱${C_PURPLE} ○ ${C_DEEP}╲${C_RESET}\n"
+  printf "${C_DEEP}             ╰─┬─╯╲       ╱╰─┬─╯${C_RESET}\n"
+  printf "${C_PURPLE}          ╭───╮│   ╲╭───╮╱   │╭───╮${C_RESET}\n"
+  printf "${C_PURPLE}         ╱${C_GOLD} ○ ${C_PURPLE}╲│    ╱${C_GOLD} ◆ ${C_PURPLE}╲    │╱${C_GOLD} ○ ${C_PURPLE}╲${C_RESET}\n"
+  printf "${C_PURPLE}         ╰─┬─╯│   ╱╰─┬─╯╲   │╰─┬─╯${C_RESET}\n"
+  printf "${C_GOLD}       ╭───╮│╭───╮╱  │  ╲╭───╮│╭───╮${C_RESET}\n"
+  printf "${C_GOLD}      ╱ ○ ╲│╱ ○ ╲   │   ╱ ○ ╲│╱ ○ ╲${C_RESET}\n"
+  printf "${C_GOLD}      ╰─┬─╯╰─┬─╯╲  │  ╱╰─┬─╯╰─┬─╯${C_RESET}\n"
+  printf "${C_PURPLE}         ╰───╯│   ╲╭┴╮╱   │╰───╯${C_RESET}\n"
+  printf "${C_PURPLE}          ╭───╮│    ╱${C_EMBER} ● ${C_PURPLE}╲    │╭───╮${C_RESET}\n"
+  printf "${C_PURPLE}         ╱ ○ ╲│   ╱╰─┬─╯╲   │╱ ○ ╲${C_RESET}\n"
+  printf "${C_PURPLE}         ╰───╯╰──╱───┴───╲──╯╰───╯${C_RESET}\n"
+  printf "${C_DEEP}              ╭───╮         ╭───╮${C_RESET}\n"
+  printf "${C_DEEP}             ╱ ○ ╲─────────╱ ○ ╲${C_RESET}\n"
+  printf "${C_DEEP}             ╰───╯         ╰───╯${C_RESET}\n"
+  printf "${C_DEEP}                 ─── ${C_RESET}${C_GOLD}${label}${C_RESET}${C_DEEP} ───${C_RESET}\n\n"
+}
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# §23 DNA HELIX — Double helix with base pairs, 64 codons
+#     Rotating perspective · Phosphate backbone · Base pair bridges
+#     64 codons = 64 hexagrams of I Ching
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+scene_dna_helix() {
+  local label="${1:-DNA Helix · 64 Codons}"
+  printf "\n"
+  printf "${C_DEEP}        ╭╮                           ╭╮${C_RESET}\n"
+  printf "${C_PURPLE}       ╱  ╲─────${C_SILVER}A═══T${C_PURPLE}─────────╱  ╲${C_RESET}\n"
+  printf "${C_PURPLE}      │    │────${C_SILVER}G≡≡≡C${C_PURPLE}────────│    │${C_RESET}\n"
+  printf "${C_GOLD}       ╲  ╱─────${C_SILVER}T═══A${C_GOLD}─────────╲  ╱${C_RESET}\n"
+  printf "${C_GOLD}        ╰╯╲                         ╱╰╯${C_RESET}\n"
+  printf "${C_GOLD}            ╲───${C_SILVER}C≡≡≡G${C_GOLD}───────────╱${C_RESET}\n"
+  printf "${C_PURPLE}        ╭╮  ╲──${C_SILVER}A═══T${C_PURPLE}──────╱  ╭╮${C_RESET}\n"
+  printf "${C_PURPLE}       ╱  ╲──╲─${C_SILVER}G≡≡≡C${C_PURPLE}───╱──╱  ╲${C_RESET}\n"
+  printf "${C_GOLD}      │    │───${C_SILVER}T═══A${C_GOLD}──────│    │${C_RESET}\n"
+  printf "${C_GOLD}       ╲  ╱────${C_SILVER}C≡≡≡G${C_GOLD}───────╲  ╱${C_RESET}\n"
+  printf "${C_GOLD}        ╰╯╲────${C_SILVER}A═══T${C_GOLD}────────╱╰╯${C_RESET}\n"
+  printf "${C_PURPLE}            ╲──${C_SILVER}G≡≡≡C${C_PURPLE}──────╱${C_RESET}\n"
+  printf "${C_PURPLE}        ╭╮   ╲${C_SILVER}T═══A${C_PURPLE}───╱   ╭╮${C_RESET}\n"
+  printf "${C_DEEP}       ╱  ╲────${C_SILVER}C≡≡≡G${C_DEEP}─────╱  ╲${C_RESET}\n"
+  printf "${C_DEEP}        ╰╯                           ╰╯${C_RESET}\n"
+  printf "${C_DEEP}     ─── ${C_RESET}${C_GOLD}${label}${C_RESET}${C_DEEP} ───${C_RESET}\n\n"
+}
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# §24 PLATONIC SOLIDS — All 5 in a row
+#     Tetrahedron · Cube · Octahedron · Dodecahedron · Icosahedron
+#     Fire · Earth · Air · Ether · Water
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+scene_platonic_solids() {
+  local label="${1:-5 Platonic Solids}"
+  printf "\n"
+  printf "${C_GOLD}    △        ┌──┐      ◇       ⬠       ◇${C_RESET}\n"
+  printf "${C_GOLD}   ╱│╲      ╱│  │╲    ╱│╲     ╱ ╲     ╱│╲${C_RESET}\n"
+  printf "${C_GOLD}  ╱ │ ╲    ╱ │  │ ╲  ╱ │ ╲   ╱   ╲   ╱ │ ╲${C_RESET}\n"
+  printf "${C_PURPLE} ╱  │  ╲  │  │  │  │╱  │  ╲ │─────│ ╱──┼──╲${C_RESET}\n"
+  printf "${C_PURPLE}◆───┼───◆ │  └──┼──│◆──┼──◆ │     │◆───┼───◆${C_RESET}\n"
+  printf "${C_PURPLE} ╲  │  ╱  │ ╱   │╱ │ ╲ │ ╱  │─────│ ╲──┼──╱${C_RESET}\n"
+  printf "${C_DEEP}  ╲ │ ╱    │╱    │  │  ╲│╱   ╲   ╱   ╲ │ ╱${C_RESET}\n"
+  printf "${C_DEEP}   ╲│╱     └─────┘   ╲ │╱     ╲ ╱     ╲│╱${C_RESET}\n"
+  printf "${C_DEEP}    ▽        ────      ◇       ⬠       ◇${C_RESET}\n"
+  printf "${C_SILVER}  TETRA     HEXA     OCTA    DODECA   ICOSA${C_RESET}\n"
+  printf "${C_DEEP}   Fire     Earth     Air     Ether    Water${C_RESET}\n"
+  printf "${C_DEEP}    4F       6F       8F       12F      20F${C_RESET}\n"
+  printf "${C_DEEP}                 ─── ${C_RESET}${C_GOLD}${label}${C_RESET}${C_DEEP} ───${C_RESET}\n\n"
+}
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# §25 TOROIDAL VORTEX — Cross-section of torus with energy flow
+#     Self-sustaining field · As above so below · Magnetic return
+#     Heart field geometry · Zero-point center
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+scene_toroidal_vortex() {
+  local label="${1:-Toroidal Vortex · Zero Point}"
+  printf "\n"
+  printf "${C_DEEP}                    ↑ ↑ ↑${C_RESET}\n"
+  printf "${C_PURPLE}              ╭━━━━━┿━┿━┿━━━━━╮${C_RESET}\n"
+  printf "${C_PURPLE}           ╭━━╯  ↗  │ │ │  ↖  ╰━━╮${C_RESET}\n"
+  printf "${C_GOLD}         ╭━╯  ↗╱    │ │ │    ╲↖  ╰━╮${C_RESET}\n"
+  printf "${C_GOLD}        ━╯  ↗╱      ↓ ↓ ↓      ╲↖  ╰━${C_RESET}\n"
+  printf "${C_GOLD}       │  ↗╱    ╭━━━━━━━━━━━╮    ╲↖  │${C_RESET}\n"
+  printf "${C_GOLD}       │ →│    ╭╯           ╰╮    │← │${C_RESET}\n"
+  printf "${C_EMBER}       │ →│   │    ${C_GOLD}◆ ZERO ◆${C_EMBER}   │   │← │${C_RESET}\n"
+  printf "${C_GOLD}       │ →│    ╰╮           ╭╯    │← │${C_RESET}\n"
+  printf "${C_GOLD}       │  ↘╲    ╰━━━━━━━━━━━╯    ╱↙  │${C_RESET}\n"
+  printf "${C_GOLD}        ━╮  ↘╲      ↑ ↑ ↑      ╱↙  ╭━${C_RESET}\n"
+  printf "${C_PURPLE}         ╰━╮  ↘╲    │ │ │    ╱↙  ╭━╯${C_RESET}\n"
+  printf "${C_PURPLE}           ╰━━╮  ↘  │ │ │  ↙  ╭━━╯${C_RESET}\n"
+  printf "${C_DEEP}              ╰━━━━━┿━┿━┿━━━━━╯${C_RESET}\n"
+  printf "${C_DEEP}                    ↓ ↓ ↓${C_RESET}\n"
+  printf "${C_DEEP}                 ─── ${C_RESET}${C_GOLD}${label}${C_RESET}${C_DEEP} ───${C_RESET}\n\n"
+}
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# §26 HYPERCUBE ROTATION — 4D tesseract mid-rotation
+#     Inner cube + outer cube + 8 connecting edges
+#     4th dimension projected into 3D shadow
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+scene_hypercube_rotation() {
+  local label="${1:-Hypercube · 4D Tesseract}"
+  printf "\n"
+  printf "${C_DEEP}         ┌─────────────────────────────────┐${C_RESET}\n"
+  printf "${C_DEEP}         │${C_PURPLE}    ┌───────────────────────┐    ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}         │${C_PURPLE}    │╲${C_RESET}                      ${C_PURPLE}│╲   ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}         │${C_PURPLE}    │ ╲${C_GOLD}  ┌───────────────┐${C_PURPLE} │ ╲  ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}         │${C_PURPLE}    │  ╲${C_GOLD} │╲              │${C_PURPLE}│  ╲ ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}         │${C_PURPLE}    │  │${C_GOLD} │ ╲─────────╲  │${C_PURPLE}│  │ ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}         │${C_PURPLE}    │  │${C_GOLD} │ │${C_EMBER}  ◆ 4D ◆${C_GOLD} │ │${C_PURPLE}│  │ ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}         │${C_PURPLE}    │  │${C_GOLD} │ ╱─────────╱  │${C_PURPLE}│  │ ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}         │${C_PURPLE}    │  ╱${C_GOLD} │╱              │${C_PURPLE}│  ╱ ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}         │${C_PURPLE}    │ ╱${C_GOLD}  └───────────────┘${C_PURPLE} │ ╱  ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}         │${C_PURPLE}    │╱                       ${C_PURPLE}│╱   ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}         │${C_PURPLE}    └───────────────────────┘    ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}         └─────────────────────────────────┘${C_RESET}\n"
+  printf "${C_DEEP}                 ─── ${C_RESET}${C_GOLD}${label}${C_RESET}${C_DEEP} ───${C_RESET}\n\n"
+}
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# §27 SEED OF LIFE — 7 overlapping circles
+#     Genesis pattern · 7 days of creation · Foundation of Flower
+#     Central circle + 6 surrounding at 60° intervals
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+scene_seed_of_life() {
+  local label="${1:-Seed of Life · Genesis}"
+  printf "\n"
+  printf "${C_DEEP}                  ╭━━━━━╮${C_RESET}\n"
+  printf "${C_DEEP}              ╭━━╱━━━━━━━╲━━╮${C_RESET}\n"
+  printf "${C_PURPLE}          ╭━━╱━╱━━━━━━━━━╲━╲━━╮${C_RESET}\n"
+  printf "${C_PURPLE}         ╱  ╱ ╱             ╲ ╲  ╲${C_RESET}\n"
+  printf "${C_PURPLE}        │  │ │  ╭━━━━━━━╮  │ │  │${C_RESET}\n"
+  printf "${C_GOLD}        │  │ │ ╱  ╭━━━╮  ╲ │ │  │${C_RESET}\n"
+  printf "${C_GOLD}        │  │ ││  ╱ ${C_EMBER}◆●◆${C_GOLD} ╲  ││ │  │${C_RESET}\n"
+  printf "${C_GOLD}        │  │ │ ╲  ╰━━━╯  ╱ │ │  │${C_RESET}\n"
+  printf "${C_PURPLE}        │  │ │  ╰━━━━━━━╯  │ │  │${C_RESET}\n"
+  printf "${C_PURPLE}         ╲  ╲ ╲             ╱ ╱  ╱${C_RESET}\n"
+  printf "${C_PURPLE}          ╰━━╲━╲━━━━━━━━━╱━╱━━╯${C_RESET}\n"
+  printf "${C_DEEP}              ╰━━╲━━━━━━━╱━━╯${C_RESET}\n"
+  printf "${C_DEEP}                  ╰━━━━━╯${C_RESET}\n"
+  printf "${C_SILVER}            7 circles · 6 petals · 1 seed${C_RESET}\n"
+  printf "${C_DEEP}                 ─── ${C_RESET}${C_GOLD}${label}${C_RESET}${C_DEEP} ───${C_RESET}\n\n"
+}
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# §28 FIBONACCI SPIRAL — Golden ratio spiral with numbered segments
+#     φ = 1.618033... · Nature's growth algorithm
+#     1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89...
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+scene_fibonacci_spiral() {
+  local label="${1:-Fibonacci · φ 1.618}"
+  printf "\n"
+  printf "${C_DEEP}     ┌──────────────────────────┬─────────────────┐${C_RESET}\n"
+  printf "${C_DEEP}     │${C_PURPLE}                            ${C_DEEP}│${C_PURPLE}                 ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_PURPLE}         ╭━━━━━━━━━━━━╮     ${C_DEEP}│${C_PURPLE}                 ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_PURPLE}       ╭━╯            ╰━╮   ${C_DEEP}│${C_PURPLE}                 ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_GOLD}      ╭╯   ╭━━━━━━╮    ╰╮  ${C_DEEP}│${C_PURPLE}      34         ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_GOLD}     ╭╯   ╭╯${C_EMBER}╭━━╮${C_GOLD} ╰╮    │  ${C_DEEP}│${C_PURPLE}                 ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_GOLD}     │   ╭╯ ${C_EMBER}│${C_GOLD}◆${C_EMBER}│${C_GOLD}  │    │  ${C_DEEP}│${C_PURPLE}                 ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_GOLD}     │   │  ${C_EMBER}╰━╯${C_GOLD}  │ 13 │  ${C_DEEP}│${C_PURPLE}                 ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_GOLD}     │   ╰━━━━━━━╯    │  ${C_DEEP}│${C_DEEP}─────────────────${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_PURPLE}     ╰━━━━━━━━━━━━━━━╯  ${C_DEEP}│${C_DEEP}                 ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_PURPLE}           21              ${C_DEEP}│${C_DEEP}      21         ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_PURPLE}                            ${C_DEEP}│${C_DEEP}                 ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     ├──────────────────────────┴─────────────────┤${C_RESET}\n"
+  printf "${C_DEEP}     │${C_SILVER}  1  1  2  3  5  8  13  21  34  55  89...  ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     └───────────────────────────────────────────-┘${C_RESET}\n"
+  printf "${C_DEEP}                 ─── ${C_RESET}${C_GOLD}${label}${C_RESET}${C_DEEP} ───${C_RESET}\n\n"
+}
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# §29 CADUCEUS — Two serpents winding around central staff + wings
+#     Ida & Pingala nadis · Sushumna central channel
+#     Kundalini ascent · Mercury's staff · Healing symbol
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+scene_caduceus() {
+  local label="${1:-Caduceus · Kundalini}"
+  printf "\n"
+  printf "${C_GOLD}                      ◆${C_RESET}\n"
+  printf "${C_GOLD}                   ╱━━━━━╲${C_RESET}\n"
+  printf "${C_GOLD}                 ╱━━━━━━━━━╲${C_RESET}\n"
+  printf "${C_SILVER}                ╱─── ${C_GOLD}│${C_SILVER} ───╲${C_RESET}\n"
+  printf "${C_SILVER}               ╱──── ${C_GOLD}│${C_SILVER} ────╲${C_RESET}\n"
+  printf "${C_PURPLE}              ╭╮    ${C_GOLD}│${C_PURPLE}    ╭╮${C_RESET}\n"
+  printf "${C_PURPLE}             ╱  ╲━━━${C_GOLD}│${C_PURPLE}━━╱  ╲${C_RESET}\n"
+  printf "${C_EMBER}            ╱  ╭╮╲  ${C_GOLD}│${C_EMBER}  ╱╭╮  ╲${C_RESET}\n"
+  printf "${C_EMBER}           ╱  ╱  ╲ ╲${C_GOLD}│${C_EMBER}╱╱  ╲  ╲${C_RESET}\n"
+  printf "${C_PURPLE}           ╲╱    ╱╲ ${C_GOLD}│${C_PURPLE} ╱╲    ╲╱${C_RESET}\n"
+  printf "${C_PURPLE}            ╲  ╱╱  ╲${C_GOLD}│${C_PURPLE}╱  ╲╲  ╱${C_RESET}\n"
+  printf "${C_EMBER}             ╲╱╱ ╭╮ ${C_GOLD}│${C_EMBER} ╭╮ ╲╲╱${C_RESET}\n"
+  printf "${C_EMBER}              ╲ ╱  ╲${C_GOLD}│${C_EMBER}╱  ╲ ╱${C_RESET}\n"
+  printf "${C_PURPLE}               ╳    ${C_GOLD}│${C_PURPLE}    ╳${C_RESET}\n"
+  printf "${C_PURPLE}              ╱ ╲━━━${C_GOLD}│${C_PURPLE}━━━╱ ╲${C_RESET}\n"
+  printf "${C_DEEP}             ╰╯    ${C_GOLD}│${C_DEEP}    ╰╯${C_RESET}\n"
+  printf "${C_GOLD}                    ┃${C_RESET}\n"
+  printf "${C_GOLD}                    ◆${C_RESET}\n"
+  printf "${C_DEEP}                 ─── ${C_RESET}${C_GOLD}${label}${C_RESET}${C_DEEP} ───${C_RESET}\n\n"
+}
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# §30 QUANTUM FIELD — Particle-wave duality + probability clouds
+#     Observer collapses wavefunction · Superposition states
+#     ψ = probability amplitude · Heisenberg uncertainty
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+scene_quantum_field() {
+  local label="${1:-Quantum Field · ψ Collapse}"
+  printf "\n"
+  printf "${C_DEEP}     ┌─────────────────────────────────────────────┐${C_RESET}\n"
+  printf "${C_DEEP}     │${C_PURPLE}  ∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿  ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_PURPLE} ∿∿∿∿${C_GOLD}╭━━━╮${C_PURPLE}∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿  ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_PURPLE} ∿∿∿${C_GOLD}╭╯░░░╰╮${C_PURPLE}∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿  ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_PURPLE} ∿∿${C_GOLD}│░░${C_EMBER}◆${C_GOLD}░░│${C_PURPLE}∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿ ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_PURPLE} ∿∿∿${C_GOLD}╰╮░░░╭╯${C_PURPLE}∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿  ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_PURPLE} ∿∿∿∿${C_GOLD}╰━━━╯${C_PURPLE}∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿  ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_PURPLE}  ∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿∿  ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     ├─────────────────────┬───────────────────────┤${C_RESET}\n"
+  printf "${C_DEEP}     │${C_SILVER}  WAVE ∿∿∿∿∿∿∿∿∿∿∿  ${C_DEEP}│${C_SILVER}  PARTICLE  ◆         ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_SILVER}  ψ = Ae^ikx          ${C_DEEP}│${C_SILVER}  Δx·Δp ≥ ℏ/2        ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     │${C_SILVER}  superposition      ${C_DEEP}│${C_SILVER}  observer collapse   ${C_DEEP}│${C_RESET}\n"
+  printf "${C_DEEP}     └─────────────────────┴───────────────────────┘${C_RESET}\n"
+  printf "${C_DEEP}                 ─── ${C_RESET}${C_GOLD}${label}${C_RESET}${C_DEEP} ───${C_RESET}\n\n"
+}

@@ -43,6 +43,16 @@ DSH uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - #24 eslint ^10.4.0
 - #25 @types/node ^25.9.1
 
+### Previously Added (pre-2026-05-23)
+- DSH prerequisite check in `spore.sh` — now verifies `.env`, `agents/`, `kb/`
+  exist before mesh activation; runs `pre-spore-verify.py` automatically.
+- `TRINITY_JWT` added to `.env.template` and `.env.example` for JWT-based
+  Trinity API auth alongside `HUB_API_SECRET`.
+- Missing Python deps added to `compute/requirements.txt`: fastapi, uvicorn,
+  langchain, transformers, sqlalchemy, psycopg2-binary, redis, numba,
+  networkx, psutil, matplotlib, scikit-learn, statsmodels.
+- Shell tools (jq, yq, tree, htop, curl, wget) now documented in README Stack table.
+
 ### Fixed
 - All scripts now default to `$HOME/DSH` (was `$HOME/DOME-HUB`): zshrc-dome,
   audit, daemon-watch, dome-approve, render-env, secrets-doctor,

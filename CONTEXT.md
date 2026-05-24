@@ -14,7 +14,7 @@ DSH is also the prerequisite for `spore.sh` → Trinity Consortium mesh access.
 
 | Item | Detail |
 |------|--------|
-| Languages | Python 3.14, Node 20, TypeScript, Go, Rust |
+| Languages | Python 3.14, Node 22, TypeScript, Go, Rust |
 | AI Stack | Ollama (devstral), MLX, Claude, LangChain, ChromaDB |
 | Databases | PostgreSQL 18, Redis, SQLite, ChromaDB |
 | Agents | 6 pre-built (researcher, coder, analyst, planner, kb_agent, local) |

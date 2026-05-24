@@ -1,7 +1,7 @@
 # DSH Index
 
 Complete reference of all files, directories, and their purpose.
-Last updated: 2026-04-30
+Last updated: 2026-05-23
 
 ---
 
@@ -169,7 +169,7 @@ DSH/
 ├── .env.template              # Environment template (keychain markers)
 ├── .env.example               # Environment example (empty values)
 ├── .gitignore                 # Ignore rules
-├── .nvmrc                     # Node 20
+├── .nvmrc                     # Node 22
 └── .python-version            # Python 3.14
 ```
 

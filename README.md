@@ -46,7 +46,7 @@ One command installs and configures everything:
 - **Full AI stack** — local LLMs (Ollama/MLX), Claude, OpenAI, LangChain, ChromaDB, RAG pipelines, agent framework
 - **Model training** — PyTorch with Apple GPU (MPS), Transformers, fine-tuning ready
 - **Quantum computing** — Qiskit, PennyLane, Cirq, QuTiP, PyQuil, Amazon Braket
-- **Web & app dev** — Node 20, TypeScript, React-ready, FastAPI, PostgreSQL, Redis
+- **Web & app dev** — Node 22, TypeScript, React-ready, FastAPI, PostgreSQL, Redis
 - **Creative tools** — document generation (Word, PDF, PowerPoint, Excel), image pipelines
 - **Data science** — NumPy, Pandas, SciPy, scikit-learn, Matplotlib, SymPy, Numba
 - **Infra & cloud** — AWS CLI, Terraform, GitHub CLI
@@ -142,7 +142,7 @@ DSH is designed to be fully customized. Every piece is modular:
 
 | Category | Tools |
 |----------|-------|
-| Languages | Python 3.14, Node 20, TypeScript, Go, Rust |
+| Languages | Python 3.14, Node 22, TypeScript, Go, Rust |
 | Local AI | Ollama, MLX, mlx-lm (Apple Silicon native) |
 | Cloud AI | Anthropic Claude, OpenAI (optional) |
 | AI/ML | PyTorch (MPS/GPU), LangChain, ChromaDB, Transformers, sentence-transformers |

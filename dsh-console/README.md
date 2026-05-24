@@ -22,7 +22,7 @@ Localhost only. No telemetry. Sovereign by isolation.
 ## Requirements
 
 - macOS (the parsers target `top`, `vm_stat`, `df` output as found on Darwin)
-- Node 20+
+- Node 22+
 - pnpm
 - Optional: [Ollama](https://ollama.com) running locally — the dashboard works without it (shows `offline`)
 

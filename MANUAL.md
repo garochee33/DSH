@@ -2,7 +2,7 @@
 
 Complete usage guide for the DSH sovereign build environment.  
 For developers, engineers, creatives, artists, designers, entrepreneurs, and researchers.  
-Last updated: 2026-04-17
+Last updated: 2026-05-23
 
 ---
 
@@ -243,7 +243,7 @@ code .                       # VS Code
 
 Each project gets:
 - Isolated Python `.venv`
-- `.nvmrc` (Node 20)
+- `.nvmrc` (Node 22)
 - `pnpm` initialized
 - `.env.example`
 - `.gitignore`

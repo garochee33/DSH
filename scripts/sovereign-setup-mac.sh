@@ -273,9 +273,9 @@ phase "Node and pnpm"
 mkdir -p "$HOME/.nvm"
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && source "/opt/homebrew/opt/nvm/nvm.sh"
-info "Installing Node 20 and global TypeScript runtime tools"
+info "Installing Node 22 and global TypeScript runtime tools"
 pulse "Preparing Node runtime environment"
-nvm install 20
+nvm install 22
 nvm alias default 20
 npm install -g pnpm
 pnpm setup

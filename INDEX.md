@@ -224,3 +224,8 @@ pnpm format     # Prettier format
 pnpm typecheck  # tsc --noEmit
 pnpm audit      # security audit
 ```
+
+## Visual Library
+- `scripts/lib/box-format.sh` — Box-drawing format library (242 lines, 31 functions)
+- `scripts/lib/trinity-visuals.sh` — Sacred geometry 3D scenes (509 lines, 20 scenes)
+- `docs/FORMATTING_PROTOCOL.md` — Sovereign visual standard protocol (417 lines)

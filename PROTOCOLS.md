@@ -30,3 +30,26 @@
 - Run `bash scripts/audit.sh` — must be all green.
 - Run `bash scripts/daemon-watch.sh` — must be all approved.
 - Run `pnpm sync` after every session.
+
+## §12 Output Formatting Protocol
+
+All DSH outputs (audit reports, session logs, agent responses, simulation results) MUST follow the box-drawing visual standard defined in `docs/FORMATTING_PROTOCOL.md`.
+
+### Required Elements
+- Report headers: `╔═══╗ / ║ ║ / ╚═══╝` double-line box
+- Section dividers: `━━━ §N TITLE ━━━` heavy horizontal
+- Status indicators: ✅ ❌ ⚠️ 🔄 🚫
+- Result footers: PASS/FAIL/WARN counts + verdict box
+- 3D scenes: Merkaba, Torus, Lattice for phase transitions
+- Animations: spin(), pulse(), wave(), orbit() for async ops
+- Progress bars: `▐████░░░▌ NN%` for multi-step operations
+
+### Libraries
+- Bash: `source scripts/lib/box-format.sh`
+- Python: `from lib.box_format import *`
+
+### Enforcement
+- All scripts in `scripts/` MUST source the format library
+- All Python outputs MUST use `box_format.py` helpers
+- Agent outputs SHOULD use the agent header template
+- Session logs MUST start with the session header template

@@ -1,0 +1,40 @@
+name: kiro
+vendor: AWS / Kiro
+display_name: "Kiro"
+version: "kiro-cli-chat"
+
+surfaces:
+  - cli                  # primary: kiro-cli-chat (non-interactive mode)
+
+cli:
+  # The /usr/local/bin/kiro launcher script ships with an unfilled `@@APPNAME@@`
+  # placeholder, so we resolve the binary inside the .app bundle directly.
+  binary: "/Applications/Kiro CLI.app/Contents/MacOS/kiro-cli-chat"
+  fallback_path_binary: "kiro"
+  subcommand: "chat"
+  flags:
+    non_interactive: "--no-interactive"
+    trust_no_tools: "--trust-tools="
+    list_models: "--list-models"
+    list_sessions: "--list-sessions"
+
+env:
+  required: []           # auth via `kiro-cli-chat login` (stored in macOS Keychain `kirocli:social:token`)
+  optional:
+    - KIRO_AGENT_NAME    # context profile to use
+    - KIRO_MODEL         # override model
+    - KIRO_AGENT_WORKDIR
+
+workspace:
+  folder: "./"
+  scratch_folder: ".scratch/kiro/"
+
+compute:
+  python: ">=3.11"
+  requires: [pyyaml]
+
+constraints:
+  never_push_to_main_without_approval: true
+  never_skip_git_hooks: true
+  never_commit_secrets: true
+  refuse: [malware, weapons_of_mass_destruction, csam]

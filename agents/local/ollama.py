@@ -48,7 +48,7 @@ class OllamaClient:
         ) as resp:
             resp.raise_for_status()
             for line in resp.iter_lines():
-                pass  # drain stream; pull completes when stream ends
+                _ = line  # drain stream; pull completes when stream ends
 
     def run(self, prompt: str, model: str = "llama3") -> str:
         """Run a prompt through the specified model and return the full response."""

@@ -53,9 +53,23 @@ def retrieve_relevant(concept: str, memories: list[dict], n: int = 5) -> list[di
     Falls back to keyword match if no vectors present.
     """
     if memories and "vector" in memories[0]:
-        from agents.core.memory.vector import VectorMemory
-        # delegate to vector memory if available
-        pass
+        query_terms = concept.lower().split()
+        # Deterministic lightweight embedding-free score:
+        # cosine(vector, lexical-count-projected vector) + lexical overlap.
+        scored = []
+        for m in memories:
+            vec = np.array(m.get("vector", []), dtype=float)
+            if vec.size == 0:
+                continue
+            content = m.get("content", "").lower()
+            lexical = sum(term in content for term in query_terms)
+            proxy = np.full_like(vec, fill_value=max(lexical, 1), dtype=float)
+            denom = (np.linalg.norm(vec) * np.linalg.norm(proxy)) or 1.0
+            cosine = float(np.dot(vec, proxy) / denom)
+            scored.append((m, cosine + lexical))
+        scored.sort(key=lambda x: x[1], reverse=True)
+        if scored:
+            return [m for m, _ in scored[:n]]
     # keyword fallback
     scored = [(m, sum(w in m.get("content","").lower()
                       for w in concept.lower().split())) for m in memories]

@@ -1,0 +1,38 @@
+name: cursor
+vendor: Anysphere (Cursor)
+display_name: "Cursor Agent"
+version: "2026.02.27-e7d2ef6"
+
+surfaces:
+  - cli                  # primary: cursor-agent (non-interactive print mode)
+  - ide                  # interactive IDE (out of programmatic scope)
+
+cli:
+  binary: "cursor-agent"
+  print_mode: "-p"            # non-interactive
+  output_format: "json"       # parseable
+  modes:
+    plan: "--mode plan"       # read-only planning
+    ask: "--mode ask"         # Q&A only
+    full: ""                  # write + shell
+
+env:
+  required:
+    - CURSOR_API_KEY        # OR Keychain: cursor-access-token (auto-discovered by CLI)
+  optional:
+    - CURSOR_AGENT_WORKDIR
+    - CURSOR_AGENT_MODE     # plan | ask | full (default: full)
+
+workspace:
+  folder: "./"
+  scratch_folder: ".scratch/cursor/"
+
+compute:
+  python: ">=3.11"
+  requires: [pyyaml]
+
+constraints:
+  never_push_to_main_without_approval: true
+  never_skip_git_hooks: true
+  never_commit_secrets: true
+  refuse: [malware, weapons_of_mass_destruction, csam]

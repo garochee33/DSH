@@ -9,10 +9,11 @@ cd "$REPO_ROOT"
 
 echo "==> Bootstrapping Claude compute environment in $REPO_ROOT"
 
-# 1. Python venv
+# 1. Python venv — version is driven by .python-version so it stays in sync with doctrine.
 if [ ! -d ".venv" ]; then
-  echo "--> Creating .venv (Python 3.14)"
-  python3.11 -m venv .venv
+  PY_VERSION="$(cat .python-version)"
+  echo "--> Creating .venv (Python $PY_VERSION)"
+  "python${PY_VERSION}" -m venv .venv
 fi
 
 # shellcheck disable=SC1091
@@ -21,6 +22,22 @@ python -m pip install --upgrade pip wheel >/dev/null
 
 echo "--> Installing Python requirements"
 pip install -r compute/requirements.txt
+
+# 1b. Ingest sidecar venv — chromadb/onnxruntime/sentence-transformers segfault on
+# Python 3.14 (native-extension ABI mismatch). Same pattern as the LAVA 3.10 sidecar:
+# isolate the RAG stack into its own Python 3.13 venv. Idempotent — skip if present.
+INGEST_PYTHON_VERSION="3.13"
+if [ ! -d ".venv-ingest" ]; then
+  INGEST_PY_BIN="/opt/homebrew/opt/python@${INGEST_PYTHON_VERSION}/bin/python${INGEST_PYTHON_VERSION}"
+  if command -v "${INGEST_PY_BIN}" >/dev/null 2>&1 || [ -x "${INGEST_PY_BIN}" ]; then
+    echo "--> Creating .venv-ingest (Python ${INGEST_PYTHON_VERSION}) for chromadb sidecar"
+    "${INGEST_PY_BIN}" -m venv .venv-ingest
+    .venv-ingest/bin/pip install --quiet --upgrade pip wheel
+    .venv-ingest/bin/pip install --quiet chromadb onnxruntime tokenizers numpy sentence-transformers
+  else
+    echo "--> Skipping .venv-ingest — Python ${INGEST_PYTHON_VERSION} not installed (brew install python@${INGEST_PYTHON_VERSION})"
+  fi
+fi
 
 # 2. Node toolchain (optional)
 if command -v nvm >/dev/null 2>&1; then

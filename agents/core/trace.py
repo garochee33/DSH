@@ -29,13 +29,20 @@ CREATE TABLE IF NOT EXISTS traces (
 )
 """
 
+# Module-level pooled connection (WAL mode for concurrent reads + single writer)
+_pool: sqlite3.Connection | None = None
+
 
 def _conn() -> sqlite3.Connection:
-    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    c = sqlite3.connect(DB_PATH)
-    c.execute(_SCHEMA)
-    c.commit()
-    return c
+    global _pool
+    if _pool is None:
+        DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+        _pool = sqlite3.connect(DB_PATH, check_same_thread=False)
+        _pool.execute("PRAGMA journal_mode=WAL")
+        _pool.execute("PRAGMA synchronous=NORMAL")
+        _pool.execute(_SCHEMA)
+        _pool.commit()
+    return _pool
 
 
 class Span:
@@ -89,73 +96,48 @@ class Tracer:
             return
         span.ended_at = time.time()
         row = span.to_row()
-        with _conn() as c:
-            c.execute(
-                """INSERT OR REPLACE INTO traces
-                   (trace_id,span_id,name,agent,model,prompt,response,
-                    tools_used,latency_ms,token_count,error,events,started_at,ended_at)
-                   VALUES (:trace_id,:span_id,:name,:agent,:model,:prompt,:response,
-                    :tools_used,:latency_ms,:token_count,:error,:events,:started_at,:ended_at)""",
-                row,
-            )
+        c = _conn()
+        c.execute(
+            """INSERT OR REPLACE INTO traces
+               (trace_id,span_id,name,agent,model,prompt,response,
+                tools_used,latency_ms,token_count,error,events,started_at,ended_at)
+               VALUES (:trace_id,:span_id,:name,:agent,:model,:prompt,:response,
+                :tools_used,:latency_ms,:token_count,:error,:events,:started_at,:ended_at)""",
+            row,
+        )
+        c.commit()
         return row["trace_id"]
 
     def get_trace(self, trace_id: str) -> dict | None:
-        with _conn() as c:
-            row = c.execute(
-                "SELECT * FROM traces WHERE trace_id=?", (trace_id,)
-            ).fetchone()
+        c = _conn()
+        row = c.execute(
+            "SELECT * FROM traces WHERE trace_id=?", (trace_id,)
+        ).fetchone()
         if not row:
             return None
-        cols = (
-            [d[0] for d in c.description]
-            if False
-            else [
-                "trace_id",
-                "span_id",
-                "name",
-                "agent",
-                "model",
-                "prompt",
-                "response",
-                "tools_used",
-                "latency_ms",
-                "token_count",
-                "error",
-                "events",
-                "started_at",
-                "ended_at",
-            ]
-        )
+        cols = [
+            "trace_id", "span_id", "name", "agent", "model", "prompt", "response",
+            "tools_used", "latency_ms", "token_count", "error", "events",
+            "started_at", "ended_at",
+        ]
         return dict(zip(cols, row))
 
     def list_traces(self, agent: str | None = None, limit: int = 50) -> list[dict]:
         cols = [
-            "trace_id",
-            "span_id",
-            "name",
-            "agent",
-            "model",
-            "prompt",
-            "response",
-            "tools_used",
-            "latency_ms",
-            "token_count",
-            "error",
-            "events",
-            "started_at",
-            "ended_at",
+            "trace_id", "span_id", "name", "agent", "model", "prompt", "response",
+            "tools_used", "latency_ms", "token_count", "error", "events",
+            "started_at", "ended_at",
         ]
-        with _conn() as c:
-            if agent:
-                rows = c.execute(
-                    "SELECT * FROM traces WHERE agent=? ORDER BY started_at DESC LIMIT ?",
-                    (agent, limit),
-                ).fetchall()
-            else:
-                rows = c.execute(
-                    "SELECT * FROM traces ORDER BY started_at DESC LIMIT ?", (limit,)
-                ).fetchall()
+        c = _conn()
+        if agent:
+            rows = c.execute(
+                "SELECT * FROM traces WHERE agent=? ORDER BY started_at DESC LIMIT ?",
+                (agent, limit),
+            ).fetchall()
+        else:
+            rows = c.execute(
+                "SELECT * FROM traces ORDER BY started_at DESC LIMIT ?", (limit,)
+            ).fetchall()
         return [dict(zip(cols, r)) for r in rows]
 
 

@@ -1,4 +1,4 @@
-"""ResourceMonitor — real-time CPU/RAM/MPS metrics for Apple M3 Pro."""
+"""ResourceMonitor — real-time CPU/RAM/MPS metrics for Apple Silicon (M4 Pro on this node)."""
 from __future__ import annotations
 
 import asyncio

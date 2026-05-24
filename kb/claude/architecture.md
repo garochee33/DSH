@@ -20,7 +20,7 @@
 │          │                                          │               │
 │          ▼                                          ▼               │
 │   ┌────────────────────────────────────────────────────────────┐   │
-│   │                    .venv (Python 3.14)                     │   │
+│   │                    .venv (Python 3.11)                     │   │
 │   │   anthropic · python-docx · python-pptx · openpyxl ·       │   │
 │   │   reportlab · pypdf · pdfplumber · langchain · chromadb    │   │
 │   └────────────────────────────────────────────────────────────┘   │

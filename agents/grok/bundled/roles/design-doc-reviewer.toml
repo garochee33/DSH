@@ -1,0 +1,5 @@
+# Design doc reviewer role — read-write with high reasoning, fork context
+description = "Reviews system design documents for completeness, feasibility, and technical soundness"
+default_capability_mode = "all"
+reasoning_effort = "high"
+default_fork_context = true

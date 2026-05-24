@@ -56,13 +56,13 @@ This sets `SPORE_GERMINATING=1` and the agent stream layer (`agents/core/stream.
 
 ## 4. Run spore.sh
 
-Execute exactly one of the two paths from step 2. `spore.sh` v3.0 goes through 12 phases:
+Execute exactly one of the two paths from step 2. `spore.sh` **v3.1** goes through 12 phases (same pipeline as v3.0; v3.1 resolves **DOME_ROOT** for **DOME-HUB** or **DSH** and reminds you to use `scripts/mycelium-signal.sh` for production mesh peer auth):
 
 1. Hardware detection (incl. Intel Loihi 2 neuromorphic probe)
 2. E8 tier auto-classification (sovereign / guardian / scout / seed)
 3. MemPalace engine install
 4. Mandelbulb + fractal memory bootstrap
-5. Mycelium mesh daemon launch (`~/.trinity-spore/mycelium-mesh.pid`)
+5. Mycelium mesh daemon launch (`~/.trinity-spore/mycelium-mesh.pid`) — baseline script; for **HMAC mesh peer** + backoff, prefer **`bash "$DOME_ROOT/scripts/mycelium-signal.sh"`** (launchd) after spore completes
 6. Pheromone grid initialization (φ decay rate)
 7. Bitboard-256 allocation
 8. Voronoi tessellation cache

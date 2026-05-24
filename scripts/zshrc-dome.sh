@@ -1,5 +1,10 @@
 # DOME-HUB environment
-export DOME_ROOT="${DOME_ROOT:-$HOME/DSH}"
+export DOME_ROOT="${DOME_ROOT:-$HOME/DOME-HUB}"
+export DOME_HOME="${DOME_HOME:-$DOME_ROOT/home}"
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$DOME_HOME/.config}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:-$DOME_HOME/.cache}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:-$DOME_HOME/.local/share}"
+export CLAUDE_AGENT_WORKDIR="${CLAUDE_AGENT_WORKDIR:-$DOME_ROOT}"
 export PATH="$DOME_ROOT/scripts:$PATH"
 
 # Pin all AI/ML model caches inside DOME-HUB — nothing leaks to ~/
@@ -10,11 +15,32 @@ export TORCH_HOME="$DOME_ROOT/models/torch"
 export MLX_MODEL_PATH="$DOME_ROOT/models/mlx"
 
 # Provider strategy: local | claude | mixed
-# local  = all agents use Ollama/MLX — fully air-gapped
+# local  = all agents use DOME_LOCAL_MODEL (default Ollama; mlx-* for MLX) — air-gapped
 # claude = all agents use Anthropic API
 # mixed  = per-agent optimal (local for KB/code, cloud for research)
 export DOME_PROVIDER="mixed"
 export DOME_LOCAL_MODEL="llama3.1:8b"
+
+_dome_env_value() {
+  local key="$1"
+  local file="${2:-$DOME_ROOT/.env}"
+  local line
+
+  [ -f "$file" ] || return 1
+  line="$(grep -E "^${key}=" "$file" | tail -n 1)" || return 1
+  line="${line#*=}"
+  line="${line%\"}"
+  line="${line#\"}"
+  line="${line%\'}"
+  line="${line#\'}"
+  printf '%s' "$line"
+}
+
+if [ -z "${HUB_API_SECRET:-}" ]; then
+  HUB_API_SECRET="$(_dome_env_value HUB_API_SECRET "$DOME_ROOT/.env" 2>/dev/null || true)"
+  [ -n "$HUB_API_SECRET" ] && export HUB_API_SECRET
+fi
+unset -f _dome_env_value 2>/dev/null || true
 
 # Homebrew
 eval "$(brew shellenv 2>/dev/null || true)"
@@ -67,9 +93,13 @@ trinity-status() {
   trinity-ws status
 }
 
+# Sacred Pipeline Runner (Consortium)
 trinity-run() {
-  trinity-ws run "$*"
+  ( cd "$TRI_DIR_CONSORTIUM" && bash scripts/trinity-run.sh "$@" )
 }
+
+# Workspace Fan-out (DOME-HUB)
+alias trinity-all='trinity-ws run'
 
 # Fast navigation for the active 4 directories
 cd-dome() {
@@ -86,6 +116,10 @@ cd-consortium() {
 
 cd-console() {
   cd "$(trinity-ws path trinity-dev-console)"
+}
+
+cd-home() {
+  cd "$DOME_HOME"
 }
 
 # Akashic Co-Pilot — dimensional context on every session

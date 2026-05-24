@@ -4,7 +4,6 @@ Coordinates multiple agents: routing, pipelines, parallel execution
 """
 
 from __future__ import annotations
-import asyncio
 from typing import Callable
 from agents.core.agent import Agent
 
@@ -48,17 +47,20 @@ class Orchestrator:
 
     def parallel(self, prompt: str, agent_names: list[str]) -> dict[str, str]:
         """Run same prompt through multiple agents simultaneously."""
+        import concurrent.futures
 
-        async def _run_all():
-            loop = asyncio.get_event_loop()
-            tasks = [
-                loop.run_in_executor(None, self.agents[n].run, prompt)
-                for n in agent_names
-            ]
-            results = await asyncio.gather(*tasks)
-            return dict(zip(agent_names, results))
-
-        return asyncio.run(_run_all())
+        with concurrent.futures.ThreadPoolExecutor(max_workers=len(agent_names)) as ex:
+            futures = {
+                ex.submit(self.agents[n].run, prompt): n for n in agent_names
+            }
+            results = {}
+            for future in concurrent.futures.as_completed(futures):
+                name = futures[future]
+                try:
+                    results[name] = future.result()
+                except Exception as e:
+                    results[name] = f"Error: {e}"
+        return results
 
     # ── Debate ────────────────────────────────────────────────────────────────
 

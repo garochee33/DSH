@@ -40,29 +40,30 @@ That's fine — the simulation backend is the intended path.
 
 ## 3. Run the SNN
 
-The reproducible runner lives at `~/projects/trinity-consortium/scripts/lava-snn-demo.py`. Invoke with:
+The canonical high-quality runner now lives at:
+
+`~/DOME-HUB/home/projects/trinity-consortium/scripts/e8_240_with_amma_lens.py`
+
+It includes real E8 k-NN structured connectivity, per-neuron heterogeneity, and the full AMMA meridian projection lens by default.
+
+Recommended invocation (using the Trinity Lava 3.10 sidecar):
 
 ```bash
-"$LAVA_PY" ~/projects/trinity-consortium/scripts/lava-snn-demo.py \
-  --neurons <N> --steps <T> --tag <label>
+LAVA_PY="~/projects/trinity-consortium/python/lava/.venv/bin/python"
+
+$LAVA_PY ~/DOME-HUB/home/projects/trinity-consortium/scripts/e8_240_with_amma_lens.py \
+  --neurons 240 --steps 2000 --k 6 --tag e8-240-struct --json --save-projection
 ```
 
-Defaults: `--neurons 64 --steps 500`. For the canonical E8-aligned run: `--neurons 240 --steps 1000 --tag e8-240`.
+This is now the recommended reference implementation for E8-240 + AMMA work.
 
-For pipeline integration (another script shells out and parses output):
+## 4. Architecture the runner uses (current canonical)
 
-```bash
-"$LAVA_PY" .../lava-snn-demo.py --neurons 240 --steps 1000 --json-only
-```
-
-Emits a single JSON object to stdout, no other noise.
-
-## 4. Architecture the runner uses
-
-- **Neurons**: Lava's floating-point `LIF` model — `du=0.1, dv=0.1, vth=1.0, bias_mant∈[0.15, 0.25]` (tuned to avoid int32 overflow in the fixed-point codepath while producing real spiking dynamics).
-- **Connectivity**: random sparse `Dense` — ~10% of pairs connected, weights `~ Uniform(0.05, 0.2)`, no self-loops.
-- **Monitor**: `lava.proc.monitor` probes `lif.s_out` for the full run.
-- **RunCfg**: `Loihi2SimCfg(select_tag="floating_pt")`. Swap to `Loihi2HwCfg()` for hardware silicon — zero other changes.
+- **Neurons**: 240 (one per E8 root), heterogeneous LIF parameters (per-neuron vth/du/dv/bias).
+- **Connectivity**: k-nearest neighbors in actual E8 geometry (real E8 root distances, not random).
+- **Monitor**: `lava.proc.monitor` probes `lif.s_out`.
+- **RunCfg**: `Loihi2SimCfg(select_tag="floating_pt")`. Same source runs on real Loihi 2 via `Loihi2HwCfg()`.
+- **Post-processing**: Real AMMA meridian projection lens applied over time windows (E8 quantization scoring).
 
 ## 5. Metrics you return
 
@@ -85,27 +86,27 @@ All fields are public-safe aggregates. No per-neuron raw data leaves this runner
 
 ## 6. Output files
 
-Without `--json-only`, two files land at `~/projects/trinity-consortium/docs/reports/`:
+The script writes to the directory specified by `--output-dir` (default `docs/reports`):
 
-- `lava-snn-demo[-<tag>].json` — raw metrics
-- `LAVA_SNN_DEMO[-<TAG>].md` — human-readable report
+- `e8_240_projection_<tag>.npz` — AMMA lens time series (scores, residuals, nearest roots)
+- Optional: full spike raster + JSON summary when `--json` is used
 
-With `--tag e8-240` on a 240-neuron run, expect a 240-of-240 active population, mean rate ~500–1000 Hz equivalent (tuning-dependent), sparsity 0.0–0.1, runtime ~0.3–0.5 s on Apple M-series CPU.
+With current recommended parameters (E8 k-NN + heterogeneity), expect ~35–60% population sparsity, high rate CV (0.6–0.9), and meaningful AMMA quantization scores. Runtime is longer than the old minimal demo because of richer structure.
 
 ## 7. Interpretation (when the user asks "is this good?")
 
-- **total_spikes == 0** → bias too low relative to threshold. Bump `bias_mant` or lower `vth` in `build_network()`.
-- **sparsity < 0.01** → all neurons firing every step; saturation. Increase `vth` or decrease `bias_mant`.
-- **active_neurons < n_neurons * 0.5** → bias distribution too narrow. Widen `rng.uniform(..., ...)` range.
-- **runtime > 2× expected** → `bias_exp` set high is forcing slow integer multiplies; drop to 0.
-- **RuntimeWarning: overflow** → `du`/`dv` outside [0, 1] range. They are LEAK FRACTIONS in the floating-point model, not Lava's 0–4095 fixed-point scale.
+- **Very low sparsity (< 0.15)** → recurrent excitation too strong or bias too high relative to vth.
+- **Low rate CV (< 0.3)** → parameters too uniform across neurons. Increase heterogeneity.
+- **All windows snap to the same root** → activity is too globally uniform; E8 structure not yet expressed in band activity.
+- **Very high sparsity (> 0.85) with almost no active neurons** → parameters too conservative; network is dying.
+- Good target for AMMA visuals: 0.35–0.65 sparsity + rate CV > 0.6 + varying nearest-root over time.
 
 ## 8. When to escalate to hardware
 
 If the user has real Intel Loihi 2 access (INRC membership + NxSDK):
 
 ```python
-# Replace in lava-snn-demo.py:
+# Replace in e8_240_with_amma_lens.py (or the canonical runner):
 from lava.magma.core.run_configs import Loihi2HwCfg   # instead of Loihi2SimCfg
 cfg = Loihi2HwCfg()                                   # instead of Loihi2SimCfg(...)
 ```

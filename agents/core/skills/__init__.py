@@ -6,6 +6,18 @@ Skills: reasoning, planning, summarize, embed, search
 from __future__ import annotations
 from typing import Any
 
+# Cached embedding model (avoid reload per call)
+_embed_model = None
+
+
+def _get_embed_model(model_name: str = "all-MiniLM-L6-v2"):
+    global _embed_model
+    if _embed_model is None:
+        from sentence_transformers import SentenceTransformer
+        _embed_model = SentenceTransformer(model_name)
+    return _embed_model
+
+
 # ── Reasoning ─────────────────────────────────────────────────────────────────
 
 
@@ -71,10 +83,8 @@ def extract(agent, text: str, what: str) -> Any:
 
 
 def embed(texts: list[str], model: str = "all-MiniLM-L6-v2"):
-    """Generate embeddings for a list of texts."""
-    from sentence_transformers import SentenceTransformer
-
-    return SentenceTransformer(model).encode(texts)
+    """Generate embeddings for a list of texts (cached model)."""
+    return _get_embed_model(model).encode(texts)
 
 
 def similarity(text_a: str, text_b: str) -> float:
@@ -91,17 +101,8 @@ def similarity(text_a: str, text_b: str) -> float:
 
 
 def search_memory(agent, query: str, top_k: int = 5) -> list[dict]:
-    """Semantic search over agent's memory."""
-    import numpy as np
-
-    if not agent.memory:
-        return []
-    texts = [m.content for m in agent.memory]
-    embs = embed(texts + [query])
-    doc_embs, query_emb = embs[:-1], embs[-1]
-    scores = np.dot(doc_embs, query_emb)
-    top_idx = scores.argsort()[-top_k:][::-1]
-    return [{"score": float(scores[i]), "message": agent.memory[i]} for i in top_idx]
+    """Semantic search over agent's vector memory via ChromaDB."""
+    return agent.mem.search(query, top_k=top_k)
 
 
 def search_code(
@@ -117,7 +118,7 @@ def search_code(
     ]
     if not files:
         return []
-    contents = [f.read_text(errors="ignore")[:1000] for f in files]
+    contents = [f.read_text(errors="ignore")[:1000] for f in files[:200]]
     embs = embed(contents + [query])
     doc_embs, query_emb = embs[:-1], embs[-1]
     scores = np.dot(doc_embs, query_emb)

@@ -3,16 +3,18 @@
 # Monitors LaunchAgents/Daemons and permanently removes unauthorized ones
 # Run: bash scripts/daemon-watch.sh (or add to cron)
 
-LOG="$HOME/DSH/logs/daemon-watch.log"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOME_ROOT="${DOME_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
+LOG="$DOME_ROOT/logs/daemon-watch.log"
 mkdir -p "$(dirname $LOG)"
 
 APPROVED=(
-  "homebrew.mxcl.postgresql"
-  "homebrew.mxcl.redis"
-  "homebrew.mxcl.dnscrypt-proxy"
+  "homebrew.mxcl."
   "com.apple."
   "com.openssh."
   "org.cups."
+  "com.dome."
+  "com.docker."
 )
 
 is_approved() {

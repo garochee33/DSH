@@ -17,7 +17,8 @@ echo "--- System ---"
 check "FileVault ON"       "fdesetup status"                          "FileVault is On"
 check "SIP enabled"        "csrutil status"                           "enabled"
 check "Gatekeeper ON"      "spctl --status"                           "enabled"
-check "Firewall ON"        "/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate" "enabled"
+FW_STATE=$(/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate 2>/dev/null)
+if echo "$FW_STATE" | grep -qE "enabled|blocking"; then echo "✅ Firewall ON"; else echo "❌ Firewall OFF — $FW_STATE"; fi
 gpg --list-secret-keys 2>/dev/null | grep -q "sec" && echo "✅ GPG key present" || echo "⚠️  No GPG key"
 check "Screen lock ON"     "/usr/bin/defaults read com.apple.screensaver askForPassword" "1"
 echo ""
@@ -45,7 +46,7 @@ else
 fi
 echo ""
 echo "--- DOME-HUB ---"
-DOME_ROOT="${DOME_ROOT:-$HOME/DSH}"
+DOME_ROOT="${DOME_ROOT:-$HOME/DOME-HUB}"
 [ -f "$DOME_ROOT/.env" ] && \
   echo "⚠️  .env file exists — ensure it's in .gitignore" || \
   echo "✅ No exposed .env"

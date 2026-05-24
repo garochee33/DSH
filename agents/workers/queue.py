@@ -4,6 +4,7 @@ DOME-HUB Task Queue — Redis-backed with SQLite persistence
 
 from __future__ import annotations
 import asyncio, json, os, sqlite3, time, uuid
+import logging
 from pathlib import Path
 from typing import Optional
 
@@ -12,12 +13,13 @@ import redis.asyncio as aioredis
 
 from agents.core.registry import make_dome_orchestrator
 
-DB_PATH = Path(os.environ.get("DOME_ROOT", Path.home() / "DSH")) / "db" / "tasks.db"
+DB_PATH = Path(os.environ.get("DOME_ROOT", Path.home() / "DOME-HUB")) / "db" / "tasks.db"
 REDIS_URL = "redis://localhost:6379"
 QUEUE_KEY = "dome:queue"
 QUEUE_HIGH = "dome:queue:high"
 
 _orc = None
+_LOG = logging.getLogger(__name__)
 
 
 def get_orc():
@@ -134,7 +136,9 @@ class TaskQueue:
         _insert_task(task_id, agent, prompt, priority, callback_url)
         r = await self._r()
         queue = QUEUE_HIGH if priority > 0 else QUEUE_KEY
-        await r.rpush(queue, payload)
+        maybe_awaitable = r.rpush(queue, payload)
+        if asyncio.iscoroutine(maybe_awaitable):
+            await maybe_awaitable
         return task_id
 
     async def get_status(self, task_id: str) -> Optional[dict]:
@@ -157,6 +161,8 @@ class TaskQueue:
             if item is None:
                 continue
             _, raw = item
+            task = None
+            task_id = None
             try:
                 task = json.loads(raw)
                 task_id = task["id"]
@@ -170,9 +176,11 @@ class TaskQueue:
                 if task.get("callback_url"):
                     await _fire_callback(task["callback_url"], task_id, result, None)
             except Exception as e:
-                _upsert(task_id, status="failed", error=str(e))
-                if task.get("callback_url"):
-                    await _fire_callback(task["callback_url"], task_id, None, str(e))
+                _LOG.exception("Queue worker failed while processing task")
+                if task_id:
+                    _upsert(task_id, status="failed", error=str(e))
+                if task and task.get("callback_url"):
+                    await _fire_callback(task["callback_url"], task_id or "unknown", None, str(e))
 
 
 async def _fire_callback(
@@ -184,7 +192,7 @@ async def _fire_callback(
                 url, json={"task_id": task_id, "result": result, "error": error}
             )
     except Exception:
-        pass
+        _LOG.exception("Task callback failed for %s", task_id)
 
 
 async def start_workers(n: int = 2, redis_url: str = REDIS_URL):

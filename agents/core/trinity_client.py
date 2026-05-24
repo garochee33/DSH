@@ -54,8 +54,6 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
-from agents.core.trial import TrialTracker, TrialStatus, get_tracker
-
 
 DOME_ROOT = pathlib.Path(
     os.environ.get("DOME_ROOT") or pathlib.Path(__file__).resolve().parents[2]
@@ -139,17 +137,13 @@ class TrinityClient:
 
         local   → always False (never try Trinity)
         trinity → always True (fail fast if no creds)
-        mixed   → True if any credential present OR trial not expired
+        mixed   → True if any credential present
         """
         if self.provider == "local":
             return False
         if self.provider == "trinity":
             return True
-        if self.has_credentials():
-            return True
-        # Grant Phase 2 features during active trial
-        trial = get_tracker().status()
-        return not trial.is_expired
+        return self.has_credentials()  # mixed
 
     def status(self, probe: bool = False) -> TrinityStatus:
         """Return a TrinityStatus snapshot. `probe=True` performs a /health
@@ -175,10 +169,6 @@ class TrinityClient:
         )
 
     # ── HTTP helpers ───────────────────────────────────────────────────
-
-    def trial_status(self) -> TrialStatus:
-        """Return the current trial tracker status."""
-        return get_tracker().status()
 
     def _headers(self) -> dict[str, str]:
         h: dict[str, str] = {"Accept": "application/json"}
@@ -282,20 +272,15 @@ class TrinityClient:
                 f"{feature} requires Phase 2 (Trinity credentials). "
                 f"Provider is 'local'. {UPGRADE_MSG}"
             )
-        if not self.has_credentials():
-            trial = get_tracker().status()
-            if trial.is_expired:
-                elapsed = -trial.days_remaining  # days_remaining is 0 when expired
-                from datetime import datetime, timezone
-                install = datetime.fromisoformat(trial.install_date)
-                days_since = (datetime.now(timezone.utc) - install).days - 90
-                raise TrinityPhase2Required(
-                    f"{feature} unavailable — trial expired {days_since} day(s) ago. "
-                    f"DSH is now read-only. Validate HUB holding or subscribe at {UPGRADE_URL}"
-                )
-            # Trial still active — allow through
-            return
-        # Has credentials — allow through
+        if self.provider == "trinity" and not self.has_credentials():
+            raise TrinityPhase2Required(
+                f"{feature} requires Phase 2 credentials. "
+                f"Set TRINITY_JWT or HUB_API_SECRET in $DOME_ROOT/.env. {UPGRADE_MSG}"
+            )
+        if self.provider == "mixed" and not self.has_credentials():
+            raise TrinityPhase2Required(
+                f"{feature} requires Phase 2 credentials. {UPGRADE_MSG}"
+            )
 
     def _translate_http_error(self, e: HTTPError) -> None:
         if e.code == 401:

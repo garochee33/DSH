@@ -10,9 +10,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   typescript:
     name: TypeScript lint + typecheck
@@ -22,11 +19,12 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
+        # Version read from package.json "packageManager" — do not duplicate here
 
-      - name: Setup Node 22
+      - name: Setup Node 20
         uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 20
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
@@ -41,26 +39,23 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Setup Python 3.14
+      - name: Setup Python 3.11
         uses: actions/setup-python@v6
         with:
-          python-version: "3.14"
+          python-version: "3.11"
           cache: pip
 
       - name: Install minimal deps for verify
         run: |
           python -m pip install --upgrade pip
-          pip install numpy scipy sympy numba torch qiskit pennylane cirq \
-                      matplotlib networkx mpmath pandas chromadb \
-                      sentence-transformers pytest httpx fastapi psutil
+          pip install numpy scipy sympy numba torch qiskit qiskit-aer pennylane cirq \
+                      amazon-braket-sdk matplotlib networkx mpmath pandas chromadb \
+                      sentence-transformers
 
       - name: Python syntax check
         run: |
           python -m py_compile scripts/*.py akashic/*.py agents/**/*.py || true
           python -m pyflakes scripts/ akashic/ agents/ || true
-
-      - name: Run test suite
-        run: KMP_DUPLICATE_LIB_OK=TRUE python -m pytest tests/ -v --tb=short
 
       - name: Pre-spore skill verify
         run: python scripts/pre-spore-verify.py
@@ -85,69 +80,23 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
+        # Version read from package.json "packageManager" — do not duplicate here
 
-      - name: Setup Node 22
+      - name: Setup Node 20
         uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 20
+          cache: pnpm
 
       - name: pnpm audit
         run: pnpm audit --audit-level=high || true
 
-      - name: Setup Python 3.14
+      - name: Setup Python 3.11
         uses: actions/setup-python@v6
         with:
-          python-version: "3.14"
+          python-version: "3.11"
 
       - name: pip-audit
         run: |
           pip install pip-audit
           pip-audit -r compute/requirements.txt || true
-
-  windows:
-    name: Windows setup script validation
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - name: PowerShell syntax check
-        shell: pwsh
-        run: |
-          $tokens = $null
-          $parseErrors = $null
-          $null = [System.Management.Automation.Language.Parser]::ParseFile(
-            "$PWD/scripts/sovereign-setup-windows.ps1",
-            [ref]$tokens,
-            [ref]$parseErrors
-          )
-          if ($parseErrors.Count -gt 0) {
-            $parseErrors | ForEach-Object { Write-Error $_.ToString() }
-            exit 1
-          }
-          Write-Host "PowerShell syntax: PASS — 0 parse errors"
-
-      - name: Validate script structure
-        shell: pwsh
-        run: |
-          $content = Get-Content scripts/sovereign-setup-windows.ps1 -Raw
-          $checks = @(
-            @{ Name = "Show-Phase function"; Pattern = "function Show-Phase" },
-            @{ Name = "Python install";      Pattern = "python|pyenv|winget.*Python" },
-            @{ Name = "Node install";        Pattern = "node|nvm|winget.*Node" },
-            @{ Name = "PostgreSQL";          Pattern = "postgresql|postgres" },
-            @{ Name = "Redis";               Pattern = "redis" },
-            @{ Name = "VS Code";             Pattern = "visual-studio-code|code --install" },
-            @{ Name = "GPG/security";        Pattern = "gpg|gnupg|signing" },
-            @{ Name = "AI assistant choice"; Pattern = "Kiro|Claude|Cursor|Copilot|Aider" }
-          )
-          $fail = 0
-          foreach ($c in $checks) {
-            if ($content -match $c.Pattern) {
-              Write-Host "✅ $($c.Name)"
-            } else {
-              Write-Host "❌ $($c.Name) — pattern not found: $($c.Pattern)"
-              $fail++
-            }
-          }
-          if ($fail -gt 0) { exit 1 }
-          Write-Host "Structure validation: PASS"

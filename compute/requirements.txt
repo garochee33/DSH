@@ -1,5 +1,5 @@
 # Claude compute environment — DOME-HUB
-# Pinned to known-good versions for Python 3.14.
+# Pinned to known-good versions for Python 3.11.
 
 # --- Local inference (sovereign, air-gapped — preferred over any cloud API) ---
 # Apple MLX: native M-series silicon inference, fastest local path
@@ -7,20 +7,24 @@ mlx>=0.16.0; sys_platform == "darwin"
 mlx-lm>=0.16.0; sys_platform == "darwin"
 # Ollama Python client (HTTP interface to local Ollama daemon)
 ollama>=0.2.0
+# Voice activity detection runtime for open local ONNX weights
+onnxruntime>=1.16.1
+# Optional warm in-process ASR backend. CLI fallback still works if missing.
+openai-whisper>=20240930
 
 # --- Cloud LLM SDKs (secondary — use only when local is insufficient) ---
 # Anthropic Claude (preferred cloud provider — no OpenAI dependency)
-anthropic>=0.97.0,<1.0.0
+anthropic>=0.39.0,<1.0.0
 claude-agent-sdk>=0.1.0; python_version >= "3.11"
 # OpenAI SDK kept for Ollama OpenAI-compat endpoint only — avoid direct OpenAI API use
 openai>=1.30.0
 
 # --- Document creation (backs the docx/pdf/pptx/xlsx skills) ---
-python-docx>=1.2.0
+python-docx>=1.1.0
 python-pptx>=0.6.23
 openpyxl>=3.1.2
 reportlab>=4.0.7
-pypdf>=6.10.2
+pypdf>=4.2.0
 pdfplumber>=0.11.0
 
 # --- Web research ---
@@ -28,17 +32,9 @@ requests>=2.31.0
 beautifulsoup4>=4.12.0
 httpx>=0.27.0
 
-# --- Web/API server ---
-fastapi>=0.111.0
-uvicorn>=0.29.0
-
-# --- AI orchestration ---
-langchain>=0.2.0
-
 # --- Retrieval / embeddings (for kb/ retrieval-augmented workflows) ---
 chromadb>=0.5.0
-sentence-transformers>=5.4.1
-transformers>=4.40.0
+sentence-transformers>=2.7.0
 tiktoken>=0.7.0
 
 # --- Data / analysis ---
@@ -46,17 +42,6 @@ pandas>=2.2.0
 numpy>=1.26.0
 scipy>=1.12.0
 sympy>=1.12
-numba>=0.59.0
-networkx>=3.2.0
-psutil>=5.9.0
-matplotlib>=3.8.0
-scikit-learn>=1.4.0
-statsmodels>=0.14.0
-
-# --- Database clients ---
-sqlalchemy>=2.0.0
-psycopg2-binary>=2.9.9
-redis>=5.0.0
 
 # --- Quantum computing (lab-grade stack) ---
 # IBM — circuit design, simulation, hardware access
@@ -70,7 +55,7 @@ cirq-core>=1.3.0
 # Open quantum systems, density matrices, Lindblad dynamics
 qutip>=4.7.0
 # Rigetti-style qubit programming
-pyquil>=4.16.2
+pyquil>=4.0.0
 # AWS multi-backend (IonQ, Rigetti, simulators)
 amazon-braket-sdk>=1.83.0
 # Photonic / continuous-variable quantum computing

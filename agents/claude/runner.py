@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""agents/claude/runner.py — minimal CLI runner for the Claude agent.
+"""agents/claude/runner.py — Claude (Anthropic) agent runner.
+
+Real Anthropic SDK HTTP runner. Mirrors the contract of the kimi/cursor/kiro/
+trinity runners: a `<Tool>Runner` class plus a module-level `run()` convenience.
 
 Example:
-
     python agents/claude/runner.py --prompt "Summarize kb/claude/architecture.md"
 
-Relies on ANTHROPIC_API_KEY. Loads the agent manifest from
-`agents/claude/agent.yaml` and uses the Anthropic SDK's Messages API directly.
-If `claude_agent_sdk` is available, the richer tool-use path is preferred.
+Auth: ANTHROPIC_API_KEY (rendered into .env from Keychain `dome/ANTHROPIC_API_KEY`).
+If `claude_agent_sdk` is later available, the richer tool-use path can be wired in.
 """
 
 from __future__ import annotations
@@ -18,7 +19,7 @@ import pathlib
 import sys
 
 try:
-    import yaml  # pyyaml (optional, fallback to json if missing)
+    import yaml  # pyyaml (optional)
 except ImportError:  # pragma: no cover
     yaml = None
 
@@ -27,70 +28,90 @@ MANIFEST = REPO / "agents" / "claude" / "agent.yaml"
 DEFAULT_MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-opus-4-6")
 
 
-def load_manifest() -> dict:
-    text = MANIFEST.read_text()
-    if yaml is not None:
-        return yaml.safe_load(text)
-    # Naive fallback: only pull the fields we need.
-    out = {"model": {"default": DEFAULT_MODEL}, "kb": {"root": "kb/claude/"}}
-    for line in text.splitlines():
-        if line.startswith("  default:"):
-            out["model"]["default"] = line.split(":", 1)[1].strip().strip('"')
-            break
-    return out
+class ClaudeRunner:
+    """Real Claude (Anthropic) agent runner."""
 
+    def __init__(self, model: str = DEFAULT_MODEL):
+        self.model = model
+        self.manifest = self._load_manifest()
 
-def system_prompt(manifest: dict) -> str:
-    kb_root = REPO / manifest.get("kb", {}).get("root", "kb/claude/")
-    parts = [
-        "You are Claude, running inside DOME-HUB — a sovereign, local-first AI ",
-        "development environment — a sovereign node of Trinity Consortium.",
-        "",
-        f"Your knowledge base is at {kb_root.relative_to(REPO)}. ",
-        "Always consult it before answering questions about your own ",
-        "capabilities or DOME-HUB's architecture.",
-        "",
-        "Skills available (see kb/claude/skills/): docx, pdf, pptx, xlsx, ",
-        "schedule, setup-cowork, skill-creator, consolidate-memory.",
-    ]
-    return "\n".join(parts)
+    @staticmethod
+    def _load_manifest() -> dict:
+        if not MANIFEST.exists():
+            return {"model": {"default": DEFAULT_MODEL}, "kb": {"root": "kb/claude/"}}
+        text = MANIFEST.read_text()
+        if yaml is not None:
+            return yaml.safe_load(text) or {}
+        # Naive fallback: only pull the fields we need.
+        out: dict = {"model": {"default": DEFAULT_MODEL}, "kb": {"root": "kb/claude/"}}
+        for line in text.splitlines():
+            if line.startswith("  default:"):
+                out["model"]["default"] = line.split(":", 1)[1].strip().strip('"')
+                break
+        return out
 
+    def system_prompt(self) -> str:
+        kb_root = REPO / self.manifest.get("kb", {}).get("root", "kb/claude/")
+        parts = [
+            "You are Claude, running inside DOME-HUB — a sovereign, local-first AI ",
+            "development environment — a sovereign node of Trinity Consortium.",
+            "",
+            f"Your knowledge base is at {kb_root.relative_to(REPO)}. ",
+            "Always consult it before answering questions about your own ",
+            "capabilities or DOME-HUB's architecture.",
+            "",
+            "Skills available (see kb/claude/skills/): docx, pdf, pptx, xlsx, ",
+            "schedule, setup-cowork, skill-creator, consolidate-memory.",
+        ]
+        return "\n".join(parts)
 
-def run(prompt: str, model: str) -> int:
-    try:
-        from anthropic import Anthropic
-    except ImportError:
-        print(
-            "error: anthropic package not installed. "
-            "Run: pip install -r compute/requirements.txt",
-            file=sys.stderr,
+    def run(self, prompt: str, max_tokens: int = 2048) -> str:
+        try:
+            from anthropic import Anthropic
+        except ImportError as e:
+            raise RuntimeError(
+                "anthropic package not installed. "
+                "Run: pip install -r compute/requirements.txt"
+            ) from e
+
+        if not os.environ.get("ANTHROPIC_API_KEY"):
+            raise RuntimeError(
+                "ANTHROPIC_API_KEY not set. Render via:\n"
+                "  bash scripts/render-env.sh   # pulls dome/ANTHROPIC_API_KEY from Keychain"
+            )
+
+        client = Anthropic()
+        resp = client.messages.create(
+            model=self.model,
+            max_tokens=max_tokens,
+            system=self.system_prompt(),
+            messages=[{"role": "user", "content": prompt}],
         )
-        return 2
+        out: list[str] = []
+        for block in resp.content:
+            if getattr(block, "type", None) == "text":
+                out.append(block.text)
+        return "\n".join(out)
 
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        print("error: ANTHROPIC_API_KEY not set", file=sys.stderr)
-        return 3
 
-    manifest = load_manifest()
-    client = Anthropic()
-    resp = client.messages.create(
-        model=model,
-        max_tokens=2048,
-        system=system_prompt(manifest),
-        messages=[{"role": "user", "content": prompt}],
-    )
-    for block in resp.content:
-        if getattr(block, "type", None) == "text":
-            print(block.text)
-    return 0
+def run(prompt: str, model: str = DEFAULT_MODEL, max_tokens: int = 2048) -> str:
+    """Module-level convenience function."""
+    return ClaudeRunner(model=model).run(prompt, max_tokens=max_tokens)
 
 
 def main() -> int:
     p = argparse.ArgumentParser(description="Run Claude locally from DOME-HUB.")
     p.add_argument("--prompt", required=True, help="User prompt")
     p.add_argument("--model", default=DEFAULT_MODEL, help="Override model")
+    p.add_argument("--max-tokens", type=int, default=2048)
     args = p.parse_args()
-    return run(args.prompt, args.model)
+    try:
+        text = ClaudeRunner(model=args.model).run(args.prompt, max_tokens=args.max_tokens)
+        print(text)
+        return 0
+    except Exception as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":

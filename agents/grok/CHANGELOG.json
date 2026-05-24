@@ -1,0 +1,7 @@
+[
+  {
+    "category": "features",
+    "description": "**Grok** now reminds itself to take action in very long conversations while still obeying instructions like \"just plan\".",
+    "breaking_change": false
+  }
+]

@@ -3,7 +3,7 @@ DOME-HUB Tools Library
 Tools: web, shell, file, code, db, kb_search
 """
 
-import subprocess, os, sqlite3
+import subprocess, os, sqlite3, shlex
 from pathlib import Path
 
 DOME_ROOT = Path(os.environ.get("DOME_ROOT", Path.home() / "DOME-HUB"))
@@ -44,8 +44,8 @@ def web_fetch(url: str) -> str:
 def shell_run(command: str, cwd: str | None = None, timeout: int = 30) -> dict:
     """Run a shell command and return stdout, stderr, exit code."""
     result = subprocess.run(
-        command,
-        shell=True,
+        shlex.split(command),
+        shell=False,
         capture_output=True,
         text=True,
         cwd=cwd or str(DOME_ROOT),
@@ -128,30 +128,36 @@ def db_write(sql: str, params: tuple = (), db_path: str | None = None) -> str:
 
 
 def kb_search(query: str, kb_path: str | None = None, top_k: int = 5) -> list[dict]:
-    """Semantic search over local knowledge base using embeddings."""
+    """Semantic search over local knowledge base via ChromaDB (pre-indexed)."""
     try:
-        from sentence_transformers import SentenceTransformer
-        import numpy as np
+        import chromadb
 
-        kb_dir = Path(kb_path or DOME_ROOT / "kb")
-        docs = []
-        for f in kb_dir.rglob("*.md"):
-            text = f.read_text()
-            chunks = [text[i : i + 500] for i in range(0, len(text), 500)]
-            for chunk in chunks:
-                docs.append({"source": str(f), "text": chunk})
+        db_dir = str(DOME_ROOT / "db" / "chroma")
+        client = chromadb.PersistentClient(path=db_dir)
+        col = client.get_collection("dome-kb")
+        results = col.query(query_texts=[query], n_results=top_k)
+        out = []
+        for i, doc in enumerate(results["documents"][0]):
+            meta = results["metadatas"][0][i] if results["metadatas"] else {}
+            dist = results["distances"][0][i] if results["distances"] else 0
+            out.append({"text": doc, "score": round(1 - dist, 4), **meta})
+        return out
+    except Exception as e:
+        return [{"error": str(e)}]
 
-        if not docs:
-            return []
 
-        model = SentenceTransformer("all-MiniLM-L6-v2")
-        query_emb = model.encode([query])
-        doc_embs = model.encode([d["text"] for d in docs])
-        scores = np.dot(doc_embs, query_emb.T).flatten()
-        top_idx = scores.argsort()[-top_k:][::-1]
-        return [{"score": float(scores[i]), **docs[i]} for i in top_idx]
-    except ImportError:
-        return [{"error": "sentence-transformers not installed"}]
+# ── Quantum Compute ───────────────────────────────────────────────────────────
+
+
+def quantum_compute(backend: str = "qiskit", circuit_type: str = "bell",
+                    n_qubits: int = 2, **kwargs) -> dict:
+    """Run a quantum circuit on a local simulator.
+
+    Backends: qiskit, pennylane, cirq, braket
+    Circuits: bell, ghz, qft, vqe, qaoa, qnn, grover
+    """
+    from agents.skills.compute import quantum_circuit
+    return quantum_circuit(backend, circuit_type, n_qubits, **kwargs)
 
 
 # ── Tool registry ─────────────────────────────────────────────────────────────
@@ -167,4 +173,5 @@ ALL_TOOLS = [
     db_query,
     db_write,
     kb_search,
+    quantum_compute,
 ]

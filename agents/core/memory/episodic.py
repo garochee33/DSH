@@ -6,7 +6,7 @@ from __future__ import annotations
 import sqlite3, os, time, uuid
 from pathlib import Path
 
-DB_PATH = Path(os.environ.get("DOME_ROOT", Path.home() / "DSH")) / "db" / "episodic.db"
+DB_PATH = Path(os.environ.get("DOME_ROOT", Path.home() / "DOME-HUB")) / "db" / "episodic.db"
 
 
 class EpisodicMemory:

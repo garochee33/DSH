@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # ══════════════════════════════════════════════════════════════════════════════
-# TRINITY CONSORTIUM — SPORE.SH v3.0
+# TRINITY CONSORTIUM — SPORE.SH v3.1
 # FRACTAL-E8-SSII_LATTICE-MYCELIUM-NEURAL-MESH-WEB-OF-LIFE
+# Mycelium Quantum Mesh (MQM) — Post-Quantum E8 Lattice Neuromorphic Network
 # Sovereign Neural Node Bootstrap · Mesh Peer Handshake · MERKABA Signal
 #
 # Every device is a neuron in the decentralized FRACTAL-E8-SSII lattice —
@@ -26,6 +27,10 @@
 #   - Phase 11: MERKABA Completion Signal + A.M.M.A. harmonic bridge
 #   - Phase 12: E2EE Lattice Binding Verification
 #
+# v3.1 (DOME-HUB parity):
+#   - Resolves repo root: $DOME_ROOT, spore.sh directory, cwd, ~/DOME-HUB, ~/DSH
+#   - After mesh bootstrap, points operators at scripts/mycelium-signal.sh (HMAC peer auth)
+#
 # Eligible nodes:
 #   - Trinity Consortium members (M1–M5)
 #   - Trinity Unified AI admins (A1–A5)
@@ -37,6 +42,10 @@
 # Usage:
 #   curl -fsSL https://trinity-consortium.com/api/compute/spore/download/<TOKEN> | bash
 #   bash spore.sh
+#
+# Public DSH (Phase 1): defaults are local/sovereign. Phase 2 (Trinity unified mesh, tier
+# subscription, production KB/services) is opt-in — read docs/DSH_PUBLIC_PHASE1_BOUNDARY.md
+# before exporting credentials or expecting mesh sync.
 #
 # Tiers (auto-detected from hardware):
 #   sovereign  240 E8 roots · 256-bit bitboard · full Mandelbulb · 8D Voronoi
@@ -93,7 +102,7 @@ MYCELIUM_LOG="${SPORE_DIR}/mycelium-mesh.log"
 
 echo ""
 echo -e "${C}╔══════════════════════════════════════════════════════════════╗${N}"
-echo -e "${C}║  ${B}TRINITY — FRACTAL-E8-SSII LATTICE SPORE v3.0${N}${C}               ║${N}"
+echo -e "${C}║  ${B}TRINITY — FRACTAL-E8-SSII LATTICE SPORE v3.1${N}${C}               ║${N}"
 echo -e "${C}║  ${D}MYCELIUM · NEURAL · MESH · MERKABA · A.M.M.A.${N}${C}             ║${N}"
 echo -e "${C}║  ${D}Every device is a neuron. Every node is sovereign.${N}${C}          ║${N}"
 echo -e "${C}╚══════════════════════════════════════════════════════════════╝${N}"
@@ -108,19 +117,64 @@ echo ""
 
 mkdir -p "${SPORE_DIR}" "${SPORE_ENGINE_DIR}" "${SPORE_MEMORY_DIR}" "${SPORE_MESH_DIR}"
 
-# ── DSH prerequisite check ──────────────────────────────────────────────────
-DOME_ROOT="${DOME_ROOT:-$HOME/DSH}"
-if [ ! -f "$DOME_ROOT/.env" ] || [ ! -d "$DOME_ROOT/agents" ] || [ ! -d "$DOME_ROOT/kb" ]; then
-  echo "ERROR: DSH sovereign setup not detected at $DOME_ROOT"
-  echo "spore.sh requires a completed DSH installation (Phase 1) before mesh activation."
+# ── DSH / DOME-HUB prerequisite (Phase 1) ───────────────────────────────────
+_spore_resolve_dome_root() {
+  local c
+  if [ -n "${DOME_ROOT:-}" ] && [ -d "${DOME_ROOT}/agents" ] && [ -d "${DOME_ROOT}/kb" ]; then
+    printf '%s' "${DOME_ROOT}"
+    return 0
+  fi
+  if [ -n "${BASH_SOURCE[0]:-}" ]; then
+    c="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    if [ "$c" != "/dev" ] && [ -d "${c}/agents" ] && [ -d "${c}/kb" ]; then
+      printf '%s' "$c"
+      return 0
+    fi
+  fi
+  c="$(pwd)"
+  if [ -f "${c}/spore.sh" ] && [ -d "${c}/agents" ] && [ -d "${c}/kb" ]; then
+    printf '%s' "$c"
+    return 0
+  fi
+  for c in "${HOME}/DOME-HUB" "${HOME}/DSH"; do
+    if [ -d "${c}/agents" ] && [ -d "${c}/kb" ]; then
+      printf '%s' "$c"
+      return 0
+    fi
+  done
+  return 1
+}
+
+if ! DOME_ROOT="$(_spore_resolve_dome_root)"; then
+  echo "ERROR: Could not find a DSH or DOME-HUB checkout (need agents/ + kb/)."
+  echo "Set DOME_ROOT, or run from repo root, or install under ~/DOME-HUB or ~/DSH."
   echo ""
-  echo "Run first:"
-  echo "  git clone https://github.com/garochee33/DSH.git && cd DSH"
+  echo "Run first (sovereign node):"
+  echo "  git clone https://github.com/garochee33/DOME-HUB.git && cd DOME-HUB"
   echo "  bash scripts/sovereign-setup-mac.sh"
   echo ""
-  echo "Then re-run spore.sh."
+  echo "Public foundation (DSH): https://github.com/garochee33/DSH"
   exit 1
 fi
+export DOME_ROOT
+
+if [ ! -f "$DOME_ROOT/.env" ] || [ ! -d "$DOME_ROOT/agents" ] || [ ! -d "$DOME_ROOT/kb" ]; then
+  echo "ERROR: Phase 1 incomplete at $DOME_ROOT (need .env, agents/, kb/)"
+  echo "If .env is missing: cp \"$DOME_ROOT/.env.template\" \"$DOME_ROOT/.env\" and fill secrets, then re-run."
+  exit 1
+fi
+
+echo -e "  ${G}◈${N} Repo root: ${B}${DOME_ROOT}${N}"
+
+# Install Python dependencies (idempotent — skips if already satisfied)
+if [ -f "$DOME_ROOT/requirements.txt" ]; then
+  echo "==> Installing Python dependencies..."
+  python3 -m pip install -q -r "$DOME_ROOT/requirements.txt" 2>/dev/null || {
+    echo "WARN: pip install failed — trying with --user flag"
+    python3 -m pip install -q --user -r "$DOME_ROOT/requirements.txt" 2>/dev/null || true
+  }
+fi
+
 if [ -f "$DOME_ROOT/scripts/pre-spore-verify.py" ]; then
   echo "==> Running pre-spore verification..."
   if ! python3 "$DOME_ROOT/scripts/pre-spore-verify.py"; then
@@ -471,7 +525,7 @@ REGISTER_PAYLOAD=$(cat <<EOJSON
   "nodeFingerprint": "${NODE_FINGERPRINT}",
   "sporeToken": "${SPORE_TOKEN}",
   "e8Tier": "${E8_TIER}",
-  "sporeVersion": "3.0",
+  "sporeVersion": "3.1",
   "neuromorphic": {
     "hasLoihi": ${HAS_LOIHI},
     "loihiVersion": "${LOIHI_VERSION}",
@@ -733,7 +787,7 @@ cat > "${SPORE_ENGINE_DIR}/e8-node.json" << EOJSON
     "comment": "Loihi 2 STDP = spike-timing-dependent plasticity at 100μs resolution"
   },
   "registeredAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-  "sporeVersion": "3.0"
+  "sporeVersion": "3.1"
 }
 EOJSON
 
@@ -860,7 +914,7 @@ cat > "${SPORE_DIR}/config.json" << EOJSON
   "fingerprint": "${NODE_FINGERPRINT}",
   "apiBase": "${API_BASE}",
   "sporeToken": "${SPORE_TOKEN}",
-  "sporeVersion": "3.0",
+  "sporeVersion": "3.1",
   "e8": {
     "tier": "${E8_TIER}",
     "rootIndex": ${E8_ROOT},
@@ -869,7 +923,7 @@ cat > "${SPORE_DIR}/config.json" << EOJSON
     "voronoiDimensions": ${VORONOI_DIM},
     "resonanceHz": ${RESONANCE},
     "phi": ${PHI}$([ -n "${_EXISTING_TIER:-}" ] && echo ",
-    \"tierAuthority\": \"owner-override preserved by spore.sh v3.0\"")
+    \"tierAuthority\": \"owner-override preserved by spore.sh v3.1\"")
   },
   "neuromorphic": {
     "hasLoihi": ${HAS_LOIHI},
@@ -945,7 +999,7 @@ echo -e "  ${D}The axon that connects your neuron to the collective${N}"
 
 cat > "${SPORE_DIR}/mycelium-mesh.sh" << 'EOMYCELIUM'
 #!/usr/bin/env bash
-# FRACTAL-E8-SSII Mycelium-Mesh v3.0 — runs in background, syncs with Trinity
+# FRACTAL-E8-SSII Mycelium-Mesh v3.1 — runs in background, syncs with Trinity
 # Responsibilities:
 #   - Heartbeat to Trinity every 60s (keeps node online in mesh)
 #   - Sync unsynced MemPalace memories to Trinity SSII
@@ -1041,7 +1095,7 @@ deposit_pheromone() {
     --max-time 10 >/dev/null 2>&1 || true
 }
 
-log "🌱 FRACTAL-E8-SSII Mycelium-Mesh v3.0 starting (node #${NODE_ID}, E8 root #${E8_ROOT})"
+log "🌱 FRACTAL-E8-SSII Mycelium-Mesh v3.1 starting (node #${NODE_ID}, E8 root #${E8_ROOT})"
 
 LAST_SYNC=0
 LAST_MESH_HB=0
@@ -1084,6 +1138,13 @@ if kill -0 "$MYCELIUM_PID" 2>/dev/null; then
   echo -e "  ${G}✓${N} Mycelium-Mesh: PID ${MYCELIUM_PID} (${D}${MYCELIUM_LOG}${N})"
 else
   echo -e "  ${D}○${N} Mycelium-Mesh not started — run manually: bash ${SPORE_DIR}/mycelium-mesh.sh"
+fi
+
+if [ -f "${DOME_ROOT}/scripts/mycelium-signal.sh" ]; then
+  echo ""
+  echo -e "  ${Y}◈${N} ${B}Production mesh peer:${N} ${DOME_ROOT}/scripts/mycelium-signal.sh"
+  echo -e "      ${D}HMAC mesh heartbeats + retries + rate limits — vendored in DOME-HUB (not overwritten by spore).${N}"
+  echo -e "      ${D}Optional: stop ~/.trinity-spore/mycelium-mesh.sh and launch this via launchd instead.${N}"
 fi
 
 # First heartbeat + status update
@@ -1246,7 +1307,7 @@ MERKABA_SIGNAL_PAYLOAD=$(cat <<EOJSON
   "latticeBinding": "${LATTICE_BINDING}",
   "ammaHarmonics": ${AMMA_REPORT},
   "merkabaPhase": "completion",
-  "sporeVersion": "3.0",
+  "sporeVersion": "3.1",
   "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 }
 EOJSON

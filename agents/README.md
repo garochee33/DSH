@@ -36,10 +36,53 @@ agents/
 ├── local/
 │   └── ollama.py        # OllamaClient — local LLM inference via Ollama HTTP API
 │
-└── claude/
-    ├── runner.py        # CLI runner for Claude agent (uses ANTHROPIC_API_KEY)
-    └── agent.yaml       # Claude agent manifest
+├── claude/             # Anthropic Claude — HTTP API (ANTHROPIC_API_KEY)
+│   ├── runner.py
+│   ├── agent.yaml
+│   └── README.md
+│
+├── kimi/               # Moonshot Kimi — OpenAI-compatible HTTP (MOONSHOT_API_KEY)
+│   ├── runner.py
+│   ├── agent.yaml
+│   └── README.md
+│
+├── cursor/             # Cursor Agent — shells out to cursor-agent CLI
+│   ├── runner.py
+│   ├── agent.yaml
+│   └── README.md
+│
+├── kiro/               # AWS Kiro — shells out to kiro-cli-chat (in-app binary)
+│   ├── runner.py
+│   ├── agent.yaml
+│   └── README.md
+│
+├── trinity/            # Trinity ecosystem — HTTP client (portal :5055 + KB :3333)
+│   ├── runner.py
+│   ├── agent.yaml
+│   └── README.md
+│
+└── Codex/              # OpenAI Codex — skills mirror (no runner; CLI is `codex`)
+    ├── README.md
+    └── skills/
 ```
+
+## External tool runners (real, no stubs)
+
+| Agent | Backend | Auth | Status (2026-04-26) |
+|---|---|---|---|
+| `claude` | Anthropic SDK HTTP | `ANTHROPIC_API_KEY` env (Keychain `dome/ANTHROPIC_API_KEY`) | ✅ working |
+| `kimi` | Moonshot HTTP `api.moonshot.ai` (OpenAI-compatible) | `MOONSHOT_API_KEY` env | ⚠️ key not yet provisioned |
+| `cursor` | shell-out to `cursor-agent -p -f` | Keychain `cursor-access-token` (auto) | ⚠️ stored auth invalid; run `cursor-agent login` |
+| `kiro` | shell-out to in-app `kiro-cli-chat` | Keychain `kirocli:social:token` (auto) | ✅ auth ok; ⚠️ free-tier monthly limit hit, resets 05/01 |
+| `trinity` | HTTP to portal `localhost:5055` + KB `localhost:3333` | Keychain `dome/TRINITY_JWT` (auto) | ✅ portal health ok; ⚠️ JWT lacks `/api/agents/list` perm (401) |
+
+Each runner: `python agents/<tool>/runner.py --help` for full options.
+
+Common contract (from `agents/claude/` pattern):
+- `__init__.py` — exposes `<Tool>Runner` class + `run()` convenience function
+- `agent.yaml` — config (vendor, model defaults, env vars, constraints)
+- `runner.py` — CLI entrypoint with `--prompt`
+- `README.md` — usage + setup
 
 ## Provider Routing
 

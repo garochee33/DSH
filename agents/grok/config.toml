@@ -1,0 +1,8 @@
+[cli]
+installer = "internal"
+
+[ui]
+max_thoughts_width = 120
+fork_secondary_model = "grok-build"
+yolo = false
+compact_mode = false

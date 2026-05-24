@@ -1,0 +1,51 @@
+name: kimi
+vendor: Moonshot AI
+display_name: "Kimi"
+version: "k2-0905"
+
+surfaces:
+  - http-api             # primary: api.moonshot.ai (OpenAI-compatible)
+  - kimi-cli             # ~/.local/bin/kimi (Typer CLI, ACP server)
+
+model:
+  default: "kimi-k2-0905-preview"
+  alternates:
+    - "moonshot-v1-128k"
+    - "moonshot-v1-32k"
+    - "moonshot-v1-8k"
+    - "moonshot-v1-auto"
+
+api:
+  base_url: "https://api.moonshot.ai/v1"
+  region_alt: "https://api.moonshot.cn/v1"
+  endpoint: "/chat/completions"
+  protocol: "openai-compatible"
+
+cli:
+  binary: "kimi"
+  subcommands:
+    interactive: "term"   # TUI
+    server: "acp"         # Agent Communication Protocol server
+    info: "info"
+
+env:
+  required:
+    - MOONSHOT_API_KEY
+  optional:
+    - MOONSHOT_BASE_URL    # override base_url (e.g. for cn region)
+    - KIMI_MODEL           # override default model
+    - KIMI_AGENT_WORKDIR
+
+workspace:
+  folder: "./"
+  scratch_folder: ".scratch/kimi/"
+
+compute:
+  python: ">=3.11"
+  requires: [openai, httpx, pyyaml]
+
+constraints:
+  never_push_to_main_without_approval: true
+  never_skip_git_hooks: true
+  never_commit_secrets: true
+  refuse: [malware, weapons_of_mass_destruction, csam]

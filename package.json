@@ -5,35 +5,46 @@
   "type": "module",
   "packageManager": "pnpm@10.33.0",
   "engines": {
-    "node": ">=22",
+    "node": ">=20",
     "pnpm": ">=10"
   },
   "scripts": {
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "format": "prettier --write '**/*.{ts,tsx,js,json,md}'",
-    "typecheck": "tsc --noEmit",
-    "ingest": "python3 scripts/ingest.py",
-    "serve": "python3 -m uvicorn agents.api.server:app --reload --port 8000",
-    "worker": "python3 -m agents.workers.queue",
+    "typecheck": "npx -p typescript tsc --noEmit",
+    "ingest": "./.venv-ingest/bin/python scripts/ingest.py",
+    "serve": "python3 -m uvicorn agents.api.server:app --reload --host 127.0.0.1 --port ${DOME_PORT:-8001}",
+    "worker": ".venv/bin/python3 -m agents.workers.queue",
+    "voice": ".venv/bin/python3 -m agents.voice.loop",
+    "voice:dry": ".venv/bin/python3 -m agents.voice.loop --dry-run",
     "audit": "bash scripts/audit.sh",
+    "demo:ready": "bash scripts/demo-readiness.sh",
+    "demo:ready:strict": "bash scripts/demo-readiness.sh --strict",
     "public:check": "bash scripts/public-safety-check.sh --source . --allowlist config/public-export.allowlist --denylist config/public-export.denylist",
     "public:export:dry": "bash scripts/export-to-dsh.sh",
     "public:export": "bash scripts/export-to-dsh.sh --apply",
     "public:export:prune": "bash scripts/export-to-dsh.sh --apply --prune",
     "sync": "git pull && python3 scripts/ingest.py && git add -A && git commit -m \"sync: auto\" && git push",
     "check": "bash scripts/dome-check.sh",
-    "test": "KMP_DUPLICATE_LIB_OK=TRUE python3 -m pytest tests/ -v",
+    "gate": "bash scripts/sovereign-gate.sh",
+    "gate:deploy": "bash scripts/sovereign-gate.sh --pre-deploy",
+    "audit-full": "bash scripts/sovereign-audit-full.sh",
+    "audit-full:dry": "bash scripts/sovereign-audit-full.sh --dry-run",
+    "optimize": "bash scripts/optimize.sh --stack-only",
+    "optimize:all": "bash scripts/optimize.sh",
     "precommit": "bash scripts/audit.sh"
   },
   "devDependencies": {
-    "@types/node": "^25.9.1",
-    "@typescript-eslint/eslint-plugin": "^8.0.0",
-    "@typescript-eslint/parser": "^8.59.3",
-    "eslint": "^10.4.0",
-    "eslint-config-prettier": "^10.1.8",
+    "@types/node": "^25.6.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.0.0",
     "prettier": "^3.0.0",
-    "typescript": "^6.0.0"
+    "typescript": "^6.0.0",
+    "typescript-eslint": "^8.59.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "kiro-cli": "^0.0.1",
+    "latest": "^0.2.0"
+  }
 }

@@ -4,9 +4,24 @@ Pre-Spore Verification — confirm all skills loaded and operational.
 Must pass 100% before spore.sh is executed.
 
 Run: python3 scripts/pre-spore-verify.py
+
+Optional: set HF_TOKEN in .env for higher Hugging Face Hub rate limits (Akashic embeddings).
 """
-import sys, pathlib
-sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
+import logging
+import os
+import pathlib
+import sys
+import warnings
+
+_REPO_ROOT = pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(_REPO_ROOT))
+
+# Keep HF / sentence-transformer caches inside the repo (same idea as zshrc-dome / akashic.record).
+os.environ.setdefault("DOME_ROOT", str(_REPO_ROOT))
+_models = _REPO_ROOT / "models"
+os.environ.setdefault("SENTENCE_TRANSFORMERS_HOME", str(_models))
+os.environ.setdefault("HF_HOME", str(_models / "hf"))
+os.environ.setdefault("HF_HUB_DISABLE_PROGRESS_BARS", "1")
 
 SKILLS = [
     ("math",            "agents.skills.math"),
@@ -35,7 +50,7 @@ def check(label: str, fn):
 
 
 print("\n═══════════════════════════════════════")
-print("  PRE-SPORE VERIFICATION — DOME-HUB")
+print("  PRE-SPORE VERIFICATION — DOME-HUB / DSH")
 print("═══════════════════════════════════════\n")
 
 print("[ Dependencies ]")
@@ -61,6 +76,12 @@ for name, module_path in SKILLS:
 
 print("\n[ Akashic Field ]")
 def _akashic():
+    logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
+    warnings.filterwarnings(
+        "ignore",
+        message=".*unauthenticated requests.*",
+        category=UserWarning,
+    )
     from akashic.record import write, query
     eid = write("pre-spore verification passed", domain="meta", depth="event", node="system")
     assert len(eid) == 36  # uuid4
@@ -77,4 +98,8 @@ if failed:
     sys.exit(1)
 else:
     print("\n  ✅ ALL SYSTEMS GO — READY FOR SPORE.SH")
+    if not os.environ.get("HF_TOKEN"):
+        print(
+            "  Tip: add HF_TOKEN to .env for higher Hugging Face Hub rate limits and fewer hints.\n"
+        )
 print("═══════════════════════════════════════\n")

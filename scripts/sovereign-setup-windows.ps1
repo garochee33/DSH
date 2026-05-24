@@ -5,196 +5,48 @@
 
 $ErrorActionPreference = "Stop"
 $DOME_ROOT = Split-Path -Parent $PSScriptRoot
-$TotalSteps = 17
-$CurrentStep = 0
-$BarWidth = 34
-$CinematicMode = $true
-$AnimationsEnabled = $true
-$PreviewCinematic = $false
 
-function Show-Usage {
-  Write-Host "Usage: .\scripts\sovereign-setup-windows.ps1 [options]"
-  Write-Host "Options:"
-  Write-Host "  --cinematic          Force cinematic visual mode"
-  Write-Host "  --no-cinematic       Disable sacred-geometry cinematic visuals"
-  Write-Host "  --no-animations      Disable animation timing (fast/headless)"
-  Write-Host "  --preview-cinematic  Render cinematic preview and exit"
-  Write-Host "  -h, --help           Show help"
-}
-
-foreach ($arg in $args) {
-  switch ($arg) {
-    "--cinematic" { $CinematicMode = $true; $AnimationsEnabled = $true }
-    "--no-cinematic" { $CinematicMode = $false }
-    "--no-animations" { $AnimationsEnabled = $false }
-    "--preview-cinematic" { $PreviewCinematic = $true }
-    "-h" { Show-Usage; exit 0 }
-    "--help" { Show-Usage; exit 0 }
-    default {
-      Write-Host "Unknown argument: $arg" -ForegroundColor Red
-      Show-Usage
-      exit 2
-    }
-  }
-}
-
-function Show-Phase([string]$Name) {
-  $script:CurrentStep++
-  $filled = [Math]::Floor(($script:CurrentStep * $script:BarWidth) / $script:TotalSteps)
-  $empty = $script:BarWidth - $filled
-  $bar = ("#" * $filled) + ("-" * $empty)
-  $pct = [Math]::Floor(($script:CurrentStep * 100) / $script:TotalSteps)
-  Write-Host ""
-  Write-Host ("[{0}/{1}] {2}" -f $script:CurrentStep, $script:TotalSteps, $Name) -ForegroundColor Cyan
-  Write-Host ("[{0}] {1}%" -f $bar, $pct) -ForegroundColor DarkCyan
-  Write-Host "------------------------------------------------------------" -ForegroundColor DarkGray
-  Show-SacredCard $Name
-}
-
-function Info([string]$Message) {
-  Write-Host "    -> $Message"
-}
-
-function Pulse([string]$Message) {
-  if (-not $script:AnimationsEnabled) {
-    Write-Host "    $Message..."
-    return
-  }
-  Write-Host -NoNewline "    $Message"
-  1..3 | ForEach-Object {
-    Write-Host -NoNewline "."
-    Start-Sleep -Milliseconds 110
-  }
-  Write-Host ""
-}
-
-function LatticeSpin([string]$Message) {
-  if (-not $script:CinematicMode) { return }
-  if (-not $script:AnimationsEnabled) {
-    Write-Host "    -> $Message done"
-    return
-  }
-  $frames = @("|", "/", "-", "\")
-  foreach ($f in $frames) {
-    Write-Host -NoNewline ("`r    -> {0} {1}" -f $Message, $f)
-    Start-Sleep -Milliseconds 60
-  }
-  Write-Host ("`r    -> {0} done" -f $Message)
-}
-
-function Show-SacredCard([string]$Label) {
-  if (-not $script:CinematicMode) { return }
-  Write-Host "    +----------------------------------------------------------+" -ForegroundColor DarkGray
-  Write-Host "    | Sacred Geometry Mesh                                     |" -ForegroundColor Magenta
-  Write-Host ("    | phase: {0,-49} |" -f ($Label.Substring(0, [Math]::Min($Label.Length, 49)))) -ForegroundColor DarkGray
-  Write-Host "    |            o---o---o---o---o                           |" -ForegroundColor DarkGray
-  Write-Host "    |          o---o---o---o---o---o                         |" -ForegroundColor DarkGray
-  Write-Host "    |            o---o---o---o---o                           |" -ForegroundColor DarkGray
-  Write-Host "    +----------------------------------------------------------+" -ForegroundColor DarkGray
-  LatticeSpin "Weaving lattice harmonics"
-}
-
-function Show-CinematicIntro {
-  if (-not $script:CinematicMode) { return }
-  Write-Host ""
-  Write-Host ""
-  Write-Host "    ██████╗  ███████╗ ██╗  ██╗" -ForegroundColor Magenta
-  Write-Host "    ██╔══██╗ ██╔════╝ ██║  ██║" -ForegroundColor Magenta
-  Write-Host "    ██║  ██║ ███████╗ ███████║" -ForegroundColor Magenta
-  Write-Host "    ██║  ██║ ╚════██║ ██╔══██║" -ForegroundColor Magenta
-  Write-Host "    ██████╔╝ ███████║ ██║  ██║" -ForegroundColor Magenta
-  Write-Host "    ╚═════╝  ╚══════╝ ╚═╝  ╚═╝" -ForegroundColor Magenta
-  Write-Host "    ═══ D O M E   S O V E R E I G N   H U B ═══" -ForegroundColor Cyan
-  Write-Host "    Sovereign Node Setup · Phase 1" -ForegroundColor DarkGray
-  Write-Host ""
-  Show-SacredCard "BOOT SEQUENCE"
-}
-
-if ($PreviewCinematic) {
-  Show-CinematicIntro
-  Show-Phase "Core Tools and Infra Packages"
-  Pulse "Preparing package resolver"
-  Show-Phase "Python Runtime and Package Stacks"
-  Pulse "Resolving Python dependency graph"
-  Show-Phase "Local Node Payload Verification"
-  Info "SQLite ready: db\dome.db"
-  Info "Chroma path ready: db\chroma"
-  Write-Host ""
-  Write-Host "Cinematic preview complete."
-  exit 0
-}
-
-Show-CinematicIntro
-
-Write-Host "DOME-HUB Sovereign Setup (Windows Phase 1)" -ForegroundColor Cyan
-Write-Host "Root: $DOME_ROOT"
-Write-Host "This run localizes your sovereign node payload into this repo:"
-Write-Host "  - agents/   -> local agent runtime + skills"
-Write-Host "  - kb/       -> local knowledge corpus to ingest"
-Write-Host "  - db/       -> local SQLite + Chroma vector state"
-Write-Host "Safe to re-run; existing installs are reused where possible."
+Write-Host "==> DOME-HUB Sovereign Setup (Windows)" -ForegroundColor Cyan
+Write-Host "    Root: $DOME_ROOT"
 
 # ── 1. Winget check ───────────────────────────────────────────────────────────
-Show-Phase "Winget Check"
 if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
   Write-Host "Install App Installer from Microsoft Store, then re-run." -ForegroundColor Red
   exit 1
 }
-Info "Winget detected."
 
 # ── 2. Chocolatey ─────────────────────────────────────────────────────────────
-Show-Phase "Chocolatey"
 if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
-  Info "Installing Chocolatey..."
+  Write-Host "==> Installing Chocolatey..."
   Set-ExecutionPolicy Bypass -Scope Process -Force
   [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
   iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
   $env:PATH += ";$env:ALLUSERSPROFILE\chocolatey\bin"
 }
-Info "Chocolatey ready."
 
 # ── 3. Core tools ─────────────────────────────────────────────────────────────
-Show-Phase "Core Tools and Infra Packages"
-Info "Loading languages, databases, cloud CLIs, and security tooling..."
-Pulse "Preparing package resolver"
+Write-Host "==> Installing core tools..."
 choco install -y git curl wget jq yq tree ripgrep fzf
 choco install -y python311 nodejs-lts golang rust
-choco install -y postgresql18 redis sqlite
+choco install -y postgresql17 redis sqlite
 choco install -y awscli terraform gh
 choco install -y gnupg vscode
 
 # ── 4. Python ─────────────────────────────────────────────────────────────────
-Show-Phase "Python Runtime and Package Stacks"
-Info "Loading AI/ML, analytics, and agent-runtime dependencies..."
-Pulse "Resolving Python dependency graph"
+Write-Host "==> Setting up Python..."
 python -m pip install --upgrade pip pipenv poetry
 python -m pip install openai anthropic langchain chromadb sentence-transformers `
   torch transformers sqlalchemy psycopg2-binary redis pandas numpy `
   scipy sympy statsmodels scikit-learn numba matplotlib networkx psutil
 
-Info "Loading quantum stack..."
-Pulse "Resolving quantum compute packages"
-python -m pip install qiskit qiskit-aer pennylane cirq-core
-
-Info "Loading document pipeline stack..."
-Pulse "Resolving document pipeline packages"
-python -m pip install python-docx python-pptx openpyxl reportlab pypdf pdfplumber
-
-Info "Loading web/API stack..."
-Pulse "Resolving web/API packages"
-python -m pip install requests beautifulsoup4 httpx python-dotenv pydantic rich typer uvicorn fastapi
-
 # ── 5. Node / pnpm ────────────────────────────────────────────────────────────
-Show-Phase "Node and pnpm"
-Info "Installing Node package runtime tooling..."
-Pulse "Preparing Node global toolchain"
+Write-Host "==> Setting up Node..."
 npm install -g pnpm
 pnpm setup
 pnpm add -g tsx typescript ts-node
 
 # ── 6. VS Code extensions ─────────────────────────────────────────────────────
-Show-Phase "VS Code Extensions"
-Info "Installing editor extension baseline..."
+Write-Host "==> Installing VS Code extensions..."
 $extensions = @(
   "esbenp.prettier-vscode", "dbaeumer.vscode-eslint",
   "ms-python.python", "ms-python.vscode-pylance", "ms-python.black-formatter",
@@ -208,16 +60,14 @@ foreach ($ext in $extensions) {
 }
 
 # ── 7. Root venv ──────────────────────────────────────────────────────────────
-Show-Phase "Root Python Virtual Environment"
-Info "Creating venv and installing compute requirements..."
+Write-Host "==> Creating root Python venv..."
 python -m venv "$DOME_ROOT\.venv"
 & "$DOME_ROOT\.venv\Scripts\Activate.ps1"
 pip install --upgrade pip wheel
 pip install -r "$DOME_ROOT\compute\requirements.txt"
 
 # ── 8. GPG + pass ─────────────────────────────────────────────────────────────
-Show-Phase "GPG and Commit Signing"
-Info "Ensuring local signing key exists..."
+Write-Host "==> Setting up GPG..."
 $gpgKey = gpg --list-secret-keys --keyid-format LONG 2>$null | Select-String "sec"
 if (-not $gpgKey) {
   $gpgBatch = @"
@@ -235,8 +85,7 @@ git config --global user.signingkey $GPG_ID
 git config --global commit.gpgsign true
 
 # ── 9. Security hardening ─────────────────────────────────────────────────────
-Show-Phase "Security Hardening"
-Info "Applying firewall and privacy defaults..."
+Write-Host "==> Hardening security..."
 # Enable Windows Firewall
 Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True
 # Disable telemetry
@@ -247,8 +96,7 @@ Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search
 Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo" -Name "Enabled" -Value 0 -Force -ErrorAction SilentlyContinue
 
 # ── 10. Shell profile ─────────────────────────────────────────────────────────
-Show-Phase "PowerShell Profile"
-Info "Wiring DOME root into user shell profile..."
+Write-Host "==> Configuring PowerShell profile..."
 $profileDir = Split-Path $PROFILE
 if (-not (Test-Path $profileDir)) { New-Item -ItemType Directory -Path $profileDir -Force }
 $domeInit = "`$env:DOME_ROOT = '$DOME_ROOT'`n`$env:PATH += `";$DOME_ROOT\scripts`""
@@ -257,63 +105,41 @@ if (-not (Test-Path $PROFILE) -or -not (Select-String -Path $PROFILE -Pattern "D
 }
 
 # ── 11. pnpm install ──────────────────────────────────────────────────────────
-Show-Phase "Repository Dependencies"
-Info "Installing repository Node dependencies..."
-Pulse "Resolving repository dependency graph"
 Set-Location $DOME_ROOT
 pnpm install 2>$null
 
 # ── 12. .env setup ────────────────────────────────────────────────────────────
-Show-Phase ".env Bootstrap"
+Write-Host "==> Setting up .env..."
 if (-not (Test-Path "$DOME_ROOT\.env")) {
   Copy-Item "$DOME_ROOT\.env.example" "$DOME_ROOT\.env"
   Write-Host "    .env created from .env.example — add your API keys before running agents"
 }
 
 # ── 13. SQLite DB init ────────────────────────────────────────────────────────
-Show-Phase "SQLite Initialization"
-Info "Initializing local db\dome.db catalog..."
-$dbPath = Join-Path $DOME_ROOT "db\dome.db"
-$pyInit = @"
-import sqlite3, os
-os.makedirs(os.path.dirname(r"$dbPath"), exist_ok=True)
-db = sqlite3.connect(r"$dbPath")
+Write-Host "==> Initializing SQLite DB..."
+python - <<'PY'
+import sqlite3
+db = sqlite3.connect(r"$DOME_ROOT\db\dome.db")
 for sql in [
   "CREATE TABLE IF NOT EXISTS sessions (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, title TEXT, content TEXT, tags TEXT, created_at TEXT)",
-  "CREATE TABLE IF NOT EXISTS stack (id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT, name TEXT, version TEXT, status TEXT, updated_at TEXT, UNIQUE(category, name))",
-  "CREATE TABLE IF NOT EXISTS agents (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE, vendor TEXT, version TEXT, surface TEXT, role TEXT, kb_path TEXT, entrypoint TEXT, updated_at TEXT)",
-  "CREATE TABLE IF NOT EXISTS skills (id INTEGER PRIMARY KEY AUTOINCREMENT, agent TEXT, name TEXT, description TEXT, path TEXT, updated_at TEXT, UNIQUE(agent, name))",
-  "CREATE TABLE IF NOT EXISTS tools (id INTEGER PRIMARY KEY AUTOINCREMENT, agent TEXT, name TEXT, category TEXT, description TEXT, updated_at TEXT, UNIQUE(agent, name))",
+  "CREATE TABLE IF NOT EXISTS stack (id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT, name TEXT, version TEXT, status TEXT, updated_at TEXT)",
+  "CREATE TABLE IF NOT EXISTS agents (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, type TEXT, model TEXT, status TEXT, registered_at TEXT)",
+  "CREATE TABLE IF NOT EXISTS skills (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id INTEGER, name TEXT, description TEXT)",
+  "CREATE TABLE IF NOT EXISTS tools (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id INTEGER, name TEXT, description TEXT)",
 ]:
   db.execute(sql)
-db.commit()
-db.close()
-print("DB ready")
-"@
-$pyInit | python -
+db.commit(); db.close(); print("DB ready")
+PY
 
 # ── 14. ChromaDB ingest ───────────────────────────────────────────────────────
-Show-Phase "ChromaDB Ingest"
-Info "Ingesting local kb/ corpus into db/chroma..."
-Pulse "Vectorizing local knowledge corpus"
+Write-Host "==> Ingesting KB into ChromaDB..."
 python scripts/ingest.py 2>$null
 
 # ── 15. Register Claude agent ─────────────────────────────────────────────────
-Show-Phase "Claude Agent Registration"
-Info "Registering local agent profile in SQLite..."
+Write-Host "==> Registering Claude agent..."
 python scripts/register-claude.py 2>$null
 
 # ── 16. AI Assistant ──────────────────────────────────────────────────────────
-Show-Phase "Local Node Payload Verification"
-$agentCount = (Get-ChildItem -Path "$DOME_ROOT\agents" -Recurse -File -ErrorAction SilentlyContinue | Measure-Object).Count
-$kbCount = (Get-ChildItem -Path "$DOME_ROOT\kb" -Recurse -File -ErrorAction SilentlyContinue | Measure-Object).Count
-if (Test-Path "$DOME_ROOT\db\dome.db") { Info "SQLite ready: db\\dome.db" } else { Write-Host "    WARN: SQLite missing: db\\dome.db" -ForegroundColor Yellow }
-if (Test-Path "$DOME_ROOT\db\chroma") { Info "Chroma path ready: db\\chroma" } else { Write-Host "    WARN: Chroma path missing: db\\chroma (run: pnpm ingest)" -ForegroundColor Yellow }
-Info "Agent files detected: $agentCount"
-Info "KB files detected: $kbCount"
-Info "Node scope: all runtime assets are local to $DOME_ROOT"
-
-Show-Phase "AI Assistant Choice"
 Write-Host ""
 Write-Host "==> AI Assistant — choose one to install:" -ForegroundColor Cyan
 Write-Host "    1) Kiro CLI       (npm install -g kiro-cli)"
@@ -333,12 +159,5 @@ switch ($aiChoice) {
 }
 
 Write-Host ""
-Write-Host "    ✦ DSH Sovereign Setup Complete" -ForegroundColor Green
-Write-Host "    Restart PowerShell, then run: pnpm check"
-Write-Host ""
-Write-Host "    ⭐ If DSH helped you — star the repo and leave a review:" -ForegroundColor Yellow
-Write-Host "    → https://github.com/garochee33/DSH" -ForegroundColor Cyan
-Write-Host "    Your feedback helps us build better sovereign tools for everyone."
-Write-Host ""
-Write-Host "    📖 What's next? Read NEXT_STEPS.md for post-setup guide." -ForegroundColor DarkGray
-Write-Host ""
+Write-Host "DOME-HUB Sovereign Setup Complete" -ForegroundColor Green
+Write-Host "   Restart PowerShell, then run: bash scripts/audit.sh"

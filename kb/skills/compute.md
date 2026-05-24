@@ -10,6 +10,14 @@ Domain: `build` | Depth: `axiom`
 - GPU tensor compute via Apple MPS (torch)
 - Parallel and vectorized operations
 
+## Apple Silicon (local)
+
+| Path | Role |
+|------|------|
+| `agents/core/stream.py` | MLX + Ollama streaming |
+| `agents/core/memory/vector.py` | ONNX Runtime → CoreML EP (Neural Engine) for embeddings |
+| `scripts/mlx-neural-bridge.sh` | Trinity MLX HTTP helper (mirror `nexus-core/mlx-neural-bridge.py`) |
+
 ## Libraries
 | Library   | Purpose |
 |-----------|---------|
@@ -26,7 +34,7 @@ Domain: `build` | Depth: `axiom`
 
 ## Key Functions
 - `jit_compute(fn, *args)` — JIT-compile and run a function
-- `optimize_fn(fn, x0)` — numerical optimization
+- `optimize(fn, x0)` — numerical optimization
 - `fft(signal)` — fast Fourier transform
-- `quantum_circuit(n_qubits)` — build and simulate a quantum circuit
+- `quantum_circuit(gates)` — build and simulate a quantum circuit
 - `gpu_tensor(data)` — move tensor to MPS (Apple GPU)

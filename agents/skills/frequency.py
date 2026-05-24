@@ -73,7 +73,7 @@ def dominant_frequency(sig: np.ndarray, sample_rate: int = 44100) -> float:
 def verify() -> bool:
     wave = synthesize([528.0], [1.0], duration=0.1, sr=44100)
     assert len(wave) == 4410
-    spec = fft_spectrum(wave, 44100)
+    _ = fft_spectrum(wave, 44100)  # verify no crash
     dom = dominant_frequency(wave, 44100)
     assert abs(dom - 528.0) < 5.0, f"dominant freq off: {dom}"
     assert solfeggio()["SOL"] == 528.0

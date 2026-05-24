@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # DSH — Ollama initialization
 # Detects hardware tier and pulls the right local models.
 # Safe to re-run: already-installed models are skipped.
 set -euo pipefail
-
-DOME_ROOT="${DOME_ROOT:-$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOME_ROOT="${DOME_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 
 echo "==> DSH Ollama init"
 

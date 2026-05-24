@@ -1,0 +1,5 @@
+# Test writer role — full access to write and run tests, high reasoning
+description = "Writes comprehensive tests following project conventions, then runs them"
+default_capability_mode = "all"
+reasoning_effort = "high"
+default_fork_context = true

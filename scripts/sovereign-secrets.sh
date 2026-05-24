@@ -9,7 +9,7 @@
 # Run interactively. You'll be prompted ONCE for a GPG passphrase.
 set -euo pipefail
 
-DOME_ROOT="${DOME_ROOT:-$HOME/DSH}"
+DOME_ROOT="${DOME_ROOT:-$HOME/DOME-HUB}"
 cd "$DOME_ROOT"
 
 GPG_USER_NAME="$(git config --global user.name || echo enzo)"

@@ -2,15 +2,26 @@
 DOME-HUB Streaming LLM responses — multi-provider, local-first.
 
 Provider hierarchy (sovereign order):
-  1. stream_mlx    — Apple MLX, native M-series, fully air-gapped
-  2. stream_local  — Ollama, local, air-gapped
+  1. stream_mlx    — Apple MLX / Metal (local LLM path via mlx_lm)
+  2. stream_local  — Ollama HTTP (local, air-gapped)
   3. stream_anthropic — Anthropic API (cloud, no OpenAI dependency)
   4. stream_openai — OpenAI API (avoid for sensitive/sovereign tasks)
+
+Embeddings / Neural Engine (ONNX CoreML EP) are separate — see
+agents/core/memory/vector.py (Chroma vector memory), not this module.
+
+Optional Trinity HTTP MLX helper: home/projects/trinity-consortium/nexus-core/mlx-neural-bridge.py
+(port MLX_BRIDGE_PORT, default 8101).
 """
 
 from __future__ import annotations
-from typing import AsyncGenerator, TYPE_CHECKING
-import asyncio, httpx, json, os
+
+import asyncio
+import json
+import os
+from typing import TYPE_CHECKING, AsyncGenerator
+
+import httpx
 
 
 def _spore_guard(provider: str) -> None:
@@ -21,6 +32,9 @@ def _spore_guard(provider: str) -> None:
             "Node is air-gapped during activation."
         )
 
+# MLX model cache — avoids reloading on every call (seconds of latency)
+_mlx_cache: dict[str, tuple] = {}
+
 if TYPE_CHECKING:
     from agents.core.agent import Agent
 
@@ -30,13 +44,15 @@ async def stream_mlx(
 ) -> AsyncGenerator[str, None]:
     """Native Apple Silicon inference via MLX — fastest local path on M-series."""
     try:
-        from mlx_lm import load, generate
+        from mlx_lm import generate, load
     except ImportError:
         yield "[mlx_lm not installed — run: pip install mlx-lm]"
         return
 
     model_name = model.removeprefix("mlx-").removeprefix("mlx_")
-    model_obj, tokenizer = load(model_name)
+    if model_name not in _mlx_cache:
+        _mlx_cache[model_name] = load(model_name)
+    model_obj, tokenizer = _mlx_cache[model_name]
     prompt = "\n".join(f"{m['role']}: {m['content']}" for m in messages)
 
     # MLX generate is synchronous — run in thread to not block event loop

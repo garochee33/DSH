@@ -56,8 +56,30 @@ class RAGPipeline:
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
 
+    def purge_by_source(self, source: str) -> int:
+        """Delete all previously-ingested chunks for a given source. Returns rows
+        purged. Used by `ingest()` to make re-ingestion idempotent — re-ingesting
+        the same source replaces its chunks rather than stacking new on top of old.
+
+        Wrapped in try/except because chromadb's metadata-where-delete had a
+        SIGSEGV on Python 3.14.x (see venv audit 2026-05-23); ingest runs under
+        the .venv-ingest 3.13 sidecar where this is safe, but the guard means
+        an unexpected platform regression degrades to append-only behavior
+        instead of crashing the whole ingest.
+        """
+        try:
+            col = self.memory.collection
+            before = col.count()
+            col.delete(where={"source": source})
+            return max(0, before - col.count())
+        except Exception:
+            return 0
+
     def ingest(self, source: str) -> int:
-        """Load source, chunk, and store in vector memory. Returns chunk count."""
+        """Load source, chunk, and store in vector memory. Idempotent —
+        re-ingesting the same source replaces its prior chunks (purge then add)
+        rather than stacking on top. Returns chunk count added."""
+        self.purge_by_source(source)
         text = _load_source(source)
         chunks = chunk_text(text, self.chunk_size, self.chunk_overlap)
         for i, chunk in enumerate(chunks):

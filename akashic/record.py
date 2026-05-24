@@ -26,7 +26,11 @@ def _collection():
     ef = embedding_functions.SentenceTransformerEmbeddingFunction(
         model_name=_MODEL_NAME
     )
-    return client.get_or_create_collection(NAMESPACE, embedding_function=ef)
+    return client.get_or_create_collection(
+        NAMESPACE,
+        embedding_function=ef,
+        metadata={"hnsw:space": "cosine"},
+    )
 
 
 def write(
@@ -36,6 +40,7 @@ def write(
     node: str = "system",
     tags: list[str] | None = None,
     resonance: list[str] | None = None,
+    source: str | None = None,
 ) -> str:
     """Write a dimensional record. Returns the entry id."""
     entry_id = str(uuid.uuid4())
@@ -50,6 +55,7 @@ def write(
             "node": node,
             "tags": ",".join(tags or []),
             "resonance": ",".join(resonance or []),
+            "source": source or "",
         }],
     )
     return entry_id

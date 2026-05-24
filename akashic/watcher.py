@@ -20,7 +20,7 @@ from watchdog.events import FileSystemEventHandler
 
 from akashic.record import write
 
-WATCH_DIRS = ["logs", "kb", "agents"]
+WATCH_DIRS = ["logs", "kb", "projects", "agents", "brain", "memory"]
 EXTENSIONS = {".md", ".txt", ".py", ".ts"}
 
 # domain inference from path
@@ -32,9 +32,33 @@ DOMAIN_MAP = {
     "trinity": "trinity",
     "security":"security",
     "infra":   "infra",
+    "brain":   "architecture",
+    "memory":  "meta",
 }
 
+_SEEN_PATH = DOME_ROOT / "db" / ".akashic-seen.json"
 _seen: dict[str, str] = {}  # path → content hash
+
+
+def _load_seen():
+    """Load persisted dedup hashes from disk."""
+    if _SEEN_PATH.exists():
+        try:
+            import json
+            _seen.clear()
+            _seen.update(json.loads(_SEEN_PATH.read_text()))
+        except Exception:
+            pass
+
+
+def _save_seen():
+    """Persist dedup hashes to disk."""
+    try:
+        import json
+        _SEEN_PATH.parent.mkdir(parents=True, exist_ok=True)
+        _SEEN_PATH.write_text(json.dumps(_seen))
+    except Exception:
+        pass
 
 
 def _infer_domain(path: Path) -> str:
@@ -70,13 +94,15 @@ def _ingest(path: Path):
         if _seen.get(str(path)) == h:
             return  # unchanged
         _seen[str(path)] = h
+        _save_seen()
 
         entry_id = write(
             content=content[:2000],  # cap per entry
             domain=_infer_domain(path),
             depth=_infer_depth(path),
             node="system",
-            tags=[path.suffix.lstrip("."), path.parent.name],
+            tags=[path.suffix.lstrip("."), path.parent.name, path.stem],
+            source=str(path.relative_to(DOME_ROOT)),
         )
         print(f"[akashic] ✦ {path.relative_to(DOME_ROOT)} → {entry_id[:8]}")
     except Exception as e:
@@ -94,6 +120,7 @@ class AkashicHandler(FileSystemEventHandler):
 
 
 def main():
+    _load_seen()
     observer = Observer()
     for d in WATCH_DIRS:
         target = DOME_ROOT / d

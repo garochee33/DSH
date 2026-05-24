@@ -1,0 +1,88 @@
+# Gitleaks custom config — extends default rules with non-provider patterns
+# Replaces GitHub Advanced Security's validity checks + non-provider scanning
+
+title = "DSH Secret Scanning"
+
+[extend]
+useDefault = true
+
+# ── Custom non-provider patterns ──
+
+[[rules]]
+id = "generic-api-key"
+description = "Generic API key assignment"
+regex = '''(?i)(api[_-]?key|apikey)\s*[:=]\s*['"]([a-z0-9]{32,})['"]'''
+entropy = 3.5
+secretGroup = 2
+
+[[rules]]
+id = "generic-secret"
+description = "Generic secret assignment"
+regex = '''(?i)(secret|password|passwd|token)\s*[:=]\s*['"]([^\s'"]{16,})['"]'''
+entropy = 3.5
+secretGroup = 2
+
+[[rules]]
+id = "bearer-token"
+description = "Bearer token in code"
+regex = '''(?i)bearer\s+[a-z0-9_\-\.]{20,}'''
+entropy = 3.0
+
+[[rules]]
+id = "connection-string"
+description = "Database connection string with credentials"
+regex = '''(?i)(postgres|mysql|mongodb|redis)://[^:]+:[^@]+@[^\s'"]+'''
+
+[[rules]]
+id = "private-ip-hardcoded"
+description = "Hardcoded non-localhost IP with port (potential infra leak)"
+regex = '''\b(?:(?:25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(?:25[0-5]|2[0-4]\d|[01]?\d\d?):\d{2,5}\b'''
+[rules.allowlist]
+regexes = ['''127\.0\.0\.1''', '''0\.0\.0\.0''', '''255\.255\.255''']
+
+[[rules]]
+id = "jwt-token"
+description = "JWT token"
+regex = '''eyJ[a-zA-Z0-9_-]{10,}\.eyJ[a-zA-Z0-9_-]{10,}\.[a-zA-Z0-9_-]{10,}'''
+
+[[rules]]
+id = "ollama-custom-key"
+description = "Ollama or local LLM API key"
+regex = '''(?i)(ollama[_-]?key|llm[_-]?token|local[_-]?api[_-]?key)\s*[:=]\s*['"]([^\s'"]{8,})['"]'''
+secretGroup = 2
+
+[[rules]]
+id = "trinity-spore-token"
+description = "Trinity SPORE_TOKEN"
+regex = '''SPORE_TOKEN\s*[:=]\s*['"]?([a-zA-Z0-9_\-]{16,})['"]?'''
+secretGroup = 1
+
+[[rules]]
+id = "hetzner-api-token"
+description = "Hetzner Cloud API token"
+regex = '''(?i)hetzner[_-]?(api[_-]?)?token\s*[:=]\s*['"]?([a-zA-Z0-9]{64})['"]?'''
+secretGroup = 2
+
+[[rules]]
+id = "ssh-passphrase"
+description = "SSH passphrase in config"
+regex = '''(?i)(passphrase|ssh[_-]?pass)\s*[:=]\s*['"]([^\s'"]{8,})['"]'''
+secretGroup = 2
+
+# ── Allowlist (false positive suppression) ──
+
+[allowlist]
+paths = [
+  '''\.env\.example''',
+  '''\.env\.template''',
+  '''docs/.*\.md''',
+  '''CHANGELOG\.md''',
+  '''pnpm-lock\.yaml''',
+  '''dsh-console/pnpm-lock\.yaml''',
+  '''dsh-console/\.next/''',
+  '''node_modules/''',
+  '''\.git/''',
+]
+regexes = [
+  '''__[A-Z_]+__''',
+]

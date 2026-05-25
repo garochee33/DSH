@@ -102,6 +102,24 @@ AI agents — autonomous, orchestrated, or tool-using agents.
 | `agents/skills/`                               | Skill implementations (algorithms, cognitive, compute, fractals, frequency, math, sacred_geometry) |
 | `agents/skills/neuromorphic_sync.py`           | STDP adaptive coupling + theta-gamma monitoring + NeuroScale sync                                  |
 | `agents/skills/cto-build-framework-validator/` | CTO Build Framework validation skill                                                               |
+| `agents/skills/docx/`                          | Create/edit Word documents (.docx) via python-docx                                                 |
+| `agents/skills/pdf/`                           | Create/read PDFs via reportlab + pdfplumber                                                        |
+| `agents/skills/pptx/`                          | Create/edit PowerPoint presentations                                                               |
+| `agents/skills/xlsx/`                          | Create/edit Excel spreadsheets via openpyxl                                                        |
+| `agents/skills/pandoc/`                        | Universal document conversion (md↔docx↔html↔pdf↔epub↔pptx)                                        |
+| `agents/skills/latex-tectonic/`                | Compile LaTeX/TeX with Tectonic                                                                    |
+| `agents/skills/imagegen/`                      | AI image generation via OpenAI API                                                                 |
+| `agents/skills/speech/`                        | Text-to-speech via OpenAI Audio API                                                                |
+| `agents/skills/transcribe/`                    | Audio-to-text transcription with diarization                                                       |
+| `agents/skills/jupyter-notebook/`              | Scaffold/edit Jupyter notebooks (.ipynb)                                                           |
+| `agents/skills/playwright/`                    | Browser automation (navigation, forms, screenshots, data extraction)                               |
+| `agents/skills/screenshot/`                    | OS-level desktop/window screen capture                                                             |
+| `agents/skills/github/`                        | GitHub repo management (PRs, issues, Actions, releases, branch protection)                         |
+| `agents/skills/ci-cd-architect/`               | CI/CD pipeline design, GitHub Actions, deployment automation                                       |
+| `agents/skills/security-threat-model/`         | Repository-grounded threat modeling (trust boundaries, abuse paths)                                 |
+| `agents/skills/security-best-practices/`       | Language-specific secure coding review (Python, JS/TS, Go)                                         |
+| `agents/skills/deep-research/`                 | Deep multi-source research synthesis (web, academic, patent, KB)                                   |
+| `agents/skills/skill-generator-engine/`        | Autonomous skill creation and continuous improvement engine                                         |
 
 ### `/akashic`
 
@@ -328,6 +346,7 @@ Automation, security, and utility scripts.
 | `sovereign-setup-mac.sh`         | Full sovereign setup for macOS M1/M2/M3/M4                                                                                        |
 | `sovereign-setup-windows.ps1`    | Full sovereign setup for Windows                                                                                                  |
 | `bootstrap.sh`                   | Install all dependencies                                                                                                          |
+| `install-format-deps.sh`         | Install workstation utility deps (pandoc, tectonic, python-docx, reportlab, playwright, etc.)                                     |
 | `new-project.sh`                 | Scaffold new project with venv + Node                                                                                             |
 | `optimize.sh`                    | Full-stack optimize: Darwin hardware (sudo) + pnpm/venv/skill sync; `--stack-only` without sudo                                   |
 | `harden.sh`                      | Security hardening (firewall, privacy, telemetry)                                                                                 |

@@ -120,6 +120,22 @@ AI agents — autonomous, orchestrated, or tool-using agents.
 | `agents/skills/security-best-practices/`       | Language-specific secure coding review (Python, JS/TS, Go)                                         |
 | `agents/skills/deep-research/`                 | Deep multi-source research synthesis (web, academic, patent, KB)                                   |
 | `agents/skills/skill-generator-engine/`        | Autonomous skill creation and continuous improvement engine                                         |
+| `agents/skills/nextjs/`                        | Next.js App Router — SSR, Server Components, routing, deployment                                   |
+| `agents/skills/fastapi/`                       | Python API development with Pydantic models                                                        |
+| `agents/skills/ai-sdk/`                        | Vercel AI SDK — chat, streaming, tool calling, any LLM provider                                    |
+| `agents/skills/react-best-practices/`          | React/Next.js performance optimization patterns                                                    |
+| `agents/skills/shadcn/`                        | shadcn/ui component library — CLI, theming, Tailwind CSS                                           |
+| `agents/skills/database-optimizer/`            | PostgreSQL + Drizzle ORM query tuning, indexing, migrations                                        |
+| `agents/skills/neon-postgres/`                 | Serverless Postgres (Neon) — branching, auth, CLI                                                  |
+| `agents/skills/migration-specialist/`          | Schema evolution, data transformation, zero-downtime deploys                                       |
+| `agents/skills/cloudflare-deploy/`             | Deploy Workers, Pages, KV, D1, R2 to Cloudflare                                                   |
+| `agents/skills/api-gateway-designer/`          | REST/GraphQL/WebSocket endpoint design, microservice patterns                                      |
+| `agents/skills/testing-strategist/`            | Unit/integration/E2E test strategy and automation                                                  |
+| `agents/skills/refactoring-engineer/`          | Technical debt reduction, architecture modernization                                               |
+| `agents/skills/performance-tuner/`             | Profiling, caching, bundle optimization, monitoring                                                |
+| `agents/skills/dependency-manager/`            | Vulnerability scanning, license compliance, package updates                                        |
+| `agents/skills/documentation-generator/`       | Auto-generate API docs, READMEs, knowledge bases                                                   |
+| `agents/skills/stripe-best-practices/`         | Payments, subscriptions, Connect platforms, webhooks                                               |
 
 ### `/akashic`
 

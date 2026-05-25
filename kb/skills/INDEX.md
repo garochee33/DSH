@@ -218,3 +218,45 @@ File generation, automation, security, and research skills that turn DSH into a 
 | `skill-generator-engine` | `agents/skills/skill-generator-engine/SKILL.md` | Autonomous skill creation engine |
 
 **Dependency installer:** `scripts/install-format-deps.sh` (cross-platform macOS/Linux)
+
+---
+
+## Developer Productivity Skills (agents/skills/ — added 2026-05-25)
+
+Full-stack development, infrastructure, quality engineering, and monetization skills.
+
+### Frameworks & Full-Stack
+
+| Skill | Path | Description |
+|-------|------|-------------|
+| `nextjs` | `agents/skills/nextjs/SKILL.md` | Next.js App Router — SSR, Server Components, routing, deployment |
+| `fastapi` | `agents/skills/fastapi/SKILL.md` | Python API development with Pydantic models |
+| `ai-sdk` | `agents/skills/ai-sdk/SKILL.md` | Vercel AI SDK — chat, streaming, tool calling, any LLM |
+| `react-best-practices` | `agents/skills/react-best-practices/SKILL.md` | React/Next.js performance optimization |
+| `shadcn` | `agents/skills/shadcn/SKILL.md` | Component library — CLI, theming, Tailwind CSS |
+
+### Data & Infrastructure
+
+| Skill | Path | Description |
+|-------|------|-------------|
+| `database-optimizer` | `agents/skills/database-optimizer/SKILL.md` | PostgreSQL + Drizzle ORM query tuning, indexing |
+| `neon-postgres` | `agents/skills/neon-postgres/SKILL.md` | Serverless Postgres (Neon) |
+| `migration-specialist` | `agents/skills/migration-specialist/SKILL.md` | Schema evolution, zero-downtime deploys |
+| `cloudflare-deploy` | `agents/skills/cloudflare-deploy/SKILL.md` | Deploy Workers, Pages, KV, D1, R2 |
+| `api-gateway-designer` | `agents/skills/api-gateway-designer/SKILL.md` | REST/GraphQL/WebSocket endpoint design |
+
+### Engineering Quality
+
+| Skill | Path | Description |
+|-------|------|-------------|
+| `testing-strategist` | `agents/skills/testing-strategist/SKILL.md` | Unit/integration/E2E test strategy |
+| `refactoring-engineer` | `agents/skills/refactoring-engineer/SKILL.md` | Technical debt reduction, modernization |
+| `performance-tuner` | `agents/skills/performance-tuner/SKILL.md` | Profiling, caching, bundle optimization |
+| `dependency-manager` | `agents/skills/dependency-manager/SKILL.md` | Vulnerability scanning, license compliance |
+| `documentation-generator` | `agents/skills/documentation-generator/SKILL.md` | Auto-generate API docs, READMEs |
+
+### Monetization
+
+| Skill | Path | Description |
+|-------|------|-------------|
+| `stripe-best-practices` | `agents/skills/stripe-best-practices/SKILL.md` | Payments, subscriptions, Connect platforms |

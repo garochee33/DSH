@@ -11,6 +11,7 @@ DSH uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - **18 workstation utility skills** — file generation (docx, pdf, pptx, xlsx, pandoc, latex-tectonic, imagegen, speech, transcribe, jupyter-notebook), automation (playwright, screenshot, github, ci-cd-architect), security (security-threat-model, security-best-practices), research (deep-research, skill-generator-engine)
+- **16 developer productivity skills** — frameworks (nextjs, fastapi, ai-sdk, react-best-practices, shadcn), data/infra (database-optimizer, neon-postgres, migration-specialist, cloudflare-deploy, api-gateway-designer), quality (testing-strategist, refactoring-engineer, performance-tuner, dependency-manager, documentation-generator), monetization (stripe-best-practices)
 - `scripts/install-format-deps.sh` — cross-platform dependency installer for all workstation skills
 - Windows setup: workstation format deps (pandoc, miktex, ffmpeg, python-docx, playwright)
 

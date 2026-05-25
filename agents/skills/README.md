@@ -55,3 +55,28 @@ Each exports `SKILL` (name) and `verify()` (returns True if working).
 | `skill-generator-engine/` | Autonomous skill creation engine |
 
 **Install deps:** `bash scripts/install-format-deps.sh`
+
+---
+
+## Developer Productivity Skills (added 2026-05-25)
+
+16 skills for full-stack development, infrastructure, quality, and monetization.
+
+| Skill | What it does |
+|-------|-------------|
+| `nextjs/` | Next.js App Router — SSR, Server Components, deployment |
+| `fastapi/` | Python API development (Pydantic, async, DI) |
+| `ai-sdk/` | Vercel AI SDK — chat, streaming, tool calling |
+| `react-best-practices/` | React performance optimization |
+| `shadcn/` | Component library (CLI, theming, Tailwind) |
+| `database-optimizer/` | PostgreSQL + Drizzle ORM tuning |
+| `neon-postgres/` | Serverless Postgres |
+| `migration-specialist/` | Schema evolution, zero-downtime deploys |
+| `cloudflare-deploy/` | Deploy to Cloudflare (Workers, Pages, KV, D1, R2) |
+| `api-gateway-designer/` | REST/GraphQL/WebSocket design |
+| `testing-strategist/` | Unit/integration/E2E test strategy |
+| `refactoring-engineer/` | Tech debt reduction, modernization |
+| `performance-tuner/` | Profiling, caching, bundle optimization |
+| `dependency-manager/` | Vulnerability scanning, license compliance |
+| `documentation-generator/` | Auto-generate API docs, READMEs |
+| `stripe-best-practices/` | Payments, subscriptions, Connect |

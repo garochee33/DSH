@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-SOURCE="$HOME/DOME-HUB/home/projects"
+SOURCE="${DOME_ROOT:-$HOME/DOME-HUB/home}/projects"
 DEST="$HOME/Library/Mobile Documents/com~apple~CloudDocs/DOME-PROJECTS-BACKUP"
 
 mkdir -p "$DEST"

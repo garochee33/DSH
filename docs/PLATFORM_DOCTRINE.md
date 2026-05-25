@@ -18,7 +18,7 @@ Three production-shape codebases coexist on this sovereign node — and previous
 
 | Platform | Identity | Default port | Deploy target |
 |---|---|---|---|
-| **trinity-consortium** | Production + multi-tenant ops + project hub + command center | `:5055` local, `:443` prod | Hetzner CCX23 (87.99.147.1) at `trinity-consortium.com` |
+| **trinity-consortium** | Production + multi-tenant ops + project hub + command center | `:5055` local, `:443` prod | Hetzner CCX23 at `trinity-consortium.com` |
 | **trinity-unified-ai** | Intelligence backbone — KB API, 461-skill canon, agent swarm, KB ingest | `:3333` local | Local-first; future federation possible |
 | **DOME-HUB** + **dome-console** | Sovereign local machine control center + local hub GUI | `:3737` (dome-console) | Localhost-only on this M4 Pro (24 GB, 38 TOPS NE) |
 
@@ -28,10 +28,10 @@ Three production-shape codebases coexist on this sovereign node — and previous
 
 ## 2. trinity-consortium — Production hub + command center
 
-**Repo:** `~/projects/trinity-consortium` (firmlinked from `~/DOME-HUB/home/projects/trinity-consortium`)
+**Repo:** `projects/trinity-consortium`
 **Remote:** `garochee33/trinity_consortium_v3` (private)
 **Stack:** Express + Drizzle ORM + tsx@4.22 on Node 24 · Next.js 16 + React 19 + Tailwind v4 frontend · PostgreSQL + pgvector (177 tables) · Redis · Docker Compose · Caddy
-**Production:** Hetzner CCX23 at `87.99.147.1`, served from `trinity-consortium.com` (Cloudflare Full SSL, Origin certs)
+**Production:** Hetzner CCX23, served from `trinity-consortium.com` (Cloudflare Full SSL, Origin certs)
 **Local dev:** `pnpm dev` from repo root → server at `127.0.0.1:5055`
 
 ### 2.1 What consortium uniquely owns (canonical — never duplicate elsewhere)
@@ -86,7 +86,7 @@ Three production-shape codebases coexist on this sovereign node — and previous
 
 ## 3. trinity-unified-ai — Intelligence backbone
 
-**Repo:** `~/DOME-HUB/home/trinity-unified-ai` (canonical path; `~/trinity-unified-ai` may exist as a symlink)
+**Repo:** `trinity-unified-ai` (canonical path)
 **Stack:** Express.js (KB API) + PostgreSQL + pgvector + Ollama (local, 11434) + Redis + Neo4j (graph)
 **HTTP surface:** Express KB API on `:3333` (local), auth via dual-mode JWT (from consortium) + `x-hub-secret` header
 **Routes:** ~1,439 across skill invoke, search, agent list/execute, E8 compute, holographic/stigmergic state, stats, protocols, orchestration, memory, telemetry
@@ -158,10 +158,10 @@ Three production-shape codebases coexist on this sovereign node — and previous
 **Repo:** `~/DOME-HUB` (private, `garochee33/DOME-HUB`)
 **Identity:** This M4 Pro (24 GB, 38 TOPS NE) is one sovereign node in the Trinity mesh. DOME-HUB is portable to any Apple Silicon machine.
 **Inner repos** (excluded from outer `.gitignore` via `/home/`):
-- `~/DOME-HUB/home/projects/dome-console` (the GUI, `garochee33/dome-console`, private)
-- `~/DOME-HUB/home/projects/trinity-consortium` (firmlinked to `~/projects/trinity-consortium`)
-- `~/DOME-HUB/home/DSH` (the public sovereign foundation, `garochee33/DSH`)
-- `~/DOME-HUB/home/trinity-unified-ai` (TU-AI canonical location)
+- `projects/dome-console` (the GUI, `garochee33/dome-console`, private)
+- `projects/trinity-consortium` (production platform)
+- `DSH` (the public sovereign foundation, `garochee33/DSH`)
+- `trinity-unified-ai` (TU-AI canonical location)
 
 ### 4.1 What DOME-HUB uniquely owns (canonical — never duplicate elsewhere)
 
@@ -243,7 +243,7 @@ Three production-shape codebases coexist on this sovereign node — and previous
 
 ### 4.2 dome-console — the local GUI surface
 
-**Repo:** `~/DOME-HUB/home/projects/dome-console` (private inner repo)
+**Repo:** `projects/dome-console` (private inner repo)
 **Stack:** Next.js 16.2.6 + React 19.2.4 + TypeScript 5 + Tailwind v4 + shadcn/ui (Base UI) + Sonner (toast) + Recharts + `@tanstack/react-virtual` + `better-sqlite3` + Zod
 **Data:** raw SQL on shared `~/DOME-HUB/db/dome.db` (no ORM, parameterized queries)
 **Binding:** `127.0.0.1:3737` — no auth (sovereign by isolation)
@@ -348,7 +348,7 @@ These are inviolable:
 - **Local launchd plists** — owned by this user account, not exported
 - **Trinity-licensable IP carried in `agents/core/`** — per IP-LEDGER-MASTER doctrine
 
-**Exception layer (DSH — public mirror):** `~/DOME-HUB/home/DSH` is the *sovereign foundation* that's deliberately public (Apache 2.0). The `scripts/export-to-dsh.sh` pipeline sanitizes DOME-HUB → DSH using `config/public-export.{allowlist,denylist}`. Mirror **direction is one-way only** (DOME-HUB → DSH). Never mirror DSH content back into DOME-HUB personal layers.
+**Exception layer (DSH — public mirror):** `DSH/` is the *sovereign foundation* that's deliberately public (Apache 2.0). The `scripts/export-to-dsh.sh` pipeline sanitizes DOME-HUB → DSH using `config/public-export.{allowlist,denylist}`. Mirror **direction is one-way only** (DOME-HUB → DSH). Never mirror DSH content back into DOME-HUB personal layers.
 
 ---
 
@@ -463,7 +463,7 @@ These are inviolable:
 - LOC: ~250
 
 **D3. Doctrine Board** (`/doctrines`)
-- Data: filesystem scan of `~/DOME-HUB/docs/` + `~/DOME-HUB/home/projects/trinity-consortium/docs/` for canonical doctrines (8 listed in §11 below + this file)
+- Data: filesystem scan of `docs/` + `projects/trinity-consortium/docs/` for canonical doctrines (8 listed in §11 below + this file)
 - UI: card per doctrine with title, date, status (Active/Superseded/WIP), last-modified, link
 - Companion: Recent Audits feed (mtime-sorted from `logs/reports/` + `home/trinity-unified-ai/reports/`)
 - Companion: Contradiction Scanner — surfaces the 5 items in §10 below
@@ -511,7 +511,7 @@ These are inviolable:
 1. **IP-removal — ✅ RESOLVED 2026-05-19** — the-womb codebase consolidation is complete; Trinity IP signature removal closed by EGD33. Treat any older "4/8 FAIL" audit as superseded. Do not reopen this item without an explicit new finding.
 2. **`trinity-dev-console` path refs — ✅ FALSE POSITIVE** — re-verified 2026-05-19: `trinity-consortium/CLAUDE.md:103` already marks the path as **DECOMMISSIONED**. Doc is correct.
 3. **Old locked server `204.168.202.101` — ✅ FALSE POSITIVE** — re-verified 2026-05-19: `trinity-consortium/CLAUDE.md:40,376` already documents the April 15 lockout as historical context (LOCKED OUT). Doc is correct.
-4. **TU-AI path mismatch — ✅ RESOLVED 2026-05-19** — verified that `~/trinity-unified-ai` IS a real symlink to `~/DOME-HUB/home/trinity-unified-ai` (`lrwxr-xr-x` → DOME-HUB/home/trinity-unified-ai, since 2026-04-25). Docs using either path resolve to the same files. The nested form remains canonical for new docs; the symlink is a valid alias. No mass-rewrite needed.
+4. **TU-AI path mismatch — ✅ RESOLVED 2026-05-19** — verified that `~/trinity-unified-ai` IS a real symlink to the canonical location. Docs using either path resolve to the same files. The nested form remains canonical for new docs; the symlink is a valid alias. No mass-rewrite needed.
 5. **5 CTO bugs from 2026-04-27 — ✅ RESOLVED 2026-05-19** — re-probed each: (A) devstral 14 GB is now pulled in Ollama; (B) no `node tsx` process running from overlay path; (C) migration journal moved from `drizzle/` to `migrations/meta/_journal.json` (system reorganized, not broken); (D) `dist/` mtime is today 15:07 (fresh, not 17 days stale); (E) mesh-signal heartbeats green at 19:53Z. All 5 closed.
 6. **`data/chromadb/` — ✅ DOCUMENTED 2026-05-19** — collection name is `dome-kb` with 5 embeddings (mtime 2026-05-17). Zero code references in DOME-HUB or trinity-consortium — writer is a manual/experimental ingest, not a production pipeline. Path is now gitignored (commit chain 2026-05-19). Treat as sibling experimental store; canonical Akashic remains `db/chroma/`. Owner may archive when convenient.
 7. **trinity-consortium hive-orchestrator integrity drift — ✅ RESOLVED 2026-05-19** — `control-plane-hashes.json` re-blessed at 00:59 today. No current diff. Owner already ran the bootstrap ritual.
@@ -576,12 +576,12 @@ tail -5 ~/.trinity-spore/logs/mycelium-signal.log
 launchctl list | grep com.dome.akashic-watcher
 
 # 5-repo git state
-for r in ~/DOME-HUB ~/DSH ~/projects/trinity-consortium ~/DOME-HUB/home/trinity-unified-ai ~/DOME-HUB/home/projects/dome-console; do
+for r in $DOME_ROOT $DOME_ROOT/DSH $DOME_ROOT/projects/trinity-consortium $DOME_ROOT/trinity-unified-ai $DOME_ROOT/projects/dome-console; do
   printf '%-60s ' "$r"; (cd "$r" && git status --short | wc -l | xargs printf '%s files dirty\n')
 done
 
 # Skill canon (TU-AI is single source)
-ls ~/DOME-HUB/home/trinity-unified-ai/skills-library/skills/ | wc -l        # expect ~461
+ls $DOME_ROOT/trinity-unified-ai/skills-library/skills/ | wc -l        # expect ~461
 
 # Hardening spot-check
 fdesetup status; csrutil status; /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate

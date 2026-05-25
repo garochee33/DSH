@@ -7,7 +7,7 @@ Implements bio-inspired optimizations for the Kuramoto 3D lattice:
   3. Theta-gamma hierarchical monitoring (multi-timescale AMMA)
 
 For full E8-240 spiking network + real k-NN + AMMA projection lens, use the canonical
-`~/DOME-HUB/home/projects/trinity-consortium/scripts/e8_240_with_amma_lens.py`
+`compute/sim_evolved.py` (E8-240 neuromorphic simulation)
 (lava-snn-demo.py is legacy/superseded).
 """
 

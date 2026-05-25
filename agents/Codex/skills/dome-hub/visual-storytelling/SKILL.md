@@ -31,7 +31,7 @@ All three are registered in:
 
 ## Stack files (BM25-searchable)
 
-Located in `~/DOME-HUB/home/projects/trinity-consortium/skills/ui-ux-pro-max/data/stacks/` and mirrored to `.agents/skills/` and `agents/skills/`:
+Located in `agents/skills/ui-ux-pro-max/data/stacks/` (mirrored across agent tiers):
 
 | Stack | Rows | Domain |
 |---|---:|---|
@@ -46,7 +46,7 @@ Located in `~/DOME-HUB/home/projects/trinity-consortium/skills/ui-ux-pro-max/dat
 
 Query:
 ```bash
-python3 ~/DOME-HUB/home/projects/trinity-consortium/skills/ui-ux-pro-max/scripts/search.py "<query>" --stack <name>
+python3 scripts/ui-ux-search.py "<query>" --stack <name>
 ```
 
 ## Hard rails

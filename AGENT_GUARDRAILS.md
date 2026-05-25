@@ -29,7 +29,7 @@ After modifying ANY file, the agent MUST:
 
 ## Repo Rules
 
-### DSH (~/DOME-HUB/home/DSH) — PUBLIC REPO
+### DSH — PUBLIC REPO
 - **Branch:** main
 - **Status:** SHIPPED — do not touch unless critical fix
 - **Tests:** 33 passing, 1 skipped
@@ -49,7 +49,7 @@ After modifying ANY file, the agent MUST:
 - **Server changes require rebuild:** `docker compose --env-file .env.hetzner -f docker-compose.hetzner.yml up -d --build app`
 - **Another agent may be working here** — check dirty files before touching
 
-### trinity-unified-ai (~/DOME-HUB/home/trinity-unified-ai) — KB API
+### trinity-unified-ai — KB API
 - **Branch:** master
 - **KB API Dockerfile:** `api/Dockerfile` — uses `--no-frozen-lockfile`
 - **Changes require:** rsync to server + rebuild kb-api container

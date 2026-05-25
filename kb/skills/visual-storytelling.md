@@ -26,7 +26,7 @@ All three are registered in:
 
 ## Stack files (BM25-searchable)
 
-Located in `~/DOME-HUB/home/projects/trinity-consortium/skills/ui-ux-pro-max/data/stacks/` and mirrored to `.agents/skills/` and `agents/skills/`:
+Located in `agents/skills/ui-ux-pro-max/data/stacks/` (mirrored across agent tiers):
 
 | Stack | Rows | Domain |
 |---|---:|---|
@@ -41,7 +41,7 @@ Located in `~/DOME-HUB/home/projects/trinity-consortium/skills/ui-ux-pro-max/dat
 
 Query:
 ```bash
-python3 ~/DOME-HUB/home/projects/trinity-consortium/skills/ui-ux-pro-max/scripts/search.py "<query>" --stack <name>
+python3 scripts/ui-ux-search.py "<query>" --stack <name>
 ```
 
 ## Hard rails
@@ -102,5 +102,5 @@ If it answers none, cut it.
 - Design tokens: `~/projects/s3xyverse/s3xyverse-next/src/lib/design-tokens.ts`
 - Shaders: `~/projects/s3xyverse/s3xyverse-next/src/lib/shaders/`
 - Smooth scroll: `~/projects/s3xyverse/s3xyverse-next/src/app/components/SmoothScroll.tsx`
-- Competitor intel: `~/DOME-HUB/logs/competitor-intel/2026-05-13/`
-- Protocol: `~/DOME-HUB/PROTOCOLS.md` § Visual Storytelling Protocol
+- Competitor intel: `logs/competitor-intel/`
+- Protocol: `PROTOCOLS.md` § Visual Storytelling Protocol

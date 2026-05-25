@@ -99,7 +99,7 @@ Trinity ships premium scroll-driven web platforms. Every narrative route must pa
 ### Stack discovery (BM25-searchable)
 
 ```bash
-python3 ~/DOME-HUB/home/projects/trinity-consortium/skills/ui-ux-pro-max/scripts/search.py "<query>" --stack <framer-motion|gsap|r3f|spline|video|web-audio|typography-motion>
+python3 scripts/ui-ux-search.py "<query>" --stack <framer-motion|gsap|r3f|spline|video|web-audio|typography-motion>
 ```
 
 ### Trinity skill chain

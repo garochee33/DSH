@@ -42,7 +42,7 @@ That's fine — the simulation backend is the intended path.
 
 The canonical high-quality runner now lives at:
 
-`~/DOME-HUB/home/projects/trinity-consortium/scripts/e8_240_with_amma_lens.py`
+`compute/sim_evolved.py`
 
 It includes real E8 k-NN structured connectivity, per-neuron heterogeneity, and the full AMMA meridian projection lens by default.
 
@@ -51,7 +51,7 @@ Recommended invocation (using the Trinity Lava 3.10 sidecar):
 ```bash
 LAVA_PY="~/projects/trinity-consortium/python/lava/.venv/bin/python"
 
-$LAVA_PY ~/DOME-HUB/home/projects/trinity-consortium/scripts/e8_240_with_amma_lens.py \
+$LAVA_PY compute/sim_evolved.py \
   --neurons 240 --steps 2000 --k 6 --tag e8-240-struct --json --save-projection
 ```
 

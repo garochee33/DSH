@@ -172,3 +172,49 @@ FILE_TREE.md auto-generated at every project root via `generate-file-tree.py`.
 | `frequency` | `agents/skills/frequency.py` | Frequency skill implementation |
 | `math` | `agents/skills/math.py` | Math skill implementation |
 | `sacred_geometry` | `agents/skills/sacred_geometry.py` | Sacred geometry skill implementation |
+
+---
+
+## Workstation Utility Skills (agents/skills/ — added 2026-05-24)
+
+File generation, automation, security, and research skills that turn DSH into a full sovereign workstation.
+
+### File Generation
+
+| Skill | Path | Description |
+|-------|------|-------------|
+| `docx` | `agents/skills/docx/SKILL.md` | Create/edit Word documents via python-docx |
+| `pdf` | `agents/skills/pdf/SKILL.md` | Create/read PDFs via reportlab + pdfplumber |
+| `pptx` | `agents/skills/pptx/SKILL.md` | Create/edit PowerPoint presentations |
+| `xlsx` | `agents/skills/xlsx/SKILL.md` | Create/edit Excel spreadsheets via openpyxl |
+| `pandoc` | `agents/skills/pandoc/SKILL.md` | Universal document conversion (md↔docx↔html↔pdf↔epub↔pptx) |
+| `latex-tectonic` | `agents/skills/latex-tectonic/SKILL.md` | Compile LaTeX/TeX with Tectonic |
+| `imagegen` | `agents/skills/imagegen/SKILL.md` | AI image generation via OpenAI API |
+| `speech` | `agents/skills/speech/SKILL.md` | Text-to-speech via OpenAI Audio API |
+| `transcribe` | `agents/skills/transcribe/SKILL.md` | Audio-to-text transcription with diarization |
+| `jupyter-notebook` | `agents/skills/jupyter-notebook/SKILL.md` | Scaffold/edit Jupyter notebooks (.ipynb) |
+
+### Automation & DevOps
+
+| Skill | Path | Description |
+|-------|------|-------------|
+| `playwright` | `agents/skills/playwright/SKILL.md` | Browser automation (navigation, forms, screenshots, data extraction) |
+| `screenshot` | `agents/skills/screenshot/SKILL.md` | OS-level desktop/window screen capture |
+| `github` | `agents/skills/github/SKILL.md` | GitHub repo management (PRs, issues, Actions, releases) |
+| `ci-cd-architect` | `agents/skills/ci-cd-architect/SKILL.md` | CI/CD pipeline design, GitHub Actions, deployment automation |
+
+### Security
+
+| Skill | Path | Description |
+|-------|------|-------------|
+| `security-threat-model` | `agents/skills/security-threat-model/SKILL.md` | Repository-grounded threat modeling |
+| `security-best-practices` | `agents/skills/security-best-practices/SKILL.md` | Language-specific secure coding review |
+
+### Research & Meta
+
+| Skill | Path | Description |
+|-------|------|-------------|
+| `deep-research` | `agents/skills/deep-research/SKILL.md` | Deep multi-source research synthesis |
+| `skill-generator-engine` | `agents/skills/skill-generator-engine/SKILL.md` | Autonomous skill creation engine |
+
+**Dependency installer:** `scripts/install-format-deps.sh` (cross-platform macOS/Linux)

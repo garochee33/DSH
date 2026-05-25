@@ -9,6 +9,11 @@ DSH uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+- **18 workstation utility skills** — file generation (docx, pdf, pptx, xlsx, pandoc, latex-tectonic, imagegen, speech, transcribe, jupyter-notebook), automation (playwright, screenshot, github, ci-cd-architect), security (security-threat-model, security-best-practices), research (deep-research, skill-generator-engine)
+- `scripts/install-format-deps.sh` — cross-platform dependency installer for all workstation skills
+- Windows setup: workstation format deps (pandoc, miktex, ffmpeg, python-docx, playwright)
+
 ### Changed
 - **Node 20 → 22 LTS** across entire stack: CI, .nvmrc, engines, docs, setup script
 - **GitHub Actions** bumped to v6: checkout, setup-node, setup-python, pnpm/action-setup
@@ -23,6 +28,7 @@ DSH uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - GitHub branch protection on main: required status checks (TS lint, Python verify, Gitleaks), linear history, strict mode
 
 ### Fixed
+- **Windows setup script** — bash heredoc→PowerShell pipe, venv path handling, graceful fallbacks for missing scripts, Python 3.11→3.14, postgresql17→postgresql
 - CI `deps-audit` job cache path error (removed unused `cache: pnpm`)
 - Stale `kb/trinity-unified-ai/` phantom reference in INDEX.md → corrected to `kb/claude`
 - All stale Python 3.11 references updated to 3.14 (registry.py, architecture.md, requirements.txt)

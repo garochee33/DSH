@@ -27,8 +27,8 @@ if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
 # ── 3. Core tools ─────────────────────────────────────────────────────────────
 Write-Host "==> Installing core tools..."
 choco install -y git curl wget jq yq tree ripgrep fzf
-choco install -y python311 nodejs-lts golang rust
-choco install -y postgresql17 redis sqlite
+choco install -y python314 nodejs-lts golang rust
+choco install -y postgresql redis sqlite
 choco install -y awscli terraform gh
 choco install -y gnupg vscode
 
@@ -61,10 +61,22 @@ foreach ($ext in $extensions) {
 
 # ── 7. Root venv ──────────────────────────────────────────────────────────────
 Write-Host "==> Creating root Python venv..."
-python -m venv "$DOME_ROOT\.venv"
-& "$DOME_ROOT\.venv\Scripts\Activate.ps1"
+$venvPath = Join-Path $DOME_ROOT ".venv"
+if (-not (Test-Path $venvPath)) {
+  python -m venv $venvPath
+}
+& (Join-Path $venvPath "Scripts\Activate.ps1")
 pip install --upgrade pip wheel
-pip install -r "$DOME_ROOT\compute\requirements.txt"
+$reqFile = Join-Path $DOME_ROOT "compute\requirements.txt"
+if (Test-Path $reqFile) { pip install -r $reqFile }
+
+# ── 7b. Workstation utility deps ──────────────────────────────────────────────
+Write-Host "==> Installing workstation utility dependencies..."
+choco install -y pandoc miktex ffmpeg 2>$null
+pip install python-docx==1.1.2 reportlab==4.4.0 pdfplumber==0.11.6 pypdf==5.4.0 `
+  python-pptx==1.0.2 openpyxl==3.1.5 nbformat==5.10.4 openai==1.82.0 `
+  playwright==1.52.0
+python -m playwright install chromium 2>$null
 
 # ── 8. GPG + pass ─────────────────────────────────────────────────────────────
 Write-Host "==> Setting up GPG..."
@@ -117,27 +129,34 @@ if (-not (Test-Path "$DOME_ROOT\.env")) {
 
 # ── 13. SQLite DB init ────────────────────────────────────────────────────────
 Write-Host "==> Initializing SQLite DB..."
-python - <<'PY'
-import sqlite3
-db = sqlite3.connect(r"$DOME_ROOT\db\dome.db")
+$dbScript = @"
+import sqlite3, os
+db_path = os.path.join(r'$DOME_ROOT', 'db', 'dome.db')
+os.makedirs(os.path.dirname(db_path), exist_ok=True)
+db = sqlite3.connect(db_path)
 for sql in [
-  "CREATE TABLE IF NOT EXISTS sessions (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, title TEXT, content TEXT, tags TEXT, created_at TEXT)",
-  "CREATE TABLE IF NOT EXISTS stack (id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT, name TEXT, version TEXT, status TEXT, updated_at TEXT)",
-  "CREATE TABLE IF NOT EXISTS agents (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, type TEXT, model TEXT, status TEXT, registered_at TEXT)",
-  "CREATE TABLE IF NOT EXISTS skills (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id INTEGER, name TEXT, description TEXT)",
-  "CREATE TABLE IF NOT EXISTS tools (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id INTEGER, name TEXT, description TEXT)",
+    'CREATE TABLE IF NOT EXISTS sessions (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, title TEXT, content TEXT, tags TEXT, created_at TEXT)',
+    'CREATE TABLE IF NOT EXISTS stack (id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT, name TEXT, version TEXT, status TEXT, updated_at TEXT)',
+    'CREATE TABLE IF NOT EXISTS agents (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, type TEXT, model TEXT, status TEXT, registered_at TEXT)',
+    'CREATE TABLE IF NOT EXISTS skills (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id INTEGER, name TEXT, description TEXT)',
+    'CREATE TABLE IF NOT EXISTS tools (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id INTEGER, name TEXT, description TEXT)',
 ]:
-  db.execute(sql)
-db.commit(); db.close(); print("DB ready")
-PY
+    db.execute(sql)
+db.commit()
+db.close()
+print('DB ready')
+"@
+$dbScript | python -
 
 # ── 14. ChromaDB ingest ───────────────────────────────────────────────────────
 Write-Host "==> Ingesting KB into ChromaDB..."
-python scripts/ingest.py 2>$null
+$ingestScript = Join-Path $DOME_ROOT "scripts\ingest.py"
+if (Test-Path $ingestScript) { python $ingestScript 2>$null } else { Write-Host "    Skipped (ingest.py not found)" }
 
 # ── 15. Register Claude agent ─────────────────────────────────────────────────
 Write-Host "==> Registering Claude agent..."
-python scripts/register-claude.py 2>$null
+$registerScript = Join-Path $DOME_ROOT "scripts\register-claude.py"
+if (Test-Path $registerScript) { python $registerScript 2>$null } else { Write-Host "    Skipped (register-claude.py not found)" }
 
 # ── 16. AI Assistant ──────────────────────────────────────────────────────────
 Write-Host ""
@@ -160,4 +179,4 @@ switch ($aiChoice) {
 
 Write-Host ""
 Write-Host "DOME-HUB Sovereign Setup Complete" -ForegroundColor Green
-Write-Host "   Restart PowerShell, then run: bash scripts/audit.sh"
+Write-Host "   Restart PowerShell, then run: python scripts\pre-spore-verify.py"

@@ -73,7 +73,7 @@ Execute the following in order:
 
 ```bash
 # 1. Check for similar existing skills (holographic recall)
-python3 ~/DOME-HUB/home/trinity-unified-ai/skills-library/scripts/rebuild-index.py
+python3 scripts/rebuild-index.py
 jq '.skills[] | select(.summary | test("QUERY"; "i"))' skills.index.json
 
 # 2. Generate SKILL.md using expert template
@@ -87,10 +87,10 @@ jq '.skills[] | select(.summary | test("QUERY"; "i"))' skills.index.json
 # Python search/compute scripts, Bash automation, TypeScript engine hooks
 
 # 5. Validate
-python3 ~/DOME-HUB/home/trinity-unified-ai/skills-library/scripts/validate.py
+python3 scripts/validate.py
 
 # 6. Rebuild index
-python3 ~/DOME-HUB/home/trinity-unified-ai/skills-library/scripts/rebuild-index.py
+python3 scripts/rebuild-index.py
 ```
 
 ### Phase 3: Validation (Triangle Consensus)
@@ -104,7 +104,7 @@ Consensus threshold: ≥2/3 pass (φ-weighted: 0.618 minimum score)
 
 ### Phase 4: Integration
 
-1. Place in `~/DOME-HUB/home/trinity-unified-ai/skills-library/skills/<name>/`
+1. Place in `agents/skills/<name>/`
 2. Rebuild index → instantly available to all 7 agents + 6 projects
 3. Ingest to ChromaDB for semantic recall
 4. Log to fractal learning engine for evolution tracking
@@ -162,7 +162,7 @@ The engine runs in continuous mode via the Fractal Learning Engine:
 
 ```typescript
 // Triggered by: daily-training-pipeline.ts
-// Location: trinity-unified-ai/engines/continuous-improvement/
+// Location: compute/continuous-improvement/
 
 Cycle:
 1. Evaluate recent sessions → identify skill gaps
@@ -209,7 +209,7 @@ POST /api/harmony
 ### Neuromorphic (Relevance Scoring)
 ```bash
 # Lava SNN spike-based relevance on M4 Pro Neural Engine
-python3 ~/DOME-HUB/home/projects/trinity-consortium/scripts/lava_sim.py \
+python3 compute/sim_evolved.py \
   --neurons 240 --timesteps 100 --input "skill_relevance_vector"
 ```
 
@@ -284,7 +284,7 @@ python3 skills-library/scripts/validate.py
 python3 skills-library/scripts/ingest-kb.py
 
 # Full pipeline (all of the above)
-cd ~/DOME-HUB/home/trinity-unified-ai/skills-library
+cd agents/skills
 python3 scripts/quality-fix.py && python3 scripts/strengthen.py && python3 scripts/rebuild-index.py
 ```
 

@@ -138,7 +138,7 @@ Use with: `pandoc input.md --lua-filter=uppercase-headings.lua -o output.docx`
 
 ## Dependencies
 
-Pandoc is installed via Homebrew at `/opt/homebrew/bin/pandoc` (v3.9.0.2).
+Pandoc is installed via the system package manager (`brew install pandoc` on macOS, `apt install pandoc` on Linux).
 
 For PDF output, one of:
 ```bash

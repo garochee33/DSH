@@ -2,7 +2,18 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Activity, Database, Bot, BookOpen, Network, Cpu, ScrollText, Settings } from 'lucide-react'
+import {
+  Activity,
+  Users,
+  Database,
+  Bot,
+  BookOpen,
+  Network,
+  Cpu,
+  ScrollText,
+  Settings,
+  GitBranch,
+} from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
@@ -16,15 +27,19 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
 
-const navMain = [{ title: 'Dashboard', href: '/', icon: Activity }]
-
-const navFuture = [
+const navMain = [
+  { title: 'Dashboard', href: '/', icon: Activity },
+  { title: 'CRM', href: '/crm', icon: Users },
   { title: 'Agents', href: '/agents', icon: Bot },
-  { title: 'Knowledge', href: '/knowledge', icon: BookOpen },
-  { title: 'Database', href: '/database', icon: Database },
   { title: 'Models', href: '/models', icon: Cpu },
-  { title: 'Mesh', href: '/mesh', icon: Network },
-  { title: 'Logs', href: '/logs', icon: ScrollText },
+  { title: 'Repos', href: '/repos', icon: GitBranch },
+]
+
+const navSystem = [
+  { title: 'Knowledge', href: '/knowledge', icon: BookOpen, disabled: true },
+  { title: 'Database', href: '/database', icon: Database, disabled: true },
+  { title: 'Mesh', href: '/mesh', icon: Network, disabled: true },
+  { title: 'Logs', href: '/logs', icon: ScrollText, disabled: true },
 ]
 
 export function AppSidebar() {
@@ -37,8 +52,8 @@ export function AppSidebar() {
             ●
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="font-mono text-sm font-semibold">dsh-console</span>
-            <span className="text-muted-foreground font-mono text-[10px]">sovereign node</span>
+            <span className="font-mono text-sm font-semibold">dome-console</span>
+            <span className="text-muted-foreground font-mono text-[10px]">M4 Pro · sovereign</span>
           </div>
         </div>
       </SidebarHeader>
@@ -49,8 +64,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {navMain.map((item) => {
                 const Icon = item.icon
-                const active =
-                  pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
+                const active = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))
                 return (
                   <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton isActive={active} render={<Link href={item.href} />}>
@@ -64,14 +78,14 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Roadmap</SidebarGroupLabel>
+          <SidebarGroupLabel>Coming soon</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navFuture.map((item) => {
+              {navSystem.map((item) => {
                 const Icon = item.icon
                 return (
                   <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton disabled className="opacity-50">
+                    <SidebarMenuButton disabled={item.disabled} className="opacity-50">
                       <Icon className="size-4" />
                       <span>{item.title}</span>
                     </SidebarMenuButton>

@@ -1,7 +1,4 @@
 // Pure parsers — no IO, no `server-only`. Safe to import in tests.
-//
-// Targets macOS system tools (top, vm_stat, df) and Ollama.
-// All functions are total: never throw on bad input, return safe fallbacks.
 
 export function parseTopCpuPct(stdout: string): number {
   const lines = stdout.split('\n')
@@ -29,9 +26,6 @@ export function parseVmStat(stdout: string, totalBytes: number): MacMemory {
     const m = stdout.match(re)
     return m ? parseInt(m[1], 10) : 0
   }
-  // "Available" matches Activity Monitor's definition: free + inactive (cacheable)
-  // + speculative + purgeable. This is much more accurate than os.freemem(),
-  // which reports only fully unmapped pages.
   const free = grab('free')
   const inactive = grab('inactive')
   const speculative = grab('speculative')
@@ -79,17 +73,16 @@ export function parseOllamaList(stdout: string): OllamaModel[] {
     .map((l) => {
       const parts = l.split(/\s+/)
       const name = parts[0] ?? ''
-      // `ollama list` size column is e.g. "4.7 GB"
+      // Ollama list size column: e.g. "4.7 GB" — parts[2] is the number, parts[3] is the unit
       const sizeNum = parseFloat(parts[2] ?? '0')
       const unit = (parts[3] ?? '').toLowerCase()
-      const sizeGB =
-        unit.startsWith('gb') || unit === ''
-          ? sizeNum
-          : unit.startsWith('mb')
-            ? sizeNum / 1024
-            : unit.startsWith('tb')
-              ? sizeNum * 1024
-              : 0
+      const sizeGB = unit.startsWith('gb') || unit === ''
+        ? sizeNum
+        : unit.startsWith('mb')
+          ? sizeNum / 1024
+          : unit.startsWith('tb')
+            ? sizeNum * 1024
+            : 0
       return { name, sizeGB }
     })
     .filter((m) => m.name.length > 0)

@@ -3,15 +3,15 @@
 import { Area, AreaChart, ResponsiveContainer } from 'recharts'
 
 const accentVar: Record<string, string> = {
-  gold: 'var(--chart-1)',
+  green: 'var(--chart-1)',
   blue: 'var(--chart-2)',
   amber: 'var(--chart-3)',
-  green: 'var(--chart-4)',
+  red: 'var(--destructive)',
   cyan: 'var(--chart-5)',
 }
 
-export function Sparkline({ data, accent = 'gold' }: { data: number[]; accent?: string }) {
-  const stroke = accentVar[accent] ?? accentVar.gold
+export function Sparkline({ data, accent = 'green' }: { data: number[]; accent?: string }) {
+  const stroke = accentVar[accent] ?? accentVar.green
   const series = data.map((v, i) => ({ i, v }))
   return (
     <ResponsiveContainer width="100%" height="100%">

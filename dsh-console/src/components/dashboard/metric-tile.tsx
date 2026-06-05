@@ -8,20 +8,19 @@ type Props = {
   unit?: string
   hint?: string
   series?: number[]
-  accent?: 'gold' | 'blue' | 'amber' | 'green' | 'cyan' | 'red'
+  accent?: 'green' | 'blue' | 'amber' | 'red' | 'cyan'
   className?: string
 }
 
 const accentMap: Record<NonNullable<Props['accent']>, string> = {
-  gold: 'text-[var(--chart-1)]',
+  green: 'text-[var(--chart-1)]',
   blue: 'text-[var(--chart-2)]',
   amber: 'text-[var(--chart-3)]',
-  green: 'text-[var(--chart-4)]',
-  cyan: 'text-[var(--chart-5)]',
   red: 'text-destructive',
+  cyan: 'text-[var(--chart-5)]',
 }
 
-export function MetricTile({ label, value, unit, hint, series, accent = 'gold', className }: Props) {
+export function MetricTile({ label, value, unit, hint, series, accent = 'green', className }: Props) {
   return (
     <Card className={cn('overflow-hidden', className)}>
       <CardHeader className="pb-2">

@@ -5,5 +5,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   const m = await getMetrics()
-  return NextResponse.json(m, { headers: { 'cache-control': 'no-store' } })
+  return NextResponse.json(m, {
+    headers: { 'cache-control': 'no-store' },
+  })
 }

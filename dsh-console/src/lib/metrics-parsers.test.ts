@@ -1,14 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import {
-  parseTopCpuPct,
-  parseVmStat,
-  parseDfOutput,
-  parseOllamaList,
-} from './metrics-parsers'
+import { parseTopCpuPct, parseVmStat, parseDfOutput, parseOllamaList } from './metrics-parsers'
 
 describe('parseTopCpuPct', () => {
-  it('returns 100 - idle% from a single sample', () => {
-    const stdout = `Load Avg: 1.20, 1.10, 1.05
+  it('parses macOS top output and returns 100 - idle%', () => {
+    const stdout = `Processes: 712 total, 4 running, 708 sleeping, 4528 threads
+2026/05/13 22:10:42
+Load Avg: 3.72, 6.07, 5.59
 CPU usage: 15.13% user, 11.39% sys, 73.46% idle`
     expect(parseTopCpuPct(stdout)).toBeCloseTo(26.54, 1)
   })
@@ -40,9 +37,10 @@ Pages throttled:                              0.
 Pages wired down:                        199215.
 Pages purgeable:                           7833.`
 
-  it('parses available pages and returns Activity Monitor-style memory', () => {
+  it('parses the available pages and returns Activity Monitor-style memory', () => {
     const total = 24 * 1024 ** 3
     const m = parseVmStat(VM_STAT, total)
+    // available = (289457 + 363573 + 28257 + 7833) * 16384 / 1024^3 ≈ 10.51 GB
     expect(m.totalGB).toBeCloseTo(24, 1)
     expect(m.availableGB).toBeCloseTo(10.51, 1)
     expect(m.usedGB).toBeCloseTo(13.49, 1)
@@ -50,13 +48,14 @@ Pages purgeable:                           7833.`
     expect(m.usedPct).toBeLessThan(60)
   })
 
-  it('handles a different page size (4 KB)', () => {
+  it('handles a different page size', () => {
     const stdout = VM_STAT.replace('page size of 16384', 'page size of 4096')
     const m = parseVmStat(stdout, 24 * 1024 ** 3)
+    // Same page counts × smaller page size → smaller available
     expect(m.availableGB).toBeLessThan(5)
   })
 
-  it('returns total used = total when vm_stat is empty', () => {
+  it('returns total/0/total when vm_stat is empty', () => {
     const total = 16 * 1024 ** 3
     const m = parseVmStat('', total)
     expect(m.totalGB).toBe(16)
@@ -65,8 +64,9 @@ Pages purgeable:                           7833.`
     expect(m.usedPct).toBe(100)
   })
 
-  it('never produces negative usedBytes', () => {
-    const m = parseVmStat(VM_STAT, 1024) // tiny "total" relative to available
+  it('never produces negative usedBytes (clamps when available > total)', () => {
+    // Pathological: pretend all pages are available but total is tiny
+    const m = parseVmStat(VM_STAT, 1024) // 1 KB total — far less than available
     expect(m.usedGB).toBeGreaterThanOrEqual(0)
     expect(m.usedPct).toBeGreaterThanOrEqual(0)
   })
@@ -91,7 +91,7 @@ describe('parseDfOutput', () => {
 })
 
 describe('parseOllamaList', () => {
-  it('parses standard ollama list output', () => {
+  it('parses standard ollama list output (header + rows)', () => {
     const stdout = `NAME                ID              SIZE      MODIFIED
 llama3.1:8b         42182419e950    4.7 GB    2 days ago
 qwen2.5-coder:14b   abc123          9.0 GB    1 week ago
@@ -101,10 +101,10 @@ nomic-embed-text    def456          274 MB    3 weeks ago`
     expect(models[0]).toEqual({ name: 'llama3.1:8b', sizeGB: 4.7 })
     expect(models[1]).toEqual({ name: 'qwen2.5-coder:14b', sizeGB: 9.0 })
     expect(models[2].name).toBe('nomic-embed-text')
-    expect(models[2].sizeGB).toBeCloseTo(0.267, 2)
+    expect(models[2].sizeGB).toBeCloseTo(0.267, 2) // 274/1024
   })
 
-  it('returns empty array when only header present', () => {
+  it('returns empty array for ollama with only header', () => {
     expect(parseOllamaList('NAME ID SIZE MODIFIED')).toEqual([])
   })
 

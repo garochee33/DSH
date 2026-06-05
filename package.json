@@ -44,7 +44,6 @@
     "typescript-eslint": "^8.59.3"
   },
   "dependencies": {
-    "kiro-cli": "^0.0.1",
-    "latest": "^0.2.0"
+    "kiro-cli": "^0.0.1"
   }
 }

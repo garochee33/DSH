@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  DOME-HUB Mycelium Signal — mesh peer heartbeat daemon
+  Runs mycelium-signal.sh with KeepAlive (auto-restart on crash).
+
+  Install:
+    cp scripts/launchd/com.dome.mycelium-signal.plist ~/Library/LaunchAgents/
+    launchctl load ~/Library/LaunchAgents/com.dome.mycelium-signal.plist
+
+  Unload:
+    launchctl unload ~/Library/LaunchAgents/com.dome.mycelium-signal.plist
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.dome.mycelium-signal</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/bin/bash</string>
+    <string>/Users/enzogaroche/DSH/scripts/mycelium-signal.sh</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>DOME_ROOT</key>
+    <string>/Users/enzogaroche/DSH</string>
+    <key>PATH</key>
+    <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+  </dict>
+  <key>KeepAlive</key>
+  <true/>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/Users/enzogaroche/.trinity-spore/logs/mycelium-signal-stdout.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/enzogaroche/.trinity-spore/logs/mycelium-signal-stderr.log</string>
+</dict>
+</plist>

@@ -40,14 +40,5 @@
     "tsx": "^4.21.1",
     "typescript": "^5",
     "vitest": "^4.1.6"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ],
-    "overrides": {
-      "qs": ">=6.15.2",
-      "postcss": ">=8.4.32"
-    }
   }
 }

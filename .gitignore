@@ -87,3 +87,6 @@ uv.lock
 # Allow specific tracked assets via git add -f
 !docs/assets/*.png
 !README.md
+
+# Separate project repos (each has its own .git)
+projects/

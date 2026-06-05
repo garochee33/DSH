@@ -4,7 +4,6 @@ import { ThemeProvider } from 'next-themes'
 import { AppSidebar } from '@/components/app-sidebar'
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
 import { Toaster } from '@/components/ui/sonner'
-import { SWVersionDisplay } from '@/components/sw-version-display'
 
 const sans = Inter({
   variable: '--font-sans',
@@ -38,7 +37,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </SidebarInset>
           </SidebarProvider>
           <Toaster />
-          <SWVersionDisplay />
         </ThemeProvider>
       </body>
     </html>

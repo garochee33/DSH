@@ -52,7 +52,7 @@ export function AppSidebar() {
             ●
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="font-mono text-sm font-semibold">dome-console</span>
+            <span className="font-mono text-sm font-semibold">dsh-console</span>
             <span className="text-muted-foreground font-mono text-[10px]">M4 Pro · sovereign</span>
           </div>
         </div>

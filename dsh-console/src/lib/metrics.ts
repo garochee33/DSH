@@ -16,7 +16,7 @@ import {
 const exec = promisify(execCb)
 
 const HOME = os.homedir()
-const DOME_HUB = path.join(HOME, 'DOME-HUB')
+const DSH_ROOT = path.join(HOME, 'DSH')
 
 export type SystemMetrics = {
   ts: number
@@ -122,9 +122,9 @@ async function countAgents(dir: string, ext = '.json'): Promise<number> {
 
 async function getDatabaseSizes(): Promise<SystemMetrics['databases']> {
   const candidates = [
-    { name: 'dome.db', path: path.join(DOME_HUB, 'db', 'dome.db') },
-    { name: 'episodic.db', path: path.join(DOME_HUB, 'db', 'episodic.db') },
-    { name: 'chroma', path: path.join(DOME_HUB, 'db', 'chroma') },
+    { name: 'dsh.db', path: path.join(DSH_ROOT, 'db', 'dsh.db') },
+    { name: 'episodic.db', path: path.join(DSH_ROOT, 'db', 'episodic.db') },
+    { name: 'chroma', path: path.join(DSH_ROOT, 'db', 'chroma') },
   ]
   const out: SystemMetrics['databases'] = []
   for (const c of candidates) {
@@ -159,7 +159,7 @@ export async function getMetrics(): Promise<SystemMetrics> {
     getOllama(),
     getDatabaseSizes(),
     countAgents(path.join(HOME, '.claude', 'agents'), '.json'),
-    countAgents(path.join(DOME_HUB, 'home', '.kiro', 'agents'), '.json'),
+    countAgents(path.join(DSH_ROOT, 'home', '.kiro', 'agents'), '.json'),
   ])
 
   cpuRolling.push(loadPct)

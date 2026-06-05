@@ -41,7 +41,7 @@
     "eslint-config-prettier": "^9.0.0",
     "prettier": "^3.0.0",
     "typescript": "^6.0.0",
-    "typescript-eslint": "^8.59.3"
+    "typescript-eslint": "^8.60.1"
   },
   "dependencies": {
     "kiro-cli": "^0.0.1"

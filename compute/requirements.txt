@@ -45,7 +45,7 @@ sentence-transformers>=2.7.0
 tiktoken>=0.7.0
 
 # --- Data / analysis ---
-pandas>=2.2.0
+pandas>=3.0.3
 numpy>=1.26.0
 scipy>=1.12.0
 sympy>=1.12

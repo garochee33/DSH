@@ -3,7 +3,7 @@
 
 # --- Local inference (sovereign, air-gapped — preferred over any cloud API) ---
 # Apple MLX: native M-series silicon inference, fastest local path
-mlx>=0.16.0; sys_platform == "darwin"
+mlx>=0.31.2; sys_platform == "darwin"
 mlx-lm>=0.16.0; sys_platform == "darwin"
 # Ollama Python client (HTTP interface to local Ollama daemon)
 ollama>=0.6.2

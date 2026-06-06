@@ -102,4 +102,4 @@ jobs:
       - name: pip-audit
         run: |
           pip install pip-audit
-          pip-audit -r compute/requirements.txt || true
+          pip-audit -r compute/requirements.txt --ignore-vuln CVE-2026-45829

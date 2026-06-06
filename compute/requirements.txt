@@ -10,7 +10,7 @@ ollama>=0.6.2
 # Voice activity detection runtime for open local ONNX weights
 onnxruntime>=1.16.1
 # Optional warm in-process ASR backend. CLI fallback still works if missing.
-openai-whisper>=20240930
+openai-whisper>=20250625
 
 # --- Cloud LLM SDKs (secondary — use only when local is insufficient) ---
 # Anthropic Claude (preferred cloud provider — no OpenAI dependency)

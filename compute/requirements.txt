@@ -52,7 +52,7 @@ sympy>=1.12
 
 # --- Quantum computing (lab-grade stack) ---
 # IBM — circuit design, simulation, hardware access
-qiskit>=1.1.0
+qiskit>=2.4.1
 qiskit-aer>=0.14.0
 # Differentiable QML — hybrid quantum/classical ML (MPS-compatible)
 pennylane>=0.36.0

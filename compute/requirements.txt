@@ -6,7 +6,7 @@
 mlx>=0.16.0; sys_platform == "darwin"
 mlx-lm>=0.16.0; sys_platform == "darwin"
 # Ollama Python client (HTTP interface to local Ollama daemon)
-ollama>=0.2.0
+ollama>=0.6.2
 # Voice activity detection runtime for open local ONNX weights
 onnxruntime>=1.16.1
 # Optional warm in-process ASR backend. CLI fallback still works if missing.

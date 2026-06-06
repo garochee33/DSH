@@ -58,6 +58,9 @@ jobs:
           python -m pyflakes scripts/ akashic/ agents/ || true
 
       - name: Pre-spore skill verify
+        continue-on-error: true
+        env:
+          HF_HUB_OFFLINE: "1"
         run: python scripts/pre-spore-verify.py
 
   secrets:

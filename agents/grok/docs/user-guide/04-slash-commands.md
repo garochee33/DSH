@@ -316,7 +316,7 @@ Aliases: `/changelog`
 
 ## Skills as Slash Commands
 
-Any skill with `user_invocable: true` in its SKILL.md frontmatter appears as a slash command. For example, if you have a skill at `~/.grok/skills/commit/SKILL.md`, you can invoke it with:
+Any skill with `user_invocable: true` in its SKILL.md frontmatter appears as a slash command. For example, if you have a [[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/SKILL|skill]] at `~/.grok/skills/commit/[[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/SKILL|SKILL]].md`, you can invoke it with:
 
 ```
 /commit fix typo in README
@@ -325,8 +325,8 @@ Any skill with `user_invocable: true` in its SKILL.md frontmatter appears as a s
 Skills from plugins also appear as slash commands. When multiple skills share the same name (across scopes), use the qualified form:
 
 ```
-/local:commit      # Project-scoped skill
-/user:commit       # User-scoped skill
+/local:commit      # Project-scoped [[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/SKILL|skill]]
+/user:commit       # User-scoped [[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/SKILL|skill]]
 ```
 
 Built-in slash commands always take priority over skills with the same name. If you name a skill "compact", typing `/compact` will run the built-in compact command, but `/local:compact` will invoke the skill.
@@ -340,7 +340,7 @@ The slash command menu supports fuzzy search. Start typing after `/` to filter a
 - Command name
 - Description
 - Argument hint (if the command accepts arguments)
-- Source (builtin, skill scope, plugin name)
+- Source (builtin, [[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/SKILL|skill]] scope, plugin name)
 
 Press `Tab` or `Enter` to select a command from the autocomplete menu.
 

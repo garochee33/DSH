@@ -574,12 +574,12 @@ Key environment variables. See the README for the complete list.
 | `~/.grok/auth.json` | Authentication credentials (auto-managed) |
 | `~/.grok/sessions/` | Persisted sessions (organized by working directory) |
 | `~/.grok/memory/` | Cross-session memory files and index |
-| `~/.grok/skills/` | User-scoped skill definitions |
+| `~/.grok/skills/` | User-scoped [[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/[[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/SKILL|SKILL]]|[[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/SKILL|skill]]]] definitions |
 | `~/.grok/plugins/` | User-scoped plugins |
 | `~/.grok/agents/` | User-scoped agent definitions |
 | `~/.grok/logs/` | Log files (when `GROK_LOG_FILE` is enabled) |
 | `.grok/config.toml` | Project-scoped config (MCP servers only) |
-| `.grok/skills/` | Project-scoped skill definitions |
+| `.grok/skills/` | Project-scoped [[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/SKILL|[[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/SKILL|[[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/SKILL|skill]]]]]] definitions |
 | `.grok/plugins/` | Project-scoped plugins |
 | `.grok/agents/` | Project-scoped agent definitions |
 | `.grok/hooks/` | Project-scoped hooks |

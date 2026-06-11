@@ -120,7 +120,7 @@ Full inventory: see MASTER_INDEX.md.
 |--------|---------|
 | `skill-quality-audit.py` | Score every canonical SKILL.md 0-100 (PyYAML-backed, handles multi-line `description: >` + `triggers:` lists). Output to `SKILL_QUALITY_AUDIT.md`. |
 | `skill-batch-patch.py` | Idempotent: adds missing `version` / `status` / `updated` frontmatter fields. |
-| `generate-file-tree.py` | Auto-generate FILE_TREE.md across all 13 major projects (depth 3, skips node_modules/.git/etc.). |
+| `generate-file-tree.py` | Auto-generate [[projects/trinity-consortium/FILE_TREE|FILE_TREE]].md across all 13 major projects (depth 3, skips node_modules/.git/etc.). |
 | `generate-skill-specs.ts` | Regenerate `server/ai/swarm/skill-specs.json` from the production skills-library. |
 
 ---

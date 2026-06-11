@@ -48,7 +48,7 @@ Each skill lives in its own directory with a `SKILL.md` file:
 ```
 ~/.grok/skills/
   commit/
-    SKILL.md
+    [[projects/trinity-unified-ai/skills-library/skills/writing-skills/SKILL|SKILL]].md
   review-pr/
     SKILL.md
   deploy/
@@ -81,7 +81,7 @@ Review staged changes and create a commit with a clear, conventional message.
 
 | Field | Description |
 |-------|-------------|
-| `name` | Skill identifier. Lowercase, hyphens allowed, max 64 characters. |
+| `name` | [[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/SKILL|Skill]] identifier. Lowercase, hyphens allowed, max 64 characters. |
 | `description` | What the skill does and when to use it. This is how Grok decides whether to invoke it. |
 
 The `description` field is critical -- it determines when Grok automatically invokes the skill. Be specific about trigger phrases and use cases.
@@ -104,9 +104,9 @@ You don't need to choose a mode -- `/skillify` picks the right one and tells you
 
 You can also pass a description directly: `/skillify deploy workflow for k8s`. This pre-populates the interview and typically enters from-scratch mode.
 
-### The /create-skill Alias
+### The /create-[[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/SKILL|skill]] Alias
 
-`/create-skill` is a backward-compatible alias for `/skillify`. Running `/create-skill` invokes `/skillify`, which typically enters from-scratch mode (since `/create-skill` is usually run in a fresh session). If you're used to `/create-skill`, everything still works -- you get the same interview flow with richer frontmatter generation (`when-to-use`, `allowed-tools`, `argument-hint`, and success criteria on every step).
+`/create-[[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/SKILL|skill]]` is a backward-compatible alias for `/skillify`. Running `/create-[[projects/trinity-unified-ai/skills-library/skills/sexyverse-designer/SKILL|skill]]` invokes `/skillify`, which typically enters from-scratch mode (since `/create-skill` is usually run in a fresh session). If you're used to `/create-skill`, everything still works -- you get the same interview flow with richer frontmatter generation (`when-to-use`, `allowed-tools`, `argument-hint`, and success criteria on every step).
 
 ### What Gets Generated
 

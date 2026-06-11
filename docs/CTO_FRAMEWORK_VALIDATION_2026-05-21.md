@@ -45,7 +45,7 @@ Full hardening, verification, and organization sweep of DOME-HUB repository. Cov
 | 3.1 | Session work logged | ✅ PASS | `memory/sessions/2026-05/session-2026-05-21-kiro-hardening-phase2.md` |
 | 3.2 | KB indexed | ✅ PASS | "DOME-HUB Phase 10 Hardening Part 2" in persistent KB |
 | 3.3 | Fractal maps current | ✅ PASS | .fractalmap/ regenerated 16:37 today, checksums match HEAD |
-| 3.4 | FILE_TREE.md current | ✅ PASS | Refreshed by fractalmap hook |
+| 3.4 | [[projects/trinity-consortium/FILE_TREE|FILE_TREE]].md current | ✅ PASS | Refreshed by fractalmap hook |
 | 3.5 | .env.example synced | ✅ PASS | 5 missing keys added (Trinity + KMP) |
 
 ### 4. Repository Hygiene

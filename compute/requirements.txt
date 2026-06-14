@@ -29,7 +29,7 @@ pdfplumber>=0.11.0
 nbformat>=5.10.0
 
 # --- Browser automation ---
-playwright>=1.40.0
+playwright>=1.60.0
 
 # --- Web research ---
 requests>=2.31.0

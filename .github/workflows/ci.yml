@@ -45,17 +45,23 @@ jobs:
           python-version: "3.11"
           cache: pip
 
-      - name: Install minimal deps for verify
+      - name: Install deps for verify + tests
         run: |
           python -m pip install --upgrade pip
           pip install numpy scipy sympy numba torch qiskit qiskit-aer pennylane cirq \
                       amazon-braket-sdk matplotlib networkx mpmath pandas chromadb \
-                      sentence-transformers
+                      sentence-transformers fastapi "uvicorn[standard]" slowapi
+          pip install -r compute/requirements-dev.txt
 
       - name: Python syntax check
         run: |
           python -m py_compile scripts/*.py akashic/*.py agents/**/*.py || true
           python -m pyflakes scripts/ akashic/ agents/ || true
+
+      - name: Run test suite
+        env:
+          KMP_DUPLICATE_LIB_OK: "TRUE"
+        run: python -m pytest -q
 
       - name: Pre-spore skill verify
         continue-on-error: true

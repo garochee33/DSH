@@ -1,6 +1,6 @@
 # tests — Test Suite
 
-34 pytest tests across 6 modules. Run: `pnpm test`
+39 pytest tests across 7 modules. Run: `pnpm test`
 
 | Module | Tests | Coverage |
 |--------|-------|----------|

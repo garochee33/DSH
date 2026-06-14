@@ -166,7 +166,7 @@ mv ~/my-existing-project ~/DSH/projects/
 ### Start the AI agent server
 
 ```bash
-pnpm serve       # http://localhost:8000
+pnpm serve       # http://localhost:8001
 pnpm worker      # async task queue (requires Redis)
 ```
 

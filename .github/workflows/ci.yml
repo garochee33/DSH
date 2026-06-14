@@ -108,4 +108,10 @@ jobs:
       - name: pip-audit
         run: |
           pip install pip-audit
-          pip-audit -r compute/requirements.txt --ignore-vuln CVE-2026-45829
+          # Ignored advisories (documented):
+          #   CVE-2026-45829 — chromadb FastAPI *server* only; we use PersistentClient (embedded).
+          #   CVE-2025-3000  — torch.jit.script local memory corruption; no upstream fix; this
+          #                    sovereign node never feeds untrusted input to torch.jit.script.
+          pip-audit -r compute/requirements.txt \
+            --ignore-vuln CVE-2026-45829 \
+            --ignore-vuln CVE-2025-3000

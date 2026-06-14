@@ -109,7 +109,7 @@ newproject models my-model
 newproject software my-tool
 
 # Start the AI agent server
-pnpm serve          # http://localhost:8000
+pnpm serve          # http://localhost:8001
 
 # Start the async task worker
 pnpm worker
@@ -198,7 +198,7 @@ Run `pnpm check` anytime to verify and auto-fix your security posture.
 pnpm check      # full protocol check — security, code, git
 pnpm sync       # pull + ingest + commit + push
 pnpm ingest     # index KB into ChromaDB
-pnpm serve      # start agent API server (port 8000)
+pnpm serve      # start agent API server (port 8001)
 pnpm worker     # start async task worker
 pnpm audit      # security audit
 pnpm lint       # lint TypeScript

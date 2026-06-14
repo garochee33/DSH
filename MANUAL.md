@@ -216,8 +216,8 @@ python3 scripts/ingest.py
 Starts the FastAPI agent HTTP server with hot-reload.
 ```bash
 pnpm serve
-# Server available at http://localhost:8000
-# Docs at http://localhost:8000/docs
+# Server available at http://localhost:8001
+# Docs at http://localhost:8001/docs
 ```
 
 ---

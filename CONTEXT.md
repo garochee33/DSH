@@ -21,7 +21,7 @@ DSH is also the prerequisite for `spore.sh` → Trinity Consortium mesh access.
 | Tools | 10 (web_search, web_fetch, shell_run, file_read/write/list, code_run, db_query/write, kb_search) |
 | Skills | 10 core + 7 extended (math, compute, sacred_geometry, fractals, algorithms, frequency, cognitive) |
 | API | FastAPI on port 8000 (`pnpm serve`) |
-| Tests | `pnpm test` — 34 pytest tests |
+| Tests | `pnpm test` — 39 pytest tests |
 
 ## Key Entry Points
 
@@ -38,7 +38,7 @@ DSH is also the prerequisite for `spore.sh` → Trinity Consortium mesh access.
 
 ```bash
 pnpm check      # protocol check
-pnpm test       # run 34 tests
+pnpm test       # run 39 tests
 pnpm serve      # start API server
 pnpm ingest     # index KB into ChromaDB
 pnpm lint       # ESLint

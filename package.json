@@ -13,6 +13,8 @@
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "format": "prettier --write '**/*.{ts,tsx,js,json,md}'",
     "typecheck": "npx -p typescript tsc --noEmit",
+    "test": ".venv/bin/python -m pytest -q",
+    "test:ci": "python -m pytest -q",
     "ingest": "./.venv-ingest/bin/python scripts/ingest.py",
     "serve": "python3 -m uvicorn agents.api.server:app --reload --host 127.0.0.1 --port ${DOME_PORT:-8001}",
     "worker": ".venv/bin/python3 -m agents.workers.queue",

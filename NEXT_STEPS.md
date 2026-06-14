@@ -8,7 +8,7 @@ You've installed DSH. Your sovereign node is live. Now what?
 
 ```bash
 pnpm check       # protocol enforcer — security, code, git
-pnpm test        # 34 tests — confirms everything works
+pnpm test        # 39 tests — confirms everything works
 ```
 
 If both pass, you're production-ready.

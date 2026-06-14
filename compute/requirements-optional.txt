@@ -1,0 +1,24 @@
+# Optional backends for DSH. The codebase degrades gracefully when these are
+# absent (see compute/sim_evolved.py, scripts/frequency-pulse.py, agents/voice/loop.py),
+# so install only the extras you need.
+#
+#   pip install -r compute/requirements-optional.txt
+#
+# Some require system libraries / a build toolchain (notes below).
+
+# Persistent-homology TDA backend — enables the preemptive topology sensor in
+# run_sim() (compute/resonance_layer.py). Without it, AMMA reactive healing still
+# runs; only the preemptive chimera-detection trigger is skipped.
+# Needs a C/C++ build toolchain (Xcode Command Line Tools on macOS).
+ripser>=0.6.4
+
+# Live voice capture/playback (agents/voice/loop.py — VoiceLoop).
+# soundfile bundles libsndfile; sounddevice needs PortAudio (bundled in mac/win wheels).
+soundfile>=0.12.1
+sounddevice>=0.4.6
+
+# Post-quantum signing for the mesh frequency pulse (compute/crypto/pqc.py,
+# ML-DSA-87 / ML-KEM-1024). Without it the pulse is fail-closed by default.
+# Requires the liboqs C library + cmake to build the shared lib:
+#   macOS:  brew install cmake liboqs    (oqs builds a shared lib on first import)
+liboqs-python>=0.10.0

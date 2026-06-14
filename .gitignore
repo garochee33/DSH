@@ -90,3 +90,7 @@ uv.lock
 
 # Separate project repos (each has its own .git)
 projects/
+
+# Local agent CLI config symlinks (machine-specific, never commit)
+agents/.claude
+.claude/

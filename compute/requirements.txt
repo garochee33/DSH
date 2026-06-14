@@ -45,14 +45,14 @@ sentence-transformers>=2.7.0
 tiktoken>=0.7.0
 
 # --- Data / analysis ---
-pandas>=3.0.3
+pandas>=2.1.0
 numpy>=1.26.0
 scipy>=1.12.0
 sympy>=1.12
 
 # --- Quantum computing (lab-grade stack) ---
 # IBM — circuit design, simulation, hardware access
-qiskit>=2.4.1
+qiskit>=2.0.0,<=2.3.0
 qiskit-aer>=0.16.0
 # Differentiable QML — hybrid quantum/classical ML (MPS-compatible)
 pennylane>=0.40.0

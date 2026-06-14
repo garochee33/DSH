@@ -102,8 +102,12 @@ if __name__ == "__main__":
     # refuse to emit a silently-unsigned pulse. Set DOME_ALLOW_UNSIGNED_PULSE=1 to
     # emit an explicitly-flagged unsigned pulse for local development only.
     try:
-        from compute.crypto.pqc import ensure_node_keys, sign_json, sha3
-        signing_kp, kem_kp = ensure_node_keys()
+        # liboqs-python prints a banner to stdout on import; redirect it to stderr so
+        # the pulse stdout stays pure JSON for the bash caller (mycelium-signal.sh).
+        import contextlib
+        with contextlib.redirect_stdout(sys.stderr):
+            from compute.crypto.pqc import ensure_node_keys, sign_json, sha3
+            signing_kp, kem_kp = ensure_node_keys()
         pulse["pqcSignature"] = sign_json(pulse, signing_kp.secret_key)
         pulse["pqcPubKeyHash"] = sha3(signing_kp.public_key)[:32]  # first 32 chars
         pulse["kemPubKeyHash"] = sha3(kem_kp.public_key)[:32]

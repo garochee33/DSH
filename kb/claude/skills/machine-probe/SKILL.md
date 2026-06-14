@@ -89,8 +89,8 @@ Return `get_profile()` pretty-printed. If the user requests JSON specifically, u
 
 If the DSH FastAPI server is running (`pnpm serve`), two routes expose the same data:
 
-- `GET http://localhost:8000/machine/summary` — compact payload (recommended for mobile)
-- `GET http://localhost:8000/machine` — full profile
+- `GET http://localhost:8001/machine/summary` — compact payload (recommended for mobile)
+- `GET http://localhost:8001/machine` — full profile
 
 Use these from a remote controller / phone / other node. Returns 503 if profile missing — in that case run step 1 locally first.
 

@@ -27,7 +27,7 @@ DSH is also the prerequisite for `spore.sh` → Trinity Consortium mesh access.
 
 - `scripts/sovereign-setup-mac.sh` — macOS installer (21 phases, cinematic mode)
 - `scripts/sovereign-setup-windows.ps1` — Windows installer (17 phases)
-- `agents/core/registry.py` — agent registry (6 agents)
+- `agents/core/registry.py` — agent registry (16 agents)
 - `agents/core/agent.py` — base Agent class
 - `agents/api/server.py` — FastAPI HTTP server
 - `agents/core/trinity_client.py` — Trinity mesh client (local fallback)

@@ -22,7 +22,7 @@ It protects sovereignty, IP, project integrity, memory, and data. Beyond protect
 - **Massive dependency library** — Python, Node, Go, Rust, all AI/ML frameworks, math, data, and infra tools pre-installed and maintained
 - **Brain management** — persistent vector memory (ChromaDB), episodic memory, RAG pipeline, knowledge bases, semantic search
 - **Co-pilot support** — Kiro + Claude working in parallel, agent orchestration, multi-agent pipelines
-- **Skills and tools** — 10 tools, 10 skills, 6 pre-built agents, streaming, tracing, task queue
+- **Skills and tools** — 11 tools, 10 skills, 16 pre-built agents (6 core + 10 extended), streaming, tracing, task queue
 - **Trinity Consortium integration** — FRACTAL E8-SSII-AGI, Mycelium Neural Mesh, trinity-unified-ai KB API
 - **Build anything** — apps, platforms, websites, agents, models, APIs, pipelines, neural networks
 

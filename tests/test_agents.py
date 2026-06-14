@@ -10,15 +10,19 @@ def test_agent_import():
     assert Agent is not None
 
 
-def test_registry_has_6_agents():
+def test_registry_has_16_agents():
     from agents.core.registry import REGISTRY
-    assert len(REGISTRY) == 6
-    assert set(REGISTRY.keys()) == {"researcher", "coder", "analyst", "planner", "kb_agent", "local"}
+    assert len(REGISTRY) == 16
+    assert set(REGISTRY.keys()) == {
+        "researcher", "coder", "analyst", "planner", "kb_agent", "local",
+        "security", "devops", "creative", "mesh", "akashic", "healer",
+        "monitor", "concierge", "orchestrator", "grok",
+    }
 
 
-def test_all_tools_has_10():
+def test_all_tools_has_11():
     from agents.core.tools import ALL_TOOLS
-    assert len(ALL_TOOLS) == 10
+    assert len(ALL_TOOLS) == 11
 
 
 def test_skills_has_10():
@@ -47,4 +51,4 @@ def test_agent_creation():
 def test_make_dome_orchestrator():
     from agents.core.registry import make_dome_orchestrator
     orc = make_dome_orchestrator()
-    assert len(orc.agents) == 6
+    assert len(orc.agents) == 16

@@ -32,8 +32,29 @@ if _env_path.is_file():
                 os.environ[key] = val
 
 import numpy as np
-import sounddevice as sd
-import soundfile as sf
+
+# Audio I/O backends (PortAudio via sounddevice, libsndfile via soundfile) are only
+# needed for live capture/playback. Import them lazily so the voice stack — and anything
+# that imports it, e.g. the FastAPI server — loads cleanly on machines without audio
+# hardware libraries installed.
+sd = None  # type: ignore[assignment]
+sf = None  # type: ignore[assignment]
+
+
+def _load_audio_backends() -> None:
+    """Import sounddevice/soundfile on first use; raise a clear error if unavailable."""
+    global sd, sf
+    if sd is not None and sf is not None:
+        return
+    try:
+        import sounddevice as _sd
+        import soundfile as _sf
+    except (ImportError, OSError) as exc:  # OSError: PortAudio/libsndfile missing
+        raise RuntimeError(
+            "Live voice I/O requires the optional 'sounddevice' and 'soundfile' packages "
+            "(PortAudio/libsndfile). Install them to use VoiceLoop capture/playback."
+        ) from exc
+    sd, sf = _sd, _sf
 
 from agents.voice.vad import VadDetector
 from agents.voice.pipeline import VoicePipeline, CloudProviderDisabled, LocalAsrUnavailable
@@ -147,6 +168,7 @@ class VoiceLoop:
 
     def _record_utterance(self) -> np.ndarray | None:
         """Record from mic until silence detected after speech."""
+        _load_audio_backends()
         blocks: list[np.ndarray] = []
         speech_detected = False
         silence_start: float | None = None
@@ -186,6 +208,7 @@ class VoiceLoop:
 
     def _audio_to_file(self, audio: np.ndarray) -> Path:
         """Write audio array to temp WAV file."""
+        _load_audio_backends()
         tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False, prefix="dome-voice-")
         sf.write(tmp.name, audio, SAMPLE_RATE)
         return Path(tmp.name)
@@ -193,6 +216,7 @@ class VoiceLoop:
     def _play_audio(self, path: Path):
         """Play audio file through speakers."""
         try:
+            _load_audio_backends()
             data, sr = sf.read(str(path))
             sd.play(data, sr)
             sd.wait()

@@ -331,12 +331,19 @@ def run_sim(label: str, N: int, pipeline: list, ticks: int = 256, seed: int = 33
         for _, fn in pipeline:
             s = fn(s)
 
-        # Preemptive heal: topology_sensor detects chimera formation before coherence drops
+        # Preemptive heal: topology_sensor detects chimera formation before coherence drops.
+        # The TDA backend (ripser) is imported lazily inside topology_sensor, so a missing
+        # optional dependency only surfaces here at call time — degrade gracefully and
+        # disable the sensor for the rest of the run instead of crashing the simulation.
         if topology_sensor_fn and t % 8 == 0:
-            topo = topology_sensor_fn(s.phase, topo_prev_phase)
-            if topo.get("preemptive_heal") and monitor:
-                s = monitor.check_and_heal(s, t, force=True)
-            topo_prev_phase = s.phase.copy()
+            try:
+                topo = topology_sensor_fn(s.phase, topo_prev_phase)
+            except ImportError:
+                topology_sensor_fn = None  # ripser unavailable — drop preemptive sensor
+            else:
+                if topo.get("preemptive_heal") and monitor:
+                    s = monitor.check_and_heal(s, t, force=True)
+                topo_prev_phase = s.phase.copy()
 
         if monitor:
             s = monitor.check_and_heal(s, t)

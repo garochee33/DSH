@@ -94,15 +94,29 @@ def compute_pulse() -> dict:
 
 
 if __name__ == "__main__":
-    # Ensure node has PQC keys
-    from compute.crypto.pqc import ensure_node_keys, sign_json, sha3
-    signing_kp, kem_kp = ensure_node_keys()
-
     pulse = compute_pulse()
 
-    # Sign the pulse with ML-DSA-87 (post-quantum signature)
-    pulse["pqcSignature"] = sign_json(pulse, signing_kp.secret_key)
-    pulse["pqcPubKeyHash"] = sha3(signing_kp.public_key)[:32]  # first 32 chars
-    pulse["kemPubKeyHash"] = sha3(kem_kp.public_key)[:32]
+    # Sign the pulse with ML-DSA-87 (post-quantum signature). The signing backend
+    # (liboqs / `oqs`) is optional at install time. Mesh transport requires a signed
+    # pulse, so the default behaviour is fail-closed: if the backend is missing we
+    # refuse to emit a silently-unsigned pulse. Set DOME_ALLOW_UNSIGNED_PULSE=1 to
+    # emit an explicitly-flagged unsigned pulse for local development only.
+    try:
+        from compute.crypto.pqc import ensure_node_keys, sign_json, sha3
+        signing_kp, kem_kp = ensure_node_keys()
+        pulse["pqcSignature"] = sign_json(pulse, signing_kp.secret_key)
+        pulse["pqcPubKeyHash"] = sha3(signing_kp.public_key)[:32]  # first 32 chars
+        pulse["kemPubKeyHash"] = sha3(kem_kp.public_key)[:32]
+        pulse["pqcSigned"] = True
+    except ModuleNotFoundError as exc:
+        if os.environ.get("DOME_ALLOW_UNSIGNED_PULSE") != "1":
+            sys.stderr.write(
+                f"frequency-pulse: PQC signing backend unavailable ({exc.name}); refusing to "
+                "emit an unsigned mesh pulse. Install liboqs/oqs, or set "
+                "DOME_ALLOW_UNSIGNED_PULSE=1 for local development only.\n"
+            )
+            sys.exit(2)
+        pulse["pqcSigned"] = False
+        pulse["pqcSignature"] = None
 
     print(json.dumps(pulse))

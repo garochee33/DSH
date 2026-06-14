@@ -167,16 +167,6 @@ def make_dome_orchestrator() -> Orchestrator:
     return orc
 
 
-REGISTRY: dict[str, callable] = {
-    "researcher": make_researcher,
-    "coder": make_coder,
-    "analyst": make_analyst,
-    "planner": make_planner,
-    "kb_agent": make_kb_agent,
-    "local": make_local_agent,
-}
-
-
 def _make(name: str, prompt: str, cloud: str = _CLAUDE_FAST) -> Agent:
     """Factory helper for standard agents."""
     return Agent(

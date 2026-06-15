@@ -295,6 +295,12 @@ class RunResult:
 
 def run_sim(label: str, N: int, pipeline: list, ticks: int = 256, seed: int = 33,
             amma: bool = True, stdp: bool = True, theta_gamma: bool = True) -> RunResult:
+    import warnings
+    # Suppress known-benign numpy "Mean of empty slice" warning that fires during
+    # AMMA mitosis on small lattices (N=3) when an octant slice is transiently empty.
+    warnings.filterwarnings("ignore", message="Mean of empty slice", category=RuntimeWarning)
+    warnings.filterwarnings("ignore", message="invalid value encountered in scalar divide", category=RuntimeWarning)
+
     np.random.seed(seed)
     s = Lattice(N=N)
     history = []

@@ -4,6 +4,11 @@
 
 CATEGORY=${1:?usage: new-project.sh <category> <name>}
 NAME=${2:?usage: new-project.sh <category> <name>}
+VALID_CATEGORIES="projects agents platforms models software"
+if ! echo "$VALID_CATEGORIES" | grep -qw "$CATEGORY"; then
+  echo "✗ Invalid category '$CATEGORY'. Valid: $VALID_CATEGORIES" >&2
+  exit 1
+fi
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOME_ROOT="${DOME_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 DIR="$DOME_ROOT/$CATEGORY/$NAME"

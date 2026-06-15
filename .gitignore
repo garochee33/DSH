@@ -66,6 +66,7 @@ build/
 *.swp
 .DS_Store
 .fractalmap/
+.kiro/
 
 # ── Local-only content (never push) ──
 
@@ -90,6 +91,8 @@ uv.lock
 
 # Separate project repos (each has its own .git)
 projects/
+platforms/
+software/
 
 # Local agent CLI config symlinks (machine-specific, never commit)
 agents/.claude

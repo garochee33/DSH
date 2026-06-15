@@ -146,13 +146,14 @@ class AMMAMonitor:
                     sl = (slice(i * mid, (i + 1) * mid),
                           slice(j * mid, (j + 1) * mid),
                           slice(k * mid, (k + 1) * mid))
-                    local_c = float(np.abs(np.mean(np.exp(1j * s.phase[sl]))))
+                    region = s.phase[sl]
+                    local_c = float(np.abs(np.mean(np.exp(1j * region)))) if region.size > 0 else 0.0
                     octants.append((local_c, sl))
         octants.sort(key=lambda x: x[0])
         worst_slice = octants[0][1]
 
         # Regenerate from global mean phase (healthy template)
-        mean_phase = np.angle(np.mean(np.exp(1j * s.phase)))
+        mean_phase = np.angle(np.mean(np.exp(1j * s.phase))) if s.phase.size > 0 else 0.0
         shape = s.phase[worst_slice].shape
         s.phase[worst_slice] = mean_phase + np.random.uniform(-0.1, 0.1, shape)
         s.phase %= (2 * np.pi)

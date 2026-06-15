@@ -18,12 +18,12 @@
   <key>ProgramArguments</key>
   <array>
     <string>/usr/local/bin/bash</string>
-    <string>/Users/enzogaroche/DSH/scripts/mycelium-signal.sh</string>
+    <string>/Users/trinity-hub/dev/projects/DSH/scripts/mycelium-signal.sh</string>
   </array>
   <key>EnvironmentVariables</key>
   <dict>
     <key>DOME_ROOT</key>
-    <string>/Users/enzogaroche/DSH</string>
+    <string>/Users/trinity-hub/dev/projects/DSH</string>
     <key>PATH</key>
     <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
   </dict>
@@ -32,8 +32,8 @@
   <key>RunAtLoad</key>
   <true/>
   <key>StandardOutPath</key>
-  <string>/Users/enzogaroche/.trinity-spore/logs/mycelium-signal-stdout.log</string>
+  <string>/Users/trinity-hub/dev/projects/.trinity-spore/logs/mycelium-signal-stdout.log</string>
   <key>StandardErrorPath</key>
-  <string>/Users/enzogaroche/.trinity-spore/logs/mycelium-signal-stderr.log</string>
+  <string>/Users/trinity-hub/dev/projects/.trinity-spore/logs/mycelium-signal-stderr.log</string>
 </dict>
 </plist>

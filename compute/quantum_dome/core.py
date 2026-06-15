@@ -1,4 +1,4 @@
-"""ResourceMonitor — real-time CPU/RAM/MPS metrics for Apple Silicon (M4 Pro on this node)."""
+"""ResourceMonitor + Device Router — real-time metrics & AMMA-aware silicon routing for Apple M5 Pro."""
 from __future__ import annotations
 
 import asyncio

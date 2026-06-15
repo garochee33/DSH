@@ -60,7 +60,7 @@ Each script will prompt for sudo once and keep the cached credential alive while
 Write-out lands at `agents/core/.mesh/machine.json`. Report the summary line to the user:
 
 ```
-Apple M4 Pro · 12 cores (8P + 4E) · 24.0 GB RAM · 38 TOPS NPU · tier=sovereign
+Apple M5 Pro · 18 cores (6S + 12P) · 48.0 GB RAM · 40+ TOPS NPU · tier=sovereign
 ```
 
 ## 6. Pull right-sized local LLM weights

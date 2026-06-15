@@ -48,7 +48,7 @@ Never shell out to `system_profiler`, `sysctl`, or `ioreg` directly from the ans
 Return `summary_one_liner()`. Example:
 
 ```
-Apple M4 Pro · 12 cores (8P + 4E) · 24.0 GB RAM · 38 TOPS NPU · tier=sovereign
+Apple M5 Pro · 18 cores (6S + 12P) · 48.0 GB RAM · 40+ TOPS NPU · tier=sovereign
 ```
 
 ### "What tier am I?"

@@ -451,7 +451,7 @@ agents/
 
 **Key Data:**
 - Node: `dome-hub-enzogaroche`, tier: `sovereign`
-- Hardware: Apple M4 Pro, 24GB, 16-core GPU, 38 TOPS NPU
+- Hardware: Apple M5 Pro, 48GB, 18-core GPU, 40+ TOPS NPU
 - Provider priority: MLX → Ollama → Anthropic → OpenAI
 - Default local model: `devstral:latest`
 - Engines: mempalace, E8 lattice, mandelbulb, fractal memory, pheromone grid, mesh peer

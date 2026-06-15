@@ -208,7 +208,7 @@ POST /api/harmony
 
 ### Neuromorphic (Relevance Scoring)
 ```bash
-# Lava SNN spike-based relevance on M4 Pro Neural Engine
+# Lava SNN spike-based relevance on M5 Pro Neural Engine
 python3 compute/sim_evolved.py \
   --neurons 240 --timesteps 100 --input "skill_relevance_vector"
 ```
@@ -220,7 +220,7 @@ import { BitboardCoreEngine } from 'engines/bitboard';
 const match = bitboard.query(skillFingerprint, 'skills');
 ```
 
-## Compute Strategy (M4 Pro Optimized)
+## Compute Strategy (M5 Pro Optimized)
 
 | Component | Backend | Purpose |
 |---|---|---|
@@ -235,10 +235,10 @@ const match = bitboard.query(skillFingerprint, 'skills');
 
 ### Hardware Utilization
 
-- **M4 Pro CPU (12 cores)** — Parallel skill generation, index rebuild
-- **M4 Pro GPU (MPS)** — PyTorch embeddings, Lava SNN simulation
+- **M5 Pro CPU (18 cores)** — Parallel skill generation, index rebuild
+- **M5 Pro GPU (MPS)** — PyTorch embeddings, Lava SNN simulation
 - **Neural Engine (38 TOPS)** — Local inference for quality scoring
-- **24GB Unified Memory** — ChromaDB, E8 vectors, bitboard state
+- **48GB Unified Memory** — ChromaDB, E8 vectors, bitboard state
 
 ## Multi-Agent Dispatch
 

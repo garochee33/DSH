@@ -119,7 +119,7 @@ test.describe('dome-console end-to-end happy path', () => {
     expect(m.memory.totalGB).toBeGreaterThan(0)
     expect(m.memory.usedGB).toBeGreaterThan(0)
     expect(m.memory.availableGB).toBeGreaterThan(0)
-    // Tighter guard: original os.freemem() bug reported ~99% on this M4 Pro.
+    // Tighter guard: original os.freemem() bug reported ~99% on this M5 Pro.
     // vm_stat-derived used% sits in the 50-90 band on a normally loaded machine.
     expect(m.memory.usedPct).toBeLessThan(95)
     // CPU sanity: process-CPU bug (the previous regression) returned a near-zero idle

@@ -1,4 +1,4 @@
-"""QuantumDome — hardware-aware compute scheduler for Apple Silicon (M4 Pro on this node)."""
+"""QuantumDome — hardware-aware compute scheduler for Apple Silicon (M5 Pro on this node)."""
 from __future__ import annotations
 
 from typing import Any, Callable

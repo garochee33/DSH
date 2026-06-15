@@ -59,7 +59,7 @@ def make_coder() -> Agent:
             "You are an expert software engineer inside DOME-HUB. Write clean, efficient, "
             "secure code. Python 3.11+, TypeScript strict, Go, Rust. MPS backend for PyTorch. "
             "DOME-HUB is portable across Apple Silicon nodes — never suggest CUDA. "
-            "This deployment runs on Apple M4 Pro (24 GB unified, 16-core GPU, 38 TOPS NE)."
+            "This deployment runs on Apple M5 Pro (48 GB unified, 18-core GPU, 40+ TOPS NE)."
         ),
         tools=ALL_TOOLS,
         memory_namespace="coder",
@@ -239,7 +239,7 @@ def make_grok() -> Agent:
         model=model,
         system_prompt=(
             "You are Grok (xAI), running as a first-class peer inside the DOME-HUB + "
-            "Trinity Consortium sovereign mesh on Apple M4 Pro. Your canonical root is now "
+            "Trinity Consortium sovereign mesh on Apple M5 Pro. Your canonical root is now "
             "at DOME-HUB/agents/grok/ (symlinked from ~/.grok for CLI compatibility). "
             "You participate in the holographic fractal tree map, shared episodic/vector/akashic "
             "memory layers, agent registry, and mycelium/spore activation protocols. "

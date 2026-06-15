@@ -20,7 +20,7 @@ Three production-shape codebases coexist on this sovereign node — and previous
 |---|---|---|---|
 | **trinity-consortium** | Production + multi-tenant ops + project hub + command center | `:5055` local, `:443` prod | Hetzner CCX23 at `trinity-consortium.com` |
 | **trinity-unified-ai** | Intelligence backbone — KB API, 461-skill canon, agent swarm, KB ingest | `:3333` local | Local-first; future federation possible |
-| **DOME-HUB** + **dome-console** | Sovereign local machine control center + local hub GUI | `:3737` (dome-console) | Localhost-only on this M4 Pro (24 GB, 38 TOPS NE) |
+| **DOME-HUB** + **dome-console** | Sovereign local machine control center + local hub GUI | `:4747` (dome-console) | Localhost-only on this M5 Pro (48 GB, 40+ TOPS NE) |
 
 **Mental model:** consortium is the *body* (lives in production, serves the public). TU-AI is the *mind* (knowledge + intelligence, callable by any platform). DOME-HUB is the *home* (the sovereign machine where the operator lives, where local-only concerns are owned).
 
@@ -156,7 +156,7 @@ Three production-shape codebases coexist on this sovereign node — and previous
 ## 4. DOME-HUB — Sovereign local machine + dome-console GUI
 
 **Repo:** `~/DOME-HUB` (private, `garochee33/DOME-HUB`)
-**Identity:** This M4 Pro (24 GB, 38 TOPS NE) is one sovereign node in the Trinity mesh. DOME-HUB is portable to any Apple Silicon machine.
+**Identity:** This M5 Pro (48 GB, 40+ TOPS NE) is one sovereign node in the Trinity mesh. DOME-HUB is portable to any Apple Silicon machine.
 **Inner repos** (excluded from outer `.gitignore` via `/home/`):
 - `projects/dome-console` (the GUI, `garochee33/dome-console`, private)
 - `projects/trinity-consortium` (production platform)
@@ -298,7 +298,7 @@ Use this when deciding where to put a new capability.
 | **Local agent runners (claude/codex/kiro/cursor/kimi/trinity/local)** | **DOME-HUB** | The 7 adapters |
 | **15-agent registry + 13 skill-agents** | **DOME-HUB** | `agents/core/`, `agents/skills/` |
 | **Voice pipeline (Whisper.cpp + ASR + TTS)** | **DOME-HUB** | Local-only |
-| **Local compute layer (Kuramoto, MPS, resonance_layer)** | **DOME-HUB** | This M4 Pro's specific physics |
+| **Local compute layer (Kuramoto, MPS, resonance_layer)** | **DOME-HUB** | This M5 Pro's specific physics |
 | **dome.db SQLite (sessions, traces, registry, CRM)** | **DOME-HUB** (via dome-console for CRM tables) | Shared local DB |
 | **Fractalmap (.fractalmap/ + scripts)** | **DOME-HUB** | Local-machine generated |
 | **Dual-Archive Protocol enforcement** | **DOME-HUB** | Hot/Cold archive tiers |

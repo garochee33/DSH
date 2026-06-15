@@ -13,7 +13,7 @@ export default defineConfig({
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
   ],
   use: {
-    baseURL: 'http://127.0.0.1:3737',
+    baseURL: 'http://127.0.0.1:4747',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'off',
@@ -23,7 +23,7 @@ export default defineConfig({
     // We hit a static favicon URL so the server doesn't open the DB
     // before tests have finished seeding.
     command: 'pnpm start',
-    url: 'http://127.0.0.1:3737/favicon.ico',
+    url: 'http://127.0.0.1:4747/favicon.ico',
     reuseExistingServer: false,
     timeout: 60_000,
     env: {

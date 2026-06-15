@@ -1,9 +1,11 @@
-allowBuilds:
-  better-sqlite3: false
-  esbuild: false
-  msw: false
-  sharp: false
-  unrs-resolver: false
+# pnpm v10 build-script policy.
+# onlyBuiltDependencies: packages whose install/build scripts are allowed to run.
+#   better-sqlite3 ships a native addon that MUST be compiled (src/lib/db.ts uses it).
+#   esbuild is vitest's transform backend.
+# ignoredBuiltDependencies: packages whose build scripts we intentionally skip (no warning).
+onlyBuiltDependencies:
+  - better-sqlite3
+  - esbuild
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver

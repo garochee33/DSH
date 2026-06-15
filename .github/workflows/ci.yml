@@ -115,3 +115,38 @@ jobs:
           pip-audit -r compute/requirements.txt \
             --ignore-vuln CVE-2026-45829 \
             --ignore-vuln CVE-2025-3000
+
+  console:
+    name: dsh-console (lint + unit + e2e)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: dsh-console
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+        # Version read from package.json "packageManager" — do not duplicate here
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: dsh-console/pnpm-lock.yaml
+
+      # better-sqlite3 native build is authorized via dsh-console/pnpm-workspace.yaml
+      # (onlyBuiltDependencies). src/lib/db.ts requires the compiled addon.
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm lint
+
+      - name: Unit tests (vitest)
+        run: pnpm test
+
+      - name: Install Playwright browser
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: E2E tests (playwright — builds first)
+        run: pnpm test:e2e

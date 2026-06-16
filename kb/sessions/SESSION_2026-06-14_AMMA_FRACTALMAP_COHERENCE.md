@@ -40,11 +40,11 @@ Payload: Trinity.zip (Elixir/BEAM umbrella — 5 apps: trinity_chat, trinity_eng
 | Hub | Role | Location | Remote |
 |-----|------|----------|--------|
 | **DSH** | Public open-source (Phase 1) | `~/dev/projects/DSH` | `garochee33/DSH.git` |
-| **DOME-HUB** | Private sovereign dev — IP, builds | `~/DOME-HUB` | `garochee33/DOME-HUB.git` |
+| **DOME-HUB** | Private sovereign dev — IP, builds | `~/DOME-HUB` | `<private-repo>.git` |
 | **TRINITY-HUB** | Deployments — ports & Hetzner | `~/TRINITY-HUB` | local only |
 
 **Actions:**
-- Restored `~/DOME-HUB` (remote: `garochee33/DOME-HUB.git`)
+- Restored `~/DOME-HUB` (remote: `<private-repo>.git`)
 - Cleaned TRINITY-HUB to contain only: `sovereign-deploy/`, `Trinity consortium/`, `dome-backup-2026-06-12/`, `go/`
 - Moved personal files to `~/Personal/` (Contents, crypto trust, NeuralChek, PIONEER, Kaanella Music, READINGS, EGD, HRV.pdf, REC002.WAV, REC003.WAV, etc.)
 - Removed duplicates (Trinity.zip, deployed-repos/, broken-symlink Trinity/)
@@ -61,7 +61,7 @@ Payload: Trinity.zip (Elixir/BEAM umbrella — 5 apps: trinity_chat, trinity_eng
 
 | # | Issue | Fix |
 |---|-------|-----|
-| 1 | Path migration — `.env.sovereign.runtime` pointed to `/Users/davidtownshend/...` | Fixed to `/Users/trinity-hub/TRINITY-HUB/sovereign-deploy` |
+| 1 | Path migration — `.env.sovereign.runtime` pointed to `/Users/<user>/...` | Fixed to `/Users/trinity-hub/TRINITY-HUB/sovereign-deploy` |
 | 2 | Python venv — symlinks pointed to old machine's Python 3.12 | Recreated with `brew install python@3.12` + fresh venv + 117 deps |
 | 3 | OpenSSL dylibs — BEAM release had hardcoded paths | Patched all `.so` with `install_name_tool` + `codesign --force --sign -` |
 | 4 | Mnesia — node name change caused schema conflict | Set `TRINITY_ALLOW_MNESIA_RESET=1` + cleared `db/mnesia/` |
@@ -114,8 +114,8 @@ Payload: Trinity.zip (Elixir/BEAM umbrella — 5 apps: trinity_chat, trinity_eng
 
 | Field | Value |
 |-------|-------|
-| IP | 87.99.147.1 |
-| ID | #127275345 |
+| IP | <REDACTED-IP> |
+| ID | <REDACTED-ID> |
 | Name | trinity-ubuntu-32gb-ash-3 |
 | Specs | 8 vCPU (AMD EPYC-Milan), 32GB RAM, 160GB + 33GB vol |
 | Location | Ashburn, VA |
@@ -130,15 +130,15 @@ Docker stack running: trinity-consortium-app (:5055 → trinity-consortium.com),
 3. Enabled rescue mode, rebooted, injected key into `/mnt/root/.ssh/authorized_keys`
 4. Disabled rescue, rebooted to normal OS — SSH working
 5. Installed NATS server (systemd service on port 4222)
-6. Opened ports on Hetzner Cloud Firewall: 4222/tcp, 45892/udp, 4000/tcp
-7. Local nats-bridge connected to `nats://87.99.147.1:4222` (routes=2)
+6. Opened ports on Hetzner Cloud Firewall: <PORT>/tcp, <PORT>/udp, <PORT>/tcp
+7. Local nats-bridge connected to `nats://<REDACTED-IP>:<PORT>` (routes=2)
 
 **S3XYVERSE Server:**
 
 | Field | Value |
 |-------|-------|
-| IP | 5.78.194.252 |
-| ID | #130482749 |
+| IP | <REDACTED-IP> |
+| ID | <REDACTED-ID> |
 | Name | S3XYVERSE-ubuntu-8gb-hil-1 |
 | Specs | 4 vCPU, 8GB RAM, 160GB + 69GB vol |
 | Cost | $24.99/mo |
@@ -149,15 +149,7 @@ Docker stack running: trinity-consortium-app (:5055 → trinity-consortium.com),
 ### 1.7 Mycelium Mesh Configuration
 
 ```
-TRINITY_MESH_ENABLED=1
-GOSSIP_PORT=45892
-GOSSIP_MULTICAST=230.1.1.251
-MESH_DNS_QUERY=trinity-mesh.internal
-MYCELIUM_SYNC_INTERVAL=300
-NATS_URL=nats://87.99.147.1:4222
-HETZNER_TRINITY_IP=87.99.147.1
-HETZNER_S3XYVERSE_IP=5.78.194.252
-TRINITY_ALLOW_MNESIA_RESET=1
+[REDACTED — operational config]
 ```
 
 **libcluster strategies:** Gossip (port 45892, multicast 230.1.1.251) + DNSPoll (trinity-mesh.internal, 5s interval).
@@ -168,17 +160,17 @@ TRINITY_ALLOW_MNESIA_RESET=1
 
 ```
 Host trinity-hetzner
-    HostName 87.99.147.1
+    HostName <REDACTED-HOST>
     User root
-    IdentityFile ~/.ssh/id_ed25519
+    IdentityFile <REDACTED-PATH>
 
 Host s3xyverse-hetzner
-    HostName 5.78.194.252
+    HostName <REDACTED-HOST>
     User root
-    IdentityFile ~/.ssh/id_ed25519
+    IdentityFile <REDACTED-PATH>
 ```
 
-Key: `ssh-ed25519 AAAAC3...Lpi trinity-hub@sovereign`
+Key: `ssh-ed25519 <REDACTED-KEY> trinity-hub@sovereign`
 
 ---
 
@@ -233,7 +225,7 @@ Key: `ssh-ed25519 AAAAC3...Lpi trinity-hub@sovereign`
 |------|--------|
 | `compute/requirements.txt` | Fix unsatisfiable pins (pandas≥2.1.0, qiskit≥2.0.0,≤2.3.0) |
 | `scripts/frequency-pulse.py` | Redirect liboqs import banner to stderr; stdout stays pure JSON for `mycelium-signal.sh` |
-| `agents/.claude` | **Removed** — tracked dangling symlink to `/Users/enzogaroche/DOME-HUB/home/.claude` (leaked username, broken on every machine) |
+| `agents/.claude` | **Removed** — tracked dangling symlink to `/Users/<user>/DOME-HUB/home/.claude` (leaked username, broken on every machine) |
 | `.gitignore` | Added `agents/.claude` and `.claude/` exclusions |
 
 **Result:** 39 tests pass. Signed pulse = single clean JSON line. Topology sensor active with ripser.

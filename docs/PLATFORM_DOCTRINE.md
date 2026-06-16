@@ -1,7 +1,7 @@
 # Trinity Three-Platform Doctrine
 
 **Status:** v1.0 — established 2026-05-19
-**Authority:** EGD33 (Enzo Garoche) · sole A4 / DEV-OWNER tier
+**Authority:** $OPERATOR (Enzo Garoche) · sole [admin-tier]
 **Supersedes:** the implicit "all-in-one" model previously assumed
 **Scope:** governs every working session across the three canonical Trinity platforms
 **Read order at boot:** `~/.claude/CLAUDE.md` → this file → per-repo CLAUDE.md/AGENTS.md
@@ -18,7 +18,7 @@ Three production-shape codebases coexist on this sovereign node — and previous
 
 | Platform | Identity | Default port | Deploy target |
 |---|---|---|---|
-| **trinity-consortium** | Production + multi-tenant ops + project hub + command center | `:5055` local, `:443` prod | Hetzner CCX23 at `trinity-consortium.com` |
+| **trinity-consortium** | Production + multi-tenant ops + project hub + command center | `:5055` local, `:443` prod | [cloud-provider] at `[production-domain]` |
 | **trinity-unified-ai** | Intelligence backbone — KB API, 461-skill canon, agent swarm, KB ingest | `:3333` local | Local-first; future federation possible |
 | **DOME-HUB** + **dome-console** | Sovereign local machine control center + local hub GUI | `:4747` (dome-console) | Localhost-only on this M5 Pro (48 GB, 40+ TOPS NE) |
 
@@ -29,9 +29,9 @@ Three production-shape codebases coexist on this sovereign node — and previous
 ## 2. trinity-consortium — Production hub + command center
 
 **Repo:** `projects/trinity-consortium`
-**Remote:** `garochee33/trinity_consortium_v3` (private)
+**Remote:** `[private-repo]` (private)
 **Stack:** Express + Drizzle ORM + tsx@4.22 on Node 24 · Next.js 16 + React 19 + Tailwind v4 frontend · PostgreSQL + pgvector (177 tables) · Redis · Docker Compose · Caddy
-**Production:** Hetzner CCX23, served from `trinity-consortium.com` (Cloudflare Full SSL, Origin certs)
+**Production:** [cloud-provider], served from `[production-domain]` (Cloudflare Full SSL, Origin certs)
 **Local dev:** `pnpm dev` from repo root → server at `127.0.0.1:5055`
 
 ### 2.1 What consortium uniquely owns (canonical — never duplicate elsewhere)
@@ -39,14 +39,14 @@ Three production-shape codebases coexist on this sovereign node — and previous
 **Production identity & multi-tenancy:**
 - Auth + JWT issuance + tier verification (`server/auth/middleware.ts`, `auth.service.ts`, `tier-constants.ts`)
 - Member tier ladder L1/L2/L3 (CONFIDENTIAL/RESTRICTED/CLASSIFIED) + Admin tier ladder A1/A2/A3/A4 (TEAM/INVESTOR/PARTNER/DEV-OWNER)
-- Founder gate (`FOUNDER_USERNAME = 'EGD33'`, single A4) at `server/domains/auth/auth.service.ts:38-50`
+- Founder gate (`FOUNDER_USERNAME = '$OPERATOR'`, single A4) at `server/domains/auth/auth.service.ts:38-50`
 - Workspace + ACL multi-tenancy (`enforceTenantOnScopedRoutes`)
 - Stripe webhook handling + billing events + idempotency via Redis pub/sub
 - Member onboarding grants ($20–$30 per tier; A4 unlimited)
 
 **Public/multi-tenant compute:**
 - AMMA production self-heal (`server/domains/ai/amma.routes.ts`, `ai/amma-self-heal.ts`, `ai/amma-system-metrics.ts`)
-- Bees + Hive orchestrator with integrity guard (any edit under `server/ai/bees/` requires `BEE_INTEGRITY_BOOTSTRAPPED_BY=EGD33 pnpm exec tsx scripts/trinity-bees-integrity-bootstrap.ts` to re-authorize)
+- Bees + Hive orchestrator with integrity guard (any edit under `server/ai/bees/` requires `BEE_INTEGRITY_BOOTSTRAPPED_BY=$OPERATOR pnpm exec tsx scripts/trinity-bees-integrity-bootstrap.ts` to re-authorize)
 - Mandelbulb GPU dispatcher + sacred geometry engines (E8 lattice, Metatron, Merkaba, Flower of Life, φ-scaling)
 - Production sub-domain stack: 69 route domains, ~400–500 endpoints across ai/auth/vault/admin/womb/knowledge/compute/enterprise
 
@@ -155,10 +155,10 @@ Three production-shape codebases coexist on this sovereign node — and previous
 
 ## 4. DOME-HUB — Sovereign local machine + dome-console GUI
 
-**Repo:** `~/DOME-HUB` (private, `garochee33/DOME-HUB`)
+**Repo:** `~/DOME-HUB` (private, `[private-repo]`)
 **Identity:** This M5 Pro (48 GB, 40+ TOPS NE) is one sovereign node in the Trinity mesh. DOME-HUB is portable to any Apple Silicon machine.
 **Inner repos** (excluded from outer `.gitignore` via `/home/`):
-- `projects/dome-console` (the GUI, `garochee33/dome-console`, private)
+- `projects/dome-console` (the GUI, `[private-repo]`, private)
 - `projects/trinity-consortium` (production platform)
 - `DSH` (the public sovereign foundation, `garochee33/DSH`)
 - `trinity-unified-ai` (TU-AI canonical location)
@@ -192,7 +192,7 @@ Three production-shape codebases coexist on this sovereign node — and previous
 - `compute/crypto/` — ML-KEM-1024 / ML-DSA-87 (NIST FIPS 203/204) — *candidate for promotion to TU-AI shared lib*
 
 **Local memory layer:**
-- `db/dome.db` — SQLite registry: sessions, traces, agents, skills, tools, stack inventory, contacts (2,918 — owned by dome-console CRM)
+- `db/dome.db` — SQLite registry: sessions, traces, agents, skills, tools, stack inventory, contacts ([N] — owned by dome-console CRM)
 - `db/episodic.db` — episodic memory (currently 0 episodes, 0 sessions, 17 facts — placeholder for episodic engine)
 - `db/chroma/` — Akashic ChromaDB (~50 MB, 7 collections, 267+ documents)
 - `db/.akashic-seen.json` — watcher dedup (now properly gitignored as of 2026-05-19 commit chain)
@@ -201,7 +201,7 @@ Three production-shape codebases coexist on this sovereign node — and previous
 - `memory/sessions/2026-*/` — 79 consolidated session narratives (executive summaries)
 - `memory/facts/`, `memory/decisions/` — fact base + decision journal
 - `brain/` (added 2026-05-19, commit `98c8f98`) — *reference layer*, not duplicate storage. `engines/*.ref` are 17 text pointers to actual engines in trinity-unified-ai. `state/dome.ref` points at `db/dome.db`. Catalog, not copy.
-- `~/.claude/projects/-Users-enzogaroche/memory/` — Claude auto-memory (separate from `memory/` by design; raw turn-by-turn vs. executive narratives)
+- `~/.claude/projects/-Users-<user>/memory/` — Claude auto-memory (separate from `memory/` by design; raw turn-by-turn vs. executive narratives)
 
 **Local KB layer (NOT canonical — defers to TU-AI):**
 - `kb/skills/` — *local subset* (264 files, 67 unique). For local-only references. **Canonical skill source is TU-AI's `skills-library/skills/`** (461 skills).
@@ -249,7 +249,7 @@ Three production-shape codebases coexist on this sovereign node — and previous
 **Binding:** `127.0.0.1:3737` — no auth (sovereign by isolation)
 **Current live surfaces:**
 - `/` System Dashboard (CPU, RAM, disk, DB sizes, agent counts, Ollama, contacts, 24h load chart, 5s refresh)
-- `/crm` Contact list (2,918 contacts, virtualized, search by name/phone/email, tag/note badges)
+- `/crm` Contact list ([N] contacts, virtualized, search by name/phone/email, tag/note badges)
 - `/crm/[id]` Contact detail (tags, notes, 6-type interaction logging)
 - `/api/metrics` (GET) — system metrics endpoint
 - Server actions for CRM mutations (addTag, removeTag, addNote, deleteNote, logInteraction)
@@ -274,11 +274,11 @@ Use this when deciding where to put a new capability.
 |---|---|---|
 | Auth, JWT, sessions | **consortium** | Single source of truth for identity |
 | Billing, Stripe, cost governance | **consortium** | Production-only |
-| Member/admin tier ladder + EGD33 enforcement | **consortium** | `tier-constants.ts` is canonical |
+| Member/admin tier ladder + $OPERATOR enforcement | **consortium** | `tier-constants.ts` is canonical |
 | AMMA production self-heal | **consortium** | Multi-tenant healing |
 | Bees + Hive orchestrator | **consortium** | Integrity guard required |
 | Mandelbulb GPU dispatch | **consortium** | Production fractal compute |
-| Public-facing endpoints (member portal, marketing) | **consortium** | trinity-consortium.com |
+| Public-facing endpoints (member portal, marketing) | **consortium** | [production-domain] |
 | s3xyverse, paradise-estate, client projects | **consortium** | Served by the platform |
 | Dev-tools API (`/api/dev/*`) | **consortium** (but dome-console may shell *its own* version locally) | Wrap, don't replicate |
 | **Skill canonical library (461)** | **TU-AI** | `skills-library/skills/` is single source |
@@ -314,7 +314,7 @@ Use this when deciding where to put a new capability.
 
 **Auth flow:** consortium issues JWTs. TU-AI accepts them (dual-mode JWT + `x-hub-secret`). DOME-HUB / dome-console can present the JWT to call either platform.
 
-**Mesh flow:** DOME-HUB → mycelium-signal.sh → POST `https://trinity-consortium.com/api/mesh/peer/{handshake,heartbeat,merkaba/signal}` with HMAC-SHA256. consortium owns the endpoint + peer registry; DOME-HUB owns the signal.
+**Mesh flow:** DOME-HUB → mycelium-signal.sh → POST `https://[production-domain]/api/mesh/peer/{handshake,heartbeat,merkaba/signal}` with HMAC-SHA256. consortium owns the endpoint + peer registry; DOME-HUB owns the signal.
 
 **Cost/billing flow:** consortium-owned. Other platforms never need to know.
 
@@ -340,8 +340,8 @@ dome-console (Next.js, :3737)
 
 These are inviolable:
 
-- **Personal memory** — `memory/`, `~/.claude/projects/-Users-enzogaroche/memory/`, `~/.password-store/`, Keychain entries
-- **PII** — dome-console's 2,918 contacts. Never mirrored out, never reachable from network.
+- **Personal memory** — `memory/`, `~/.claude/projects/-Users-<user>/memory/`, `~/.password-store/`, Keychain entries
+- **PII** — dome-console's [N] contacts. Never mirrored out, never reachable from network.
 - **Quantum internals** — `compute/sim_evolved.py` (Kuramoto K=2.663 internals), Mandelbulb fingerprints, MB-01→MB-10 vectors
 - **AMMA soul-layer** — the φ-Mandelbulb frequency super-engine logic itself (production AMMA exposes scores only, not algorithm)
 - **Dev keys** — `MESH_PEER_SECRET`, `HUB_API_SECRET`, GPG private key, Keychain secrets
@@ -352,15 +352,15 @@ These are inviolable:
 
 ---
 
-## 8. Identity & governance — EGD33 / A4 / tier ladder
+## 8. Identity & governance — $OPERATOR / A4 / tier ladder
 
 **Operator identity (this machine):**
-- Username: `EGD33`
+- Username: `$OPERATOR`
 - Real name: Enzo Garoche
-- Primary email: `enzo@trinity-consortium.com`
-- Aliases: `enzo@gdseglobal.com`, `enzogaroche@gmail.com`, `enzo@trinityconsortium.com`
-- Member tier: **L3 (CLASSIFIED, Gold)**
-- Admin tier: **A4 (DEV-OWNER, ♀︎dev△owner♀︎)** — sole holder, never delegated
+- Primary email: `<redacted-email>`
+- Aliases: `<redacted-email>`, `<redacted-email>`, `<redacted-email>`
+- Member tier: **[member-tier]**
+- Admin tier: **[admin-tier]** — sole holder, never delegated
 - Company: Trinity Global Partners LLC (Trinity Consortium)
 
 **Authority by tier (canonical at `trinity-consortium/shared/tier-constants.ts:168-184`):**
@@ -384,7 +384,7 @@ These are inviolable:
 
 **Founder gate enforcement points:**
 - `auth.service.ts:1184` — founder identity gate
-- `tier-constants.ts:ADMIN_OWNER_USERNAME = 'EGD33'`
+- `tier-constants.ts:ADMIN_OWNER_USERNAME = '$OPERATOR'`
 - Defense-in-depth gaps surfaced 2026-04-26 (DB CHECK constraint, JWT-sign-time validation) — *not yet applied*. Tracked in memory.
 
 **dome-console identity model:**
@@ -508,9 +508,9 @@ These are inviolable:
 
 ## 10. Open contradictions surfaced by deep-dive (must address)
 
-1. **IP-removal — ✅ RESOLVED 2026-05-19** — the-womb codebase consolidation is complete; Trinity IP signature removal closed by EGD33. Treat any older "4/8 FAIL" audit as superseded. Do not reopen this item without an explicit new finding.
+1. **IP-removal — ✅ RESOLVED 2026-05-19** — the-womb codebase consolidation is complete; Trinity IP signature removal closed by $OPERATOR. Treat any older "4/8 FAIL" audit as superseded. Do not reopen this item without an explicit new finding.
 2. **`trinity-dev-console` path refs — ✅ FALSE POSITIVE** — re-verified 2026-05-19: `trinity-consortium/CLAUDE.md:103` already marks the path as **DECOMMISSIONED**. Doc is correct.
-3. **Old locked server `204.168.202.101` — ✅ FALSE POSITIVE** — re-verified 2026-05-19: `trinity-consortium/CLAUDE.md:40,376` already documents the April 15 lockout as historical context (LOCKED OUT). Doc is correct.
+3. **Old locked server `<REDACTED-IP>` — ✅ FALSE POSITIVE** — re-verified 2026-05-19: `trinity-consortium/CLAUDE.md:40,376` already documents the April 15 lockout as historical context (LOCKED OUT). Doc is correct.
 4. **TU-AI path mismatch — ✅ RESOLVED 2026-05-19** — verified that `~/trinity-unified-ai` IS a real symlink to the canonical location. Docs using either path resolve to the same files. The nested form remains canonical for new docs; the symlink is a valid alias. No mass-rewrite needed.
 5. **5 CTO bugs from 2026-04-27 — ✅ RESOLVED 2026-05-19** — re-probed each: (A) devstral 14 GB is now pulled in Ollama; (B) no `node tsx` process running from overlay path; (C) migration journal moved from `drizzle/` to `migrations/meta/_journal.json` (system reorganized, not broken); (D) `dist/` mtime is today 15:07 (fresh, not 17 days stale); (E) mesh-signal heartbeats green at 19:53Z. All 5 closed.
 6. **`data/chromadb/` — ✅ DOCUMENTED 2026-05-19** — collection name is `dome-kb` with 5 embeddings (mtime 2026-05-17). Zero code references in DOME-HUB or trinity-consortium — writer is a manual/experimental ingest, not a production pipeline. Path is now gitignored (commit chain 2026-05-19). Treat as sibling experimental store; canonical Akashic remains `db/chroma/`. Owner may archive when convenient.
@@ -537,7 +537,7 @@ These should be respected jointly with this one:
 | Memory entry `project_skill_landscape_consolidation_2026_04_25.md` | 8-phase consolidation final state |
 | Memory entry `feedback_skill_tier_doctrine.md` | Same skill in multiple tiers is legitimate; sync within tier only |
 | Memory entry `feedback_trinity_vocabulary.md` | Mycelium Signal not daemon, spore not bootstrap, etc. |
-| Memory entry `feedback_egd33_owner_authority.md` | EGD33 sets tier/policy; API auto-detect is default not authority |
+| Memory entry `feedback_egd33_owner_authority.md` | $OPERATOR sets tier/policy; API auto-detect is default not authority |
 
 ---
 
@@ -566,7 +566,7 @@ ls -la ~/DOME-HUB/docs/PLATFORM_DOCTRINE.md
 curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:3737              # dome-console (expect 200)
 curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:3333/health       # trinity-unified-ai (expect 200)
 curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:5055/api/health   # trinity-consortium local (expect 200)
-curl -s -o /dev/null -w '%{http_code}\n' https://trinity-consortium.com/api/health  # consortium prod (expect 200)
+curl -s -o /dev/null -w '%{http_code}\n' https://[production-domain]/api/health  # consortium prod (expect 200)
 
 # Mycelium signal alive
 launchctl list | grep com.dome.mycelium-signal
@@ -587,11 +587,11 @@ ls $DOME_ROOT/trinity-unified-ai/skills-library/skills/ | wc -l        # expect 
 fdesetup status; csrutil status; /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate
 
 # Operator identity
-echo "EGD33 → A4 (DEV-OWNER) → sole holder"
+echo "$OPERATOR → A4 (DEV-OWNER) → sole holder"
 ```
 
 ---
 
 ## 14. Change log
 
-- **2026-05-19** — v1.0 doctrine established by EGD33 after 8-agent parallel deep-dive analysis. Supersedes implicit prior assumptions. dome-console expansion roadmap defined (5 phases, ~5,450 LOC delta).
+- **2026-05-19** — v1.0 doctrine established by $OPERATOR after 8-agent parallel deep-dive analysis. Supersedes implicit prior assumptions. dome-console expansion roadmap defined (5 phases, ~5,450 LOC delta).

@@ -487,4 +487,4 @@ See: `docs/DOME-HUB-ARCHITECTURE.md` (§3 neuromorphic + Trinity mirror), `logs/
 | Vector Store | `~/DOME-HUB/db/chroma`                   |
 | Trinity KB   | `~/DOME-HUB/kb/trinity-unified-ai`       |
 | API Server   | `http://127.0.0.1:8001`                  |
-| GitHub       | `https://github.com/garochee33/DOME-HUB` |
+| GitHub       | `[private repository]` |

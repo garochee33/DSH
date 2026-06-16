@@ -150,7 +150,7 @@ if ! DOME_ROOT="$(_spore_resolve_dome_root)"; then
   echo "Set DOME_ROOT, or run from repo root, or install under ~/DOME-HUB or ~/DSH."
   echo ""
   echo "Run first (sovereign node):"
-  echo "  git clone https://github.com/garochee33/DOME-HUB.git && cd DOME-HUB"
+  echo "  # Clone the private DOME-HUB repository (requires access) && cd DOME-HUB"
   echo "  bash scripts/sovereign-setup-mac.sh"
   echo ""
   echo "Public foundation (DSH): https://github.com/garochee33/DSH"

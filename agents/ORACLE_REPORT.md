@@ -450,7 +450,7 @@ agents/
 **Purpose:** Node identity, hardware profile, provider config, engine toggles.
 
 **Key Data:**
-- Node: `dome-hub-enzogaroche`, tier: `sovereign`
+- Node: `dome-hub-$USER`, tier: `sovereign`
 - Hardware: Apple M5 Pro, 48GB, 18-core GPU, 40+ TOPS NPU
 - Provider priority: MLX → Ollama → Anthropic → OpenAI
 - Default local model: `devstral:latest`

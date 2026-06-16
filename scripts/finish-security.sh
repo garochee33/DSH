@@ -33,8 +33,8 @@ Key-Type: RSA
 Key-Length: 4096
 Subkey-Type: RSA
 Subkey-Length: 4096
-Name-Real: gadikedoshim
-Name-Email: gadi@dome-hub.local
+Name-Real: $USER
+Name-Email: ${USER}@dome-hub.local
 Expire-Date: 0
 %no-protection
 EOF

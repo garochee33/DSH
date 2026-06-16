@@ -91,7 +91,7 @@ DSH uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - BRIDGE.md: added JWT auth pattern, paths → ~/DSH.
 
 ### Removed
-- All personal paths (`/Users/enzogaroche/`, `/Users/gadikedoshim/`) from every
+- All personal paths (`/Users/<user>/`) from every
   tracked file: .env.example, AI_INFRASTRUCTURE_MAP.md, AGENTS.md, REGISTRY.md,
   PUBLIC_PROD_HARDENING.md, CHANGELOG.md, kiro-skills.md.
 - Hardcoded personal identity from finish-security.sh (GPG name → $USER),

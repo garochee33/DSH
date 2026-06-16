@@ -306,11 +306,14 @@ def run_sim(label: str, N: int, pipeline: list, ticks: int = 256, seed: int = 33
     history = []
     t0 = perf_counter()
 
-    # AMMA healing (lazy import to avoid circular)
+    # AMMA healing (Trinity IP — optional, not in public DSH)
     monitor = None
     if amma:
-        from compute.amma_monitor import AMMAMonitor
-        monitor = AMMAMonitor()
+        try:
+            from compute.amma_monitor import AMMAMonitor
+            monitor = AMMAMonitor()
+        except ImportError:
+            pass
 
     # STDP adaptive coupling
     K_adaptive = load_stdp_K() if stdp else K_OPTIMAL

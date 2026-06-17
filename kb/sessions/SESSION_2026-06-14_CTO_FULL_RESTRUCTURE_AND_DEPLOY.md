@@ -32,7 +32,7 @@ Contents included: Trinity.zip, sovereign-deploy, Trinity consortium, DSH data b
 | **TRINITY-HUB** | Deployments — ports & Hetzner | `~/TRINITY-HUB` |
 
 **Actions taken:**
-- Restored `~/DOME-HUB` (remote: `garochee33/DOME-HUB.git`)
+- Restored `~/DOME-HUB` (remote: `<private-repo>.git`)
 - Cleaned TRINITY-HUB to contain only: `sovereign-deploy/`, `Trinity consortium/`, `dome-backup-2026-06-12/`, `go/` (protobuf tools)
 - Moved personal files to `~/Personal/` (Contents, crypto trust, NeuralChek, PIONEER, Kaanella Music, READINGS, EGD, HRV.pdf, REC002.WAV, REC003.WAV, etc.)
 - Removed duplicates (Trinity.zip, deployed-repos/, broken-symlink Trinity/)
@@ -46,9 +46,9 @@ Contents included: Trinity.zip, sovereign-deploy, Trinity consortium, DSH data b
 **Stack:** Elixir/BEAM umbrella + Python workers + Go sidecars + Node KB server
 
 ### Issues Fixed:
-1. **Path migration** — `.env.sovereign.runtime` pointed to `/Users/davidtownshend/...` → fixed to `/Users/trinity-hub/TRINITY-HUB/sovereign-deploy`
+1. **Path migration** — `.env.sovereign.runtime` pointed to `/Users/<user>/...` → fixed to `/Users/trinity-hub/TRINITY-HUB/sovereign-deploy`
 2. **Python venv** — Symlinks pointed to old machine's Python 3.12 → recreated with `brew install python@3.12` + fresh venv + 117 deps installed
-3. **OpenSSL dylibs** — BEAM release had hardcoded paths to `/Users/davidtownshend/.homebrew/opt/openssl@3/` → patched all `.so` files with `install_name_tool` + `codesign --force --sign -`
+3. **OpenSSL dylibs** — BEAM release had hardcoded paths to `/Users/<user>/.homebrew/opt/openssl@3/` → patched all `.so` files with `install_name_tool` + `codesign --force --sign -`
 4. **Mnesia** — Node name change caused schema conflict → set `TRINITY_ALLOW_MNESIA_RESET=1` + cleared `db/mnesia/`
 5. **Chat DB** — Missing `conversations` table → created via psql (conversations + messages + chat_schema_migrations)
 6. **trinity:latest model** — Created Ollama Modelfile alias from `llama3.2:latest`
@@ -101,8 +101,8 @@ AMMA (Adaptive Meridian Mesh Architecture) coherence monitor queried:
 
 ## 6. Hetzner Mesh Deployment
 
-### Trinity Server — CCX33 (87.99.147.1)
-- **ID:** #127275345
+### Trinity Server — CCX33 (<REDACTED-IP>)
+- **ID:** <REDACTED-ID>
 - **Name:** trinity-ubuntu-32gb-ash-3
 - **Specs:** 8 vCPU (AMD EPYC-Milan), 32GB RAM, 160GB + 33GB volume
 - **Location:** Ashburn, VA
@@ -126,11 +126,11 @@ AMMA (Adaptive Meridian Mesh Architecture) coherence monitor queried:
 3. Enabled rescue mode via API, rebooted, injected key into `/mnt/root/.ssh/authorized_keys`
 4. Disabled rescue, rebooted to normal OS — SSH working
 5. Installed NATS server (systemd service on port 4222)
-6. Opened ports on Hetzner Cloud Firewall: 4222/tcp, 45892/udp, 4000/tcp
-7. Local nats-bridge connected to `nats://87.99.147.1:4222` (routes=2)
+6. Opened ports on Hetzner Cloud Firewall: <PORT>/tcp, <PORT>/udp, <PORT>/tcp
+7. Local nats-bridge connected to `nats://<REDACTED-IP>:<PORT>` (routes=2)
 
-### S3XYVERSE Server (5.78.194.252)
-- **ID:** #130482749
+### S3XYVERSE Server (<REDACTED-IP>)
+- **ID:** <REDACTED-ID>
 - **Name:** S3XYVERSE-ubuntu-8gb-hil-1
 - **Specs:** 4 vCPU, 8GB RAM, 160GB + 69GB volume
 - **Cost:** $24.99/mo
@@ -142,15 +142,7 @@ AMMA (Adaptive Meridian Mesh Architecture) coherence monitor queried:
 
 **`.env.sovereign.runtime` additions:**
 ```
-TRINITY_MESH_ENABLED=1
-GOSSIP_PORT=45892
-GOSSIP_MULTICAST=230.1.1.251
-MESH_DNS_QUERY=trinity-mesh.internal
-MYCELIUM_SYNC_INTERVAL=300
-NATS_URL=nats://87.99.147.1:4222
-HETZNER_TRINITY_IP=87.99.147.1
-HETZNER_S3XYVERSE_IP=5.78.194.252
-TRINITY_ALLOW_MNESIA_RESET=1
+[REDACTED — operational config]
 ```
 
 **libcluster strategies (from runtime.exs):**
@@ -164,17 +156,17 @@ TRINITY_ALLOW_MNESIA_RESET=1
 **`~/.ssh/config`:**
 ```
 Host trinity-hetzner
-    HostName 87.99.147.1
+    HostName <REDACTED-HOST>
     User root
-    IdentityFile ~/.ssh/id_ed25519
+    IdentityFile <REDACTED-PATH>
 
 Host s3xyverse-hetzner
-    HostName 5.78.194.252
+    HostName <REDACTED-HOST>
     User root
-    IdentityFile ~/.ssh/id_ed25519
+    IdentityFile <REDACTED-PATH>
 ```
 
-**Key:** `ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKDRJjF54NfEInWbuSrHhp5MbUdYzLY3WmTKkBitULpi trinity-hub@sovereign`
+**Key:** `ssh-ed25519 <REDACTED-KEY> trinity-hub@sovereign`
 
 ---
 
@@ -196,7 +188,7 @@ Host s3xyverse-hetzner
 ```
 ~/
 ├── dev/projects/DSH/          ← Public open-source (garochee33/DSH.git)
-├── DOME-HUB/                  ← Private sovereign dev (garochee33/DOME-HUB.git)
+├── DOME-HUB/                  ← Private sovereign dev (<private-repo>.git)
 ├── TRINITY-HUB/               ← Deployments
 │   ├── sovereign-deploy/      ← Running Elixir/BEAM stack (all ports UP)
 │   ├── Trinity consortium/    ← R&D workspace
@@ -210,7 +202,7 @@ Host s3xyverse-hetzner
 
 ## Next Steps
 
-1. Connect S3XYVERSE Hetzner server (5.78.194.252) to mesh
+1. Connect S3XYVERSE Hetzner server (<REDACTED-IP>) to mesh
 2. Set up NATS cluster (Hetzner nodes as cluster peers)
 3. Deploy sovereign-deploy BEAM node to Hetzner for true Erlang distribution peering
 4. Build prod release targeting x86_64 Linux (current release is macOS ARM)

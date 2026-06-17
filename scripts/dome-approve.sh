@@ -4,7 +4,7 @@
 # This file is not public documentation — it is the runtime enforcement mechanism.
 # Usage: dome-approve <action> <description>
 
-APPROVED_USERS=("gadi.k" "gadikedoshim" "garochee33")
+APPROVED_USERS=("${DOME_APPROVED_USERS:-$USER}")
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DOME_ROOT="${DOME_ROOT:-$(cd "$SCRIPT_DIR/.." && pwd)}"
 LOG="$DOME_ROOT/logs/approvals.log"

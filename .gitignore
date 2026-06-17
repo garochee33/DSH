@@ -97,3 +97,5 @@ software/
 # Local agent CLI config symlinks (machine-specific, never commit)
 agents/.claude
 .claude/
+compute/amma_monitor.py
+compute/solfeggio.py

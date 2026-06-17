@@ -78,7 +78,7 @@
 ## DOME-HUB Integration
 - Aware of DOME-HUB structure: projects, platforms, software, compute, agents, models, kb, db, codebase, scripts
 - Environments: `dev` (local), `prod` (production)
-- Operator: gadikedoshim
+- Operator: trinity-hub
 - Developer/Architect: Trinity Consortium
 - Active projects: Trinity Consortium (s3xyverse production), FRACTAL E8-SSII-AGI, Mycelium Neural Mesh, trinity-unified-ai
 

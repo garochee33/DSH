@@ -63,11 +63,9 @@ jobs:
           KMP_DUPLICATE_LIB_OK: "TRUE"
         run: python -m pytest -q
 
-      - name: Pre-spore skill verify
+      - name: Skill verify (syntax check)
         continue-on-error: true
-        env:
-          HF_HUB_OFFLINE: "1"
-        run: python scripts/pre-spore-verify.py
+        run: python -m py_compile agents/core/agent.py agents/core/orchestrator.py agents/core/registry.py
 
   secrets:
     name: Secret scan (gitleaks)

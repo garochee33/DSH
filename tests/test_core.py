@@ -59,6 +59,7 @@ class TestQuantumDome:
 class TestSkillVerify:
     def test_all_skills_have_verify(self):
         from agents.skills import SKILLS
+        assert len(SKILLS) == 4
         for name, skill in SKILLS.items():
-            assert "name" in skill, f"{name} missing 'name' field"
-            assert "description" in skill, f"{name} missing 'description' field"
+            assert isinstance(skill, str), f"{name} SKILL should be a string identifier"
+            assert skill == name, f"{name} SKILL value mismatch"

@@ -1,8 +1,29 @@
 #!/usr/bin/env bash
 # Pre-push secret scan — blocks pushes that would expose known secret patterns.
 #
+# APPROVAL GATE: Pushing to DSH requires explicit approval.
+# Set DSH_PUSH_APPROVED=1 to allow, otherwise push is blocked.
+#
+# Usage:
+#   DSH_PUSH_APPROVED=1 git push origin main
+#
 # Installed as .git/hooks/pre-push (directly or via core.hooksPath=.githooks).
 # Tracked in-repo at .githooks/pre-push so fresh clones get it on hook install.
+
+set -eu
+
+# ── DSH Push Approval Gate ──
+if [ "${DSH_PUSH_APPROVED:-}" != "1" ]; then
+    echo ""
+    echo "🛑 DSH PUSH BLOCKED — approval required."
+    echo ""
+    echo "   This repo only accepts approved, DSH-specific updates."
+    echo "   To push, explicitly approve:"
+    echo ""
+    echo "     DSH_PUSH_APPROVED=1 git push origin main"
+    echo ""
+    exit 1
+fi
 #
 # Git passes pushed refs on stdin: "<local_ref> <local_sha> <remote_ref> <remote_sha>"
 # For each, scan new commits' changed files for:

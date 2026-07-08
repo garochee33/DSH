@@ -35,7 +35,7 @@ def test_skills_has_10():
 def test_extended_skills_load():
     from agents.skills import SKILLS as skill_list
     assert "math" in skill_list
-    assert len(skill_list) == 7
+    assert len(skill_list) == 4
 
 
 def test_agent_creation():

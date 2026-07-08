@@ -1,0 +1,5 @@
+# Security auditor role — full access to explore code and write findings, high reasoning
+description = "Security auditor that reviews code for vulnerabilities and writes structured findings"
+default_capability_mode = "all"
+reasoning_effort = "high"
+default_fork_context = true

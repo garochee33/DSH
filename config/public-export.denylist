@@ -1,0 +1,31 @@
+# Public export denylist (repo-relative shell globs)
+
+# Never export local/runtime/private state
+.env
+.env.*
+*.env
+.audit/*
+db/*
+logs/*
+models/*
+google drive/*
+CLAUDE.md
+
+# Local-only or private operator utilities
+docs/PUBLIC_PROD_HARDENING.md
+scripts/phase1_sovereign_baseline_audit.sh
+scripts/trinity-workspaces.sh
+scripts/public-safety-check.sh
+scripts/export-to-dsh.sh
+
+# DSH public repo keeps curated branding/docs/ignore policy
+README.md
+MANUAL.md
+.gitignore
+scripts/dome-check.sh
+
+# Files with machine-specific absolute path references
+agents/api/server.py
+scripts/ingest.py
+kb/trinity-unified-ai/agents/AGENTS.md
+kb/trinity-unified-ai/docs/AI_INFRASTRUCTURE_MAP.md

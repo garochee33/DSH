@@ -1,0 +1,9 @@
+# Development / CI dependencies for DSH.
+# Install with:  pip install -r compute/requirements.txt -r compute/requirements-dev.txt
+# Runtime deps live in requirements.txt; this file is test/lint tooling only.
+
+# Test runner (tests/ is a pytest suite — see pyproject.toml [tool.pytest.ini_options])
+pytest>=8.0.0
+
+# Static lint used by CI (.github/workflows/ci.yml python job)
+pyflakes>=3.2.0

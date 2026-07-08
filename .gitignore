@@ -1,0 +1,101 @@
+.env
+.env.*
+*.env
+!.env.template
+!.env.example
+.venv/
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+dist/
+
+# Database
+db/chroma/
+db/*.db
+
+# Large model files
+models/
+
+# AI assistant context files (machine-local)
+CLAUDE.md
+
+# Secrets & credentials
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/
+.secrets
+*_rsa
+*_rsa.pub
+*.gpg
+models/embeddings/
+
+# Internal mesh (machine-local)
+agents/core/.mesh/
+
+# Akashic session context (machine-local, regenerated each terminal)
+.akashic-context
+logs/akashic-watcher.pid
+logs/akashic-watcher.log
+
+# Session logs — per-machine, never public
+logs/*.md
+logs/*.log
+logs/reports/
+
+# Full local databases (schema lives in code, data stays per-node)
+db/
+
+# Google Drive desktop sync mount — not source of truth
+google drive/
+Google Drive/
+
+# Ollama pulled model weights — downloaded per-node
+models/ollama/
+
+# Python build artifacts
+build/
+*.egg-info/
+.pytest_cache/
+
+# IDE / OS cruft
+.idea/
+*.swp
+.DS_Store
+.fractalmap/
+.kiro/
+
+# ── Local-only content (never push) ──
+
+# Akashic books library — PDFs, extracted text, images (653MB+, copyrighted)
+akashic/books/
+
+# UV lockfile (Python, regenerated locally)
+uv.lock
+
+# Large binary assets
+*.pdf
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.mp4
+*.mp3
+*.wav
+# Allow specific tracked assets via git add -f
+!docs/assets/*.png
+!README.md
+
+# Separate project repos (each has its own .git)
+projects/
+platforms/
+software/
+
+# Local agent CLI config symlinks (machine-specific, never commit)
+agents/.claude
+.claude/
+compute/amma_monitor.py
+compute/solfeggio.py

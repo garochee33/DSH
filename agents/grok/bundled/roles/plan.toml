@@ -1,0 +1,4 @@
+# Plan role — read-only architect with high reasoning
+description = "Software architect that designs implementation plans and identifies critical files"
+default_capability_mode = "read-only"
+reasoning_effort = "high"

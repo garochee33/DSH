@@ -1,0 +1,80 @@
+MIT License
+
+Copyright (c) 2024-2026 Enzo Garoche (EGD33)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+───────────────────────────────────────────────────────────────────────────────
+PROPRIETARY INTELLECTUAL PROPERTY NOTICE
+───────────────────────────────────────────────────────────────────────────────
+
+The MIT License above applies SOLELY to the DSH (Dome Sovereign Hub)
+open-source foundation code contained in this repository.
+
+The following intellectual property is the exclusive property of Trinity Global
+Partners LLC ("Trinity Consortium"), developed by Enzo Garoche
+(Founder/Developer), and is protected under applicable United States and
+international copyright, trade secret, and intellectual property laws:
+
+  1. TRINITY CONSORTIUM PLATFORM — All versions, releases, deployments, and
+     derivative works of the Trinity Consortium software platform, including
+     but not limited to source code, object code, compiled binaries, APIs,
+     database schemas, and configuration systems.
+
+     operations, Mandelbulb fractal engines, holographic memory systems,
+     stigmergic routing protocols, Kuramoto synchronization implementations,
+     neuromorphic computing integrations, and associated subsystems.
+
+  3. A.M.M.A. (Autonomous Meridian Monitoring Architecture) — All healing
+     protocols, frequency tuning algorithms, golden needle pulse systems,
+     mitosis rejuvenation engines, root stabilization controllers, and
+     quad-sensor diagnostic frameworks.
+
+  4. MYCELIUM NEURAL MESH — All mesh networking protocols, peer discovery
+     systems, HMAC authentication schemes, E2EE lattice binding protocols,
+     pheromone grid algorithms, CRDT consensus mechanisms, and distributed
+     memory synchronization systems.
+
+  5. BUSINESS STRATEGIES AND METHODOLOGIES — All monetization strategies,
+     membership tier architectures, token economics, client acquisition
+     frameworks, partnership structures, and operational playbooks.
+
+  6. KNOWLEDGE BASE AND TRAINING DATA — All curated knowledge documents,
+     agent training prompts, skill libraries, tool specifications, and
+     proprietary datasets developed for or by Trinity Consortium.
+
+  7. CLIENT DEPLOYMENTS AND SERVICES — All customizations, configurations,
+     integrations, and derivative works created for or deployed to Trinity
+     Consortium clients, partners, or service consumers.
+
+  8. ALL VERSIONS AND SUBSYSTEMS — Including but not limited to all prior
+     versions, branches, forks, mirrors, backups, archives, and any code or
+     documentation that has at any time been part of the Trinity Consortium
+     ecosystem, regardless of current repository location.
+
+NO LICENSE, EXPRESS OR IMPLIED, IS GRANTED TO ANY PARTY FOR ANY OF THE ABOVE
+PROPRIETARY SYSTEMS. Unauthorized use, reproduction, distribution, reverse
+engineering, decompilation, or creation of derivative works from any Trinity
+Consortium proprietary intellectual property constitutes infringement and may
+result in civil and criminal penalties under 17 U.S.C. § 501 et seq., the
+Computer Fraud and Abuse Act (18 U.S.C. § 1030), the Defend Trade Secrets
+Act (18 U.S.C. § 1836), and applicable state and international laws.
+
+IP Owner: Trinity Global Partners LLC
+Developer/Founder: Enzo Garoche (EGD33)

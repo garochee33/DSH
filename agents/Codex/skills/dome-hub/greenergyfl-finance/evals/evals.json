@@ -1,0 +1,35 @@
+{
+  "skill_name": "greenergyfl-finance",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "ok so we got 4 active jobs right now. Johnson solar install - contracted $18,500, we invoiced $18,500 two months ago, they paid $9,000. Rodriguez roof + solar - contracted $24,000, invoiced $24,000 last week, nothing paid yet. Martinez commercial - contracted $67,000, we're still in progress, invoiced $30,000 so far, collected $30,000. Williams battery backup - contracted $8,200, invoiced $8,200, paid in full. what's the situation",
+      "expected_output": "Structured job summary with outstanding balances, overdue flags (Johnson at 60+ days), cash flow view, and clear action items. Johnson should be flagged as urgent.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "what do we owe this week? we have: electric bill $340 due tomorrow, supplier invoice from SunPower $4,200 due in 3 days, subcontractor Mike $2,800 due friday, insurance renewal $1,850 due next monday, and we're already 2 weeks late on a permit fee of $450",
+      "expected_output": "Prioritized bills list with overdue item flagged first, then due-this-week items sorted by urgency, total owed this week, and clear action order.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "can you write a payment reminder for the Johnson job. invoice was for $18,500, they paid half, still owe $9,250, invoice date was february 14th. their name is Robert Johnson",
+      "expected_output": "Professional but firm payment reminder letter addressed to Robert Johnson, referencing the specific invoice amount, payment received, balance due, and days overdue. Respectful tone appropriate for a homeowner.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "we got offered a commercial job - 80 panel install for a warehouse. they want to pay $52,000. our costs would be roughly: panels and equipment $28,000, labor 3 guys for 2 weeks $9,600, permits and inspection $1,200, subcontractor for electrical $4,500. should we take it?",
+      "expected_output": "Margin calculation (roughly 16.7%), clear recommendation, breakdown of costs vs revenue, and any risk flags. Should note margin is just above the 15% warning threshold.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "give me a full financial summary for this month. collected: $39,000. invoiced but not paid: johnson $9,250 (67 days), rodriguez $24,000 (8 days). bills paid this month: $18,400. bills still due: $6,890. bank balance roughly $22,000",
+      "expected_output": "Full monthly summary in the structured format from the skill — cash flow snapshot, pending in/out, overdue flags, runway calculation, and clear action items.",
+      "files": []
+    }
+  ]
+}

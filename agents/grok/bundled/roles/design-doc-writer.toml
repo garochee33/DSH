@@ -1,0 +1,5 @@
+# Design doc writer role — read-write with high reasoning, fork context
+description = "Systems architect that writes structured design documents (RFCs, ADRs)"
+default_capability_mode = "all"
+reasoning_effort = "high"
+default_fork_context = true

@@ -1,0 +1,182 @@
+# DSH Sovereign Setup — Windows
+# Run as Administrator in PowerShell:
+# Set-ExecutionPolicy Bypass -Scope Process -Force
+# .\scripts\sovereign-setup-windows.ps1
+
+$ErrorActionPreference = "Stop"
+$DOME_ROOT = Split-Path -Parent $PSScriptRoot
+
+Write-Host "==> DSH Sovereign Setup (Windows)" -ForegroundColor Cyan
+Write-Host "    Root: $DOME_ROOT"
+
+# ── 1. Winget check ───────────────────────────────────────────────────────────
+if (-not (Get-Command winget -ErrorAction SilentlyContinue)) {
+  Write-Host "Install App Installer from Microsoft Store, then re-run." -ForegroundColor Red
+  exit 1
+}
+
+# ── 2. Chocolatey ─────────────────────────────────────────────────────────────
+if (-not (Get-Command choco -ErrorAction SilentlyContinue)) {
+  Write-Host "==> Installing Chocolatey..."
+  Set-ExecutionPolicy Bypass -Scope Process -Force
+  [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+  iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+  $env:PATH += ";$env:ALLUSERSPROFILE\chocolatey\bin"
+}
+
+# ── 3. Core tools ─────────────────────────────────────────────────────────────
+Write-Host "==> Installing core tools..."
+choco install -y git curl wget jq yq tree ripgrep fzf
+choco install -y python314 nodejs-lts golang rust
+choco install -y postgresql redis sqlite
+choco install -y awscli terraform gh
+choco install -y gnupg vscode
+
+# ── 4. Python ─────────────────────────────────────────────────────────────────
+Write-Host "==> Setting up Python..."
+python -m pip install --upgrade pip pipenv poetry
+python -m pip install openai anthropic langchain chromadb sentence-transformers `
+  torch transformers sqlalchemy psycopg2-binary redis pandas numpy `
+  scipy sympy statsmodels scikit-learn numba matplotlib networkx psutil
+
+# ── 5. Node / pnpm ────────────────────────────────────────────────────────────
+Write-Host "==> Setting up Node..."
+npm install -g pnpm
+pnpm setup
+pnpm add -g tsx typescript ts-node
+
+# ── 6. VS Code extensions ─────────────────────────────────────────────────────
+Write-Host "==> Installing VS Code extensions..."
+$extensions = @(
+  "esbenp.prettier-vscode", "dbaeumer.vscode-eslint",
+  "ms-python.python", "ms-python.vscode-pylance", "ms-python.black-formatter",
+  "golang.go", "rust-lang.rust-analyzer", "ms-azuretools.vscode-docker",
+  "hashicorp.terraform", "amazonwebservices.aws-toolkit-vscode",
+  "eamodio.gitlens", "usernamehw.errorlens", "mikestead.dotenv",
+  "bradlc.vscode-tailwindcss", "prisma.prisma", "redhat.vscode-yaml"
+)
+foreach ($ext in $extensions) {
+  code --install-extension $ext --force 2>$null
+}
+
+# ── 7. Root venv ──────────────────────────────────────────────────────────────
+Write-Host "==> Creating root Python venv..."
+$venvPath = Join-Path $DOME_ROOT ".venv"
+if (-not (Test-Path $venvPath)) {
+  python -m venv $venvPath
+}
+& (Join-Path $venvPath "Scripts\Activate.ps1")
+pip install --upgrade pip wheel
+$reqFile = Join-Path $DOME_ROOT "compute\requirements.txt"
+if (Test-Path $reqFile) { pip install -r $reqFile }
+
+# ── 7b. Workstation utility deps ──────────────────────────────────────────────
+Write-Host "==> Installing workstation utility dependencies..."
+choco install -y pandoc miktex ffmpeg 2>$null
+pip install python-docx==1.1.2 reportlab==4.4.0 pdfplumber==0.11.6 pypdf==5.4.0 `
+  python-pptx==1.0.2 openpyxl==3.1.5 nbformat==5.10.4 openai==1.82.0 `
+  playwright==1.52.0
+python -m playwright install chromium 2>$null
+
+# ── 8. GPG + pass ─────────────────────────────────────────────────────────────
+Write-Host "==> Setting up GPG..."
+$gpgKey = gpg --list-secret-keys --keyid-format LONG 2>$null | Select-String "sec"
+if (-not $gpgKey) {
+  $gpgBatch = @"
+Key-Type: RSA
+Key-Length: 4096
+Name-Real: $env:USERNAME
+Name-Email: $env:USERNAME@dsh.local
+Expire-Date: 0
+%no-protection
+"@
+  $gpgBatch | gpg --batch --gen-key
+}
+$GPG_ID = (gpg --list-secret-keys --keyid-format LONG 2>$null | Select-String "sec" | Select-Object -First 1).ToString().Split("/")[1].Split(" ")[0]
+git config --global user.signingkey $GPG_ID
+git config --global commit.gpgsign true
+
+# ── 9. Security hardening ─────────────────────────────────────────────────────
+Write-Host "==> Hardening security..."
+# Enable Windows Firewall
+Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True
+# Disable telemetry
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\DataCollection" -Name "AllowTelemetry" -Value 0 -Force -ErrorAction SilentlyContinue
+# Disable Cortana
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Name "AllowCortana" -Value 0 -Force -ErrorAction SilentlyContinue
+# Disable advertising ID
+Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\AdvertisingInfo" -Name "Enabled" -Value 0 -Force -ErrorAction SilentlyContinue
+
+# ── 10. Shell profile ─────────────────────────────────────────────────────────
+Write-Host "==> Configuring PowerShell profile..."
+$profileDir = Split-Path $PROFILE
+if (-not (Test-Path $profileDir)) { New-Item -ItemType Directory -Path $profileDir -Force }
+$domeInit = "`$env:DOME_ROOT = '$DOME_ROOT'`n`$env:PATH += `";$DOME_ROOT\scripts`""
+if (-not (Test-Path $PROFILE) -or -not (Select-String -Path $PROFILE -Pattern "DOME_ROOT" -Quiet)) {
+  Add-Content -Path $PROFILE -Value $domeInit
+}
+
+# ── 11. pnpm install ──────────────────────────────────────────────────────────
+Set-Location $DOME_ROOT
+pnpm install 2>$null
+
+# ── 12. .env setup ────────────────────────────────────────────────────────────
+Write-Host "==> Setting up .env..."
+if (-not (Test-Path "$DOME_ROOT\.env")) {
+  Copy-Item "$DOME_ROOT\.env.example" "$DOME_ROOT\.env"
+  Write-Host "    .env created from .env.example — add your API keys before running agents"
+}
+
+# ── 13. SQLite DB init ────────────────────────────────────────────────────────
+Write-Host "==> Initializing SQLite DB..."
+$dbScript = @"
+import sqlite3, os
+db_path = os.path.join(r'$DOME_ROOT', 'db', 'dome.db')
+os.makedirs(os.path.dirname(db_path), exist_ok=True)
+db = sqlite3.connect(db_path)
+for sql in [
+    'CREATE TABLE IF NOT EXISTS sessions (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, title TEXT, content TEXT, tags TEXT, created_at TEXT)',
+    'CREATE TABLE IF NOT EXISTS stack (id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT, name TEXT, version TEXT, status TEXT, updated_at TEXT)',
+    'CREATE TABLE IF NOT EXISTS agents (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, type TEXT, model TEXT, status TEXT, registered_at TEXT)',
+    'CREATE TABLE IF NOT EXISTS skills (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id INTEGER, name TEXT, description TEXT)',
+    'CREATE TABLE IF NOT EXISTS tools (id INTEGER PRIMARY KEY AUTOINCREMENT, agent_id INTEGER, name TEXT, description TEXT)',
+]:
+    db.execute(sql)
+db.commit()
+db.close()
+print('DB ready')
+"@
+$dbScript | python -
+
+# ── 14. ChromaDB ingest ───────────────────────────────────────────────────────
+Write-Host "==> Ingesting KB into ChromaDB..."
+$ingestScript = Join-Path $DOME_ROOT "scripts\ingest.py"
+if (Test-Path $ingestScript) { python $ingestScript 2>$null } else { Write-Host "    Skipped (ingest.py not found)" }
+
+# ── 15. Register Claude agent ─────────────────────────────────────────────────
+Write-Host "==> Registering Claude agent..."
+$registerScript = Join-Path $DOME_ROOT "scripts\register-claude.py"
+if (Test-Path $registerScript) { python $registerScript 2>$null } else { Write-Host "    Skipped (register-claude.py not found)" }
+
+# ── 16. AI Assistant ──────────────────────────────────────────────────────────
+Write-Host ""
+Write-Host "==> AI Assistant — choose one to install:" -ForegroundColor Cyan
+Write-Host "    1) Kiro CLI       (npm install -g kiro-cli)"
+Write-Host "    2) Claude Code    (npm install -g @anthropic-ai/claude-code)"
+Write-Host "    3) Cursor         (winget install Anysphere.Cursor)"
+Write-Host "    4) GitHub Copilot (gh extension install github/gh-copilot)"
+Write-Host "    5) Aider          (pip install aider-chat)"
+Write-Host "    6) Skip"
+$aiChoice = Read-Host "    Enter choice [1-6]"
+switch ($aiChoice) {
+  "1" { npm install -g kiro-cli }
+  "2" { npm install -g "@anthropic-ai/claude-code" }
+  "3" { winget install Anysphere.Cursor }
+  "4" { gh extension install github/gh-copilot }
+  "5" { pip install aider-chat }
+  default { Write-Host "    Skipping AI assistant install." }
+}
+
+Write-Host ""
+Write-Host "DSH Sovereign Setup Complete" -ForegroundColor Green
+Write-Host "   Restart PowerShell, then run: python scripts\pre-spore-verify.py"

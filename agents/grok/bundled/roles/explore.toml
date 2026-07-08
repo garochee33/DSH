@@ -1,0 +1,4 @@
+# Explore role — fast, read-only codebase exploration
+description = "Fast read-only codebase explorer with parallel search"
+default_capability_mode = "read-only"
+reasoning_effort = "medium"

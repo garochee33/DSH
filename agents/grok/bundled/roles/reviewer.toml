@@ -1,0 +1,5 @@
+# Code review role — read-write (can write review notes), fork context
+description = "Code reviewer that writes structured notes for implementer handoff"
+default_capability_mode = "all"
+reasoning_effort = "high"
+default_fork_context = true

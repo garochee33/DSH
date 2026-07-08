@@ -1,0 +1,24 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.black-formatter",
+    "golang.go",
+    "rust-lang.rust-analyzer",
+    "bradlc.vscode-tailwindcss",
+    "prisma.prisma",
+    "graphql.vscode-graphql",
+    "ms-azuretools.vscode-docker",
+    "hashicorp.terraform",
+    "amazonwebservices.aws-toolkit-vscode",
+    "eamodio.gitlens",
+    "github.copilot",
+    "usernamehw.errorlens",
+    "streetsidesoftware.code-spell-checker",
+    "mikestead.dotenv",
+    "redhat.vscode-yaml",
+    "tamasfe.even-better-toml"
+  ]
+}

@@ -1,0 +1,60 @@
+name: claude
+vendor: Anthropic
+display_name: "Claude"
+version: "opus-4-6"
+
+surfaces:
+  - cowork-desktop       # primary (you're in this one now)
+  - agent-sdk            # programmatic, via claude-agent-sdk Python package
+  - claude-code          # CLI
+
+model:
+  default: "claude-opus-4-6"
+  alternates:
+    - "claude-sonnet-4-6"
+    - "claude-haiku-4-5-20251001"
+
+kb:
+  root: "kb/claude/"
+  docs:
+    - "kb/claude/claude-skills.md"
+    - "kb/claude/tools-reference.md"
+    - "kb/claude/file-handling-guide.md"
+    - "kb/claude/architecture.md"
+
+skills:
+  source: "kb/claude/skills/"
+  bundled:
+    - docx
+    - pdf
+    - pptx
+    - xlsx
+    - schedule
+    - setup-cowork
+    - skill-creator
+    - consolidate-memory
+
+workspace:
+  folder: "./"
+  deliverables_folder: "./"
+  scratch_folder: ".scratch/claude/"
+
+compute:
+  python: ">=3.11,<3.13"
+  requirements: "compute/requirements.txt"
+  venv: ".venv"
+  bootstrap: "compute/bootstrap-claude.sh"
+
+env:
+  required:
+    - ANTHROPIC_API_KEY
+  optional:
+    - ANTHROPIC_MODEL
+    - CLAUDE_AGENT_WORKDIR
+    - CLAUDE_AGENT_SKILL_DIR
+
+constraints:
+  never_push_to_main_without_approval: true
+  never_skip_git_hooks: true
+  never_commit_secrets: true
+  refuse: [malware, weapons_of_mass_destruction, csam]

@@ -1,0 +1,5 @@
+# Implementer role — full access, reads review notes, implements fixes
+description = "Implementer that reads review notes and addresses raised issues"
+default_capability_mode = "all"
+reasoning_effort = "high"
+default_fork_context = true

@@ -1,0 +1,57 @@
+name: grok
+vendor: xAI
+display_name: "Grok"
+version: "cli-0.1.212"   # Grok CLI version; model family is grok-3 / grok-4
+
+surfaces:
+  - grok-cli               # primary — this interactive CLI (sovereign node)
+  - agent-sdk              # future programmatic use via xAI SDK if exposed
+
+model:
+  default: "grok-3"
+  alternates:
+    - "grok-4"
+    - "grok-3-mini"
+
+kb:
+  root: "agents/grok/"          # canonical docs now live with the agent
+  docs:
+    - "agents/grok/README.md"
+    - "kb/grok/architecture.md"   # to be created / linked
+    - "kb/grok/skills.md"
+    - "kb/grok/memory-integration.md"
+
+skills:
+  source: "agents/grok/skills/"
+  bundled:
+    - best-of-n
+    - check
+    - create-skill
+    - docx
+    - help
+    - pptx
+    - xlsx
+    - implement
+    - review
+    - design
+    - pr-babysit
+  trinity-mirrors:           # high-value sovereign skills exposed from the mesh
+    - neuromorphic_sync
+    - frequency
+    - pqc_mesh_auth
+    - stigmergic_routing
+    - fractals
+    - cognitive
+    - compute
+    - skill-creator
+
+workspace:
+  folder: "./"
+  deliverables_folder: "./"
+  scratch_folder: ".scratch/grok/"
+
+mesh:
+  registry_id: "grok"
+  activation: "spore-eligible"
+  signals: ["mycelium-signal", "akashic"]
+  fractalmap: "L1/agents.md (subtree agents/grok/)"

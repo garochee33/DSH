@@ -8,7 +8,7 @@
 # Persistent-homology TDA backend — enables the preemptive topology sensor in
 # runs; only the preemptive chimera-detection trigger is skipped.
 # Needs a C/C++ build toolchain (Xcode Command Line Tools on macOS).
-ripser>=0.6.4
+ripser>=0.6.15
 
 # Live voice capture/playback (agents/voice/loop.py — VoiceLoop).
 # soundfile bundles libsndfile; sounddevice needs PortAudio (bundled in mac/win wheels).

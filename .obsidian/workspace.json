@@ -1,0 +1,235 @@
+{
+  "main": {
+    "id": "74aee12934ce0d5f",
+    "type": "split",
+    "children": [
+      {
+        "id": "85bb99c472e6131e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "edb8f661f4c5bf09",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "a0508aeaba4c17de",
+    "type": "split",
+    "children": [
+      {
+        "id": "5ef9e9c21c25c161",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0fda2dd41f514637",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "070fcd7f58d1ed64",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "tag:#2563EB",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "85f69cac8ac6798d",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 269.5,
+    "collapsed": true
+  },
+  "right": {
+    "id": "527c99096c7de6e2",
+    "type": "split",
+    "children": [
+      {
+        "id": "c648fc441e3a4ca4",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "13fbb20ee5ad9b85",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "projects/trinity-consortium/skills/ui-ux-pro-max/sub-skills/brand/templates/brand-guidelines-starter.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": false
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for brand-guidelines-starter"
+            }
+          },
+          {
+            "id": "a8b0590058c74fea",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "projects/trinity-consortium/skills/ui-ux-pro-max/sub-skills/brand/templates/brand-guidelines-starter.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from brand-guidelines-starter"
+            }
+          },
+          {
+            "id": "98b9b3a9cf99e97c",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "84c695a773af7994",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "809d58bc07423f0b",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "horizontal",
+    "width": 200,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "edb8f661f4c5bf09",
+  "lastOpenFiles": [
+    "Untitled.md",
+    "Untitled 4.base",
+    "agents/api/README.md",
+    "Untitled 3.base",
+    "agents/grok/docs/user-guide/16-subagents.md",
+    "Untitled 2.base",
+    "docs/CTO_FRAMEWORK_VALIDATION_2026-05-21.md",
+    "Untitled 1.base",
+    "docs/MQM_PARADIGM_UPGRADE_SPEC.md",
+    "Untitled.base",
+    "2026-06-11.md",
+    "Untitled 1.canvas",
+    "projects/trinity-unified-ai/api/src/integrations/coding/README.md",
+    "projects/trinity-unified-ai/api/_coding_smoke2.ts",
+    "projects/trinity-unified-ai/api/_coding_smoke.ts",
+    "projects/trinity-unified-ai/api/src/routes/coding-agent.ts",
+    "projects/trinity-unified-ai/api/src/integrations/coding/claw-sidecar.ts",
+    "projects/trinity-unified-ai/api/src/integrations/coding/rag-shim.ts",
+    "projects/CLAUDE-CLONES-WIRING.md",
+    "projects/openclaude/docs/run-with-anthropic.md",
+    "projects/openclaude/node_modules/highlight.js/styles/school-book.png",
+    "projects/openclaude/node_modules/highlight.js/styles/pojoaque.jpg",
+    "projects/openclaude/node_modules/highlight.js/styles/brown-papersq.png",
+    "projects/openclaude/node_modules/highlight.js/scss/school-book.png",
+    "projects/openclaude/node_modules/highlight.js/scss/pojoaque.jpg",
+    "projects/openclaude/node_modules/highlight.js/scss/brown-papersq.png",
+    "projects/openclaude/node_modules/highlight.js/README.md",
+    "projects/openclaude/node_modules/protobufjs/ext/debug/README.md",
+    "projects/openclaude/node_modules/protobufjs/ext/descriptor/README.md",
+    "projects/openclaude/node_modules/protobufjs/google/README.md",
+    "projects/openclaude/node_modules/protobufjs/README.md",
+    "projects/openclaude/node_modules/diff/release-notes.md",
+    "projects/openclaude/node_modules/diff/CONTRIBUTING.md",
+    "projects/openclaude/node_modules/diff/README.md",
+    "projects/openclaude/node_modules/axios/lib/helpers/README.md",
+    "projects/openclaude/node_modules/axios/lib/env/README.md",
+    "projects/openclaude/node_modules/axios/lib/core/README.md",
+    "projects/openclaude/node_modules/axios/lib/adapters/README.md",
+    "projects/openclaude/node_modules/axios/README.md",
+    "projects/openclaude/node_modules/axios/MIGRATION_GUIDE.md",
+    "projects/openclaude/node_modules/axios/CHANGELOG.md",
+    "projects/openclaude/node_modules/pngjs/coverage/lcov-report/sort-arrow-sprite.png",
+    "projects/openclaude/node_modules/pngjs/coverage/lcov-report/favicon.png",
+    "projects/openclaude/node_modules/pngjs/README.md",
+    "projects/openclaude/node_modules/path-key/readme.md",
+    "projects/openclaude/node_modules/retry/equation.gif",
+    "projects/openclaude/node_modules/dpack/assets/powers-dre.png",
+    "Untitled.canvas"
+  ]
+}

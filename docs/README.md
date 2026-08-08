@@ -5,4 +5,5 @@
 | `SETUP_VIDEO_RUNBOOK.md` | Video onboarding guide |
 | `REPO_FLOW_PRIVATE_PUBLIC.md` | Private → public export workflow |
 | `PUBLIC_PROD_HARDENING.md` | Production hardening checklist |
+| `WINDOWS_SECURITY.md` | Windows hardening scripts — what they turn off / keep on |
 | `TASKS_PHASE2_EXECUTION_2026-04-22.md` | Phase 2 execution plan |

@@ -66,6 +66,7 @@ Before treating your node as production-ready, confirm:
 - [ ] Secrets live in `pass` or macOS Keychain, never plaintext files
 
 See also: `PROTOCOLS.md`, `docs/PUBLIC_PROD_HARDENING.md`.
+Windows operators: `docs/WINDOWS_SECURITY.md` (enforcer scripts, service allow/deny lists, scheduled task).
 
 ## Threat model
 

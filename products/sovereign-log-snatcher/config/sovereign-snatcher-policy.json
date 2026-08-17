@@ -1,0 +1,89 @@
+{
+  "schema": "sky.sovereign.snatcher-policy/v1",
+  "product": "Sovereign Log Snatcher",
+  "interval_s": 900,
+  "retention_days": 30,
+  "min_free_bytes": 2147483648,
+  "custody_rel": "runtime/sovereign-snatcher",
+  "operator_rel": "Sovereign Snatcher",
+  "launchd_label": "com.skyhub.sovereign-snatcher",
+  "keepalive": true,
+  "run_at_load": true,
+  "process_has_no_network_client": true,
+  "permissions": {
+    "dirs": "0700",
+    "files": "0600"
+  },
+  "skip_names": ["auth.json", "Cookies", "*.pem", "*.key", "id_ed25519"],
+  "sources": {
+    "cursor": {
+      "enabled": true,
+      "mode": "mixed",
+      "move": [
+        "Application Support/Cursor/logs/**/telemetry*",
+        "Application Support/Cursor/logs/**/*sentry*",
+        "Application Support/Cursor/logs/**/*Telemetry*",
+        "Application Support/Cursor/sentry/*",
+        "Application Support/Cursor/Crashpad/{completed,pending,new,attached}/*",
+        "Application Support/Cursor/process-monitor/* (age>=120s)",
+        "Desktop/cursor-audit/captures*.jsonl",
+        "Desktop/cursor-audit/ALERTS.log"
+      ],
+      "copy": [
+        "Application Support/Cursor/logs/** (IDE logs; live writers copied, not moved)"
+      ]
+    },
+    "antigravity": {
+      "enabled": true,
+      "mode": "mixed",
+      "copy": [
+        "Application Support/Antigravity/logs/**",
+        "Library/Logs/Antigravity/*"
+      ],
+      "move": [
+        "Application Support/Antigravity/sentry/*",
+        "Application Support/Antigravity/Crashpad/{completed,pending,new,attached}/*"
+      ]
+    },
+    "kiro": {
+      "enabled": true,
+      "mode": "copy",
+      "copy": [
+        "Application Support/Kiro/logs/**",
+        "Application Support/Kiro/User/globalStorage/amazonwebservices.aws-toolkit-vscode/telemetryCache",
+        "Application Support/Kiro/User/globalStorage/**/telemetryCache"
+      ]
+    },
+    "codex": {
+      "enabled": true,
+      "mode": "copy",
+      "copy": [
+        "~/.codex/logs_2.sqlite (sqlite backup; vendor file left in place)",
+        "~/.codex/log/**"
+      ]
+    },
+    "claude": {
+      "enabled": true,
+      "mode": "copy",
+      "copy": [
+        "~/.claude/debug/**",
+        "~/.claude/daemon.log"
+      ]
+    },
+    "ollama": {
+      "enabled": true,
+      "mode": "copy",
+      "copy": [
+        "/opt/homebrew/var/log/ollama.log",
+        "/usr/local/var/log/ollama.log"
+      ]
+    }
+  },
+  "env": {
+    "DISABLE_TELEMETRY": "1",
+    "DO_NOT_TRACK": "1",
+    "SOVEREIGN_SNATCHER_INTERVAL": "900",
+    "SOVEREIGN_SNATCHER_RETENTION_DAYS": "30"
+  },
+  "reason": "Keep vendor logs in sovereign runtime custody. Move Cursor/Antigravity telemetry residue; copy live IDE and CLI logs so vendor homes are not wiped. This process has no network client; it does not prove OS-level zero egress."
+}

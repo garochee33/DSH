@@ -15,6 +15,7 @@ APPROVED=(
   "org.cups."
   "com.dome."
   "com.docker."
+  "com.skyhub.sovereign-snatcher"
 )
 
 is_approved() {

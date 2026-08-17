@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>com.skyhub.sovereign-snatcher</string>
+  <key>ProgramArguments</key><array>
+    <string>PYTHON</string>
+    <string>SNATCHER</string>
+  </array>
+  <key>EnvironmentVariables</key><dict>
+    <key>SKY_HUB_ROOT</key><string>HUB_ROOT</string>
+    <key>SOVEREIGN_ROOT</key><string>SOVEREIGN_ROOT</string>
+    <key>SOVEREIGN_SNATCHER_INTERVAL</key><string>900</string>
+    <key>SOVEREIGN_SNATCHER_RETENTION_DAYS</key><string>30</string>
+    <key>DISABLE_TELEMETRY</key><string>1</string>
+    <key>DO_NOT_TRACK</key><string>1</string>
+    <key>PYTHONUNBUFFERED</key><string>1</string>
+  </dict>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ProcessType</key><string>Background</string>
+  <key>LowPriorityIO</key><true/>
+  <key>Umask</key><integer>63</integer>
+</dict></plist>

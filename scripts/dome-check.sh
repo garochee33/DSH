@@ -96,7 +96,7 @@ for plist in ~/Library/LaunchAgents/*.plist; do
   [ -f "$plist" ] || continue
   name=$(basename "$plist" .plist)
   case "$name" in
-    homebrew.*|com.apple.*|com.openssh.*|org.cups.*|com.dome.*) ;;
+    homebrew.*|com.apple.*|com.openssh.*|org.cups.*|com.dome.*|com.skyhub.sovereign-snatcher) ;;
     *)
       launchctl unload -w "$plist" 2>/dev/null; rm -f "$plist"
       fixed "Removed unauthorized agent: $name"

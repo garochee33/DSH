@@ -1,7 +1,7 @@
 # DSH Index
 
 Complete reference of all files, directories, and their purpose.
-Last updated: 2026-05-23 (iCloud symlinks, gems extraction, .gitleaks.toml, sovereign-gate fixes, DB dump cleanup)
+Last updated: 2026-08-17 (Sovereign Log Snatcher public product)
 
 ---
 
@@ -23,6 +23,7 @@ Last updated: 2026-05-23 (iCloud symlinks, gems extraction, .gitleaks.toml, sove
 | **Protocols**                         | `PROTOCOLS.md` — sovereignty + cross-check checklist (items 1–17)                                                                                                                                            |
 | **Sovereign Gate Doctrine**           | `docs/SOVEREIGN_GATE_DOCTRINE.md` — mandatory pre-push/deploy gate + full audit protocol (2026-05-22)                                                                                                        |
 | **Public export (DSH) gaps**          | `docs/PUBLIC_PROD_HARDENING.md` — P0–P3 hardening log; **DSH vs DSH** reconciliation (2026-05-13)                                                                                                       |
+| **Sovereign Log Snatcher**            | `products/sovereign-log-snatcher/README.md` — local vendor-log custody, 15-minute tick                                                                                                                   |
 
 ---
 
@@ -57,6 +58,17 @@ Last updated: 2026-05-23 (iCloud symlinks, gems extraction, .gitleaks.toml, sove
 ---
 
 ## Directories
+
+### `/products`
+
+Public partner products.
+
+| Path | Purpose |
+| ---- | ------- |
+| `products/sovereign-log-snatcher/` | Local vendor-log custody. Move telemetry off the vendor path; copy live IDE logs into `runtime/`. |
+| `products/sovereign-log-snatcher/README.md` | Ballad of Sovereign Data + install |
+| `products/sovereign-log-snatcher/scripts/sovereign-snatcher.py` | Gatherer (no network client) |
+| `products/sovereign-log-snatcher/scripts/install-sovereign-snatcher.sh` | launchd install |
 
 ### `/agents`
 

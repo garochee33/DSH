@@ -2,7 +2,7 @@
 
 **Sovereign data. Snatch it back. Don't wait.**
 
-A local gatherer for a DSH / sky-hub / dome-hub tree. Every 15 minutes it
+A local gatherer you clone onto your own machine. Every 15 minutes it
 moves vendor telemetry off the vendor path and copies live IDE logs into
 `runtime/` on *your* disk. The process has no network client. It does not
 make chat smarter. It does not prove an air-gap. It keeps residue where
@@ -28,7 +28,7 @@ Cursor, Kiro, Claude debug, Codex sqlite, Ollama air.
 `runtime/` custody. `0700`. Thirty days. That's fair.
 Full disk says no. Unchanged files sleep. Keys and `sk-` ain't there.
 
-Receipt on your metal. Status line. Partner install. Your crate.
+Receipt on your metal. Status line. Your install. Your crate.
 Not their datacenter. Not a phone-home. Not a plate.
 
 What the corporations cannot do when the snatcher's in the cut:
@@ -47,22 +47,22 @@ Sovereign data. Snatch it back. Don't wait.
 ## Install
 
 ```bash
-# From a DSH / sky-hub / dome-hub tree
-export SKY_HUB_ROOT="${SKY_HUB_ROOT:-$PWD}"
-# or: export SKY_HUB_ROOT="$HOME/sovereign/sky-hub"
-
-# First gather on a full node can be ~1 GB.
-# SOVEREIGN_SNATCHER_SKIP_ONCE=1 to install the agent only.
-bash products/sovereign-log-snatcher/scripts/install-sovereign-snatcher.sh
+git clone https://github.com/garochee33/DSH.git
+cd DSH/products/sovereign-log-snatcher
+bash scripts/install-sovereign-snatcher.sh
 ```
 
-If you copied this folder into a hub `scripts/` layout, the install script
-seeds `$SKY_HUB_ROOT` and writes launchd `com.skyhub.sovereign-snatcher`.
+Custody lands under `~/sovereign/runtime/sovereign-snatcher/` if that tree
+exists, otherwise `~/.sovereign/runtime/sovereign-snatcher/`. Override with
+`SOVEREIGN_ROOT`. First gather on a full machine can be ~1 GB.
+`SOVEREIGN_SNATCHER_SKIP_ONCE=1` installs the agent only.
 
 ```bash
-python3 products/sovereign-log-snatcher/scripts/sovereign-snatcher.py --self-check
-python3 products/sovereign-log-snatcher/scripts/sovereign-snatcher.py --status
+python3 scripts/sovereign-snatcher.py --self-check
+python3 scripts/sovereign-snatcher.py --status
 ```
+
+launchd label: `com.sovereign.log-snatcher` (15-minute KeepAlive).
 
 ## What it gathers
 
@@ -79,8 +79,8 @@ Chat composer DBs and session JSONL are **out of scope**.
 
 ## Claims lock
 
-Allowed: local-only process, no upload code path, custody under sovereign
-`runtime/`, 15-minute tick, 30-day retention.
+Allowed: local-only process, no upload code path, custody on your disk,
+15-minute tick, 30-day retention.
 
 Forbidden: "zero telemetry," "zero egress," "makes the AI smarter,"
 "captures all chat history."

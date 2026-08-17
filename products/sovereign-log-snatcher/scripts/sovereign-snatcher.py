@@ -74,19 +74,21 @@ class Snatcher:
         *,
         home: Path | None = None,
         sovereign: Path | None = None,
-        sky: Path | None = None,
+        root: Path | None = None,
         policy_path: Path | None = None,
     ) -> None:
-        script_sky = Path(__file__).resolve().parents[1]
-        self.sky = sky or _env_path("SKY_HUB_ROOT", script_sky)
-        self.sovereign = sovereign or _env_path("SOVEREIGN_ROOT", self.sky.parent)
+        script_root = Path(__file__).resolve().parents[1]
+        self.root = root or _env_path("SNATCHER_ROOT", script_root)
+        home_sovereign = Path.home() / "sovereign"
+        default_sovereign = home_sovereign if home_sovereign.is_dir() else Path.home() / ".sovereign"
+        self.sovereign = sovereign or _env_path("SOVEREIGN_ROOT", default_sovereign)
         self.home = (home or Path.home()).expanduser().resolve()
         if policy_path is not None:
             self.policy_path = policy_path
         else:
             candidates = [
-                self.sky / "db" / "sovereign-snatcher-policy.json",
-                self.sky / "config" / "sovereign-snatcher-policy.json",
+                self.root / "db" / "sovereign-snatcher-policy.json",
+                self.root / "config" / "sovereign-snatcher-policy.json",
             ]
             self.policy_path = next((p for p in candidates if p.is_file()), candidates[0])
         self.policy = self._load_policy()
@@ -115,7 +117,7 @@ class Snatcher:
         self.receipts_dir = self.custody / "receipts"
         self.app_support = self.home / "Library" / "Application Support"
         self.library_logs = self.home / "Library" / "Logs"
-        self.launchd_label = str(self.policy.get("launchd_label") or "com.skyhub.sovereign-snatcher")
+        self.launchd_label = str(self.policy.get("launchd_label") or "com.sovereign.log-snatcher")
 
     @staticmethod
     def _int(value: object, default: int) -> int:
@@ -646,7 +648,7 @@ class Snatcher:
             except ValueError:
                 next_at = None
         return {
-            "schema": "sky.sovereign.snatcher-status/v1",
+            "schema": "sovereign.snatcher-status/v1",
             "product": PRODUCT,
             "custody": str(self.custody),
             "operator": str(self.operator),
@@ -719,7 +721,7 @@ class Snatcher:
         self.ensure_tree()
         if not self.disk_budget_ok():
             report = {
-                "schema": "sky.sovereign.snatcher/v1",
+                "schema": "sovereign.snatcher/v1",
                 "product": PRODUCT,
                 "at": datetime.now(timezone.utc).isoformat(),
                 "custody": str(self.custody),
@@ -768,7 +770,7 @@ class Snatcher:
                 "disabled": not self.source_enabled(name),
             }
         report = {
-            "schema": "sky.sovereign.snatcher/v1",
+            "schema": "sovereign.snatcher/v1",
             "product": PRODUCT,
             "at": datetime.now(timezone.utc).isoformat(),
             "custody": str(self.custody),

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Harden gate for Sovereign Log Snatcher. Uses SKY_HUB_ROOT. Does not invent entity execution."""
+"""Local self-check for Sovereign Log Snatcher. No remote calls."""
 from __future__ import annotations
 
 import json
@@ -9,13 +9,13 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-ROOT = Path(os.environ.get("SKY_HUB_ROOT") or Path(__file__).resolve().parents[1]).resolve()
-SOVEREIGN = Path(os.environ.get("SOVEREIGN_ROOT") or ROOT.parent).resolve()
-PY = ROOT / ".venv" / "bin" / "python"
-if not PY.is_file():
-    PY = Path(sys.executable)
+ROOT = Path(os.environ.get("SNATCHER_ROOT") or Path(__file__).resolve().parents[1]).resolve()
+home_sovereign = Path.home() / "sovereign"
+default_sovereign = home_sovereign if home_sovereign.is_dir() else Path.home() / ".sovereign"
+SOVEREIGN = Path(os.environ.get("SOVEREIGN_ROOT") or default_sovereign).resolve()
+PY = Path(sys.executable)
 SNATCHER = ROOT / "scripts" / "sovereign-snatcher.py"
-LABEL = "com.skyhub.sovereign-snatcher"
+LABEL = "com.sovereign.log-snatcher"
 PLIST = Path.home() / "Library" / "LaunchAgents" / f"{LABEL}.plist"
 CUSTODY = SOVEREIGN / "runtime" / "sovereign-snatcher"
 
@@ -45,10 +45,10 @@ def _json_out(code: int, out: str) -> dict:
 def main() -> int:
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     report: dict = {
-        "schema": "sky.sovereign.snatcher-harden/v1",
+        "schema": "sovereign.snatcher-harden/v1",
         "product": "Sovereign Log Snatcher",
         "at": datetime.now(timezone.utc).isoformat(),
-        "sky_hub_root": str(ROOT),
+        "snatcher_root": str(ROOT),
         "sovereign_root": str(SOVEREIGN),
     }
 
@@ -78,50 +78,14 @@ def main() -> int:
     mode = oct(CUSTODY.stat().st_mode & 0o777) if CUSTODY.is_dir() else None
     report["custody"] = {"path": str(CUSTODY), "ok": custody_ok, "mode": mode}
 
-    test_code, test_out = sh(
-        [str(PY), "-m", "pytest", str(ROOT / "tests" / "test_sovereign_snatcher.py"), "-q"],
-        timeout=90,
-    )
-    report["unit_tests"] = {"rc": test_code, "ok": test_code == 0, "tail": test_out[-800:]}
-
-    amma: dict = {"attempted": False}
-    abba: dict = {"attempted": False}
-    try:
-        sys.path.insert(0, str(ROOT))
-        sys.path.insert(0, str(ROOT / "scripts"))
-        from compute.harness.admission import EntityClient  # noqa: E402
-
-        amma["attempted"] = True
-        try:
-            obs = EntityClient("amma").call({"method": "observe"})
-            amma["observe_ok"] = bool(obs.get("ok", True))
-            amma["workload_executed"] = bool(obs.get("workload_executed", False))
-        except Exception as ex:
-            amma["observe_ok"] = False
-            amma["observe_error"] = f"{type(ex).__name__}: {ex}"
-        abba["attempted"] = True
-        try:
-            st = EntityClient("abba").call({"method": "status"})
-            abba["status_ok"] = bool(st.get("ok", True))
-            abba["workload_execution_enabled"] = st.get("workload_execution_enabled")
-            abba["workload_executed"] = st.get("workload_executed")
-        except Exception as ex:
-            abba["status_ok"] = False
-            abba["status_error"] = f"{type(ex).__name__}: {ex}"
-    except Exception as ex:
-        amma["import_error"] = f"{type(ex).__name__}: {ex}"
-    report["amma"] = amma
-    report["abba"] = abba
-
     report["harden_ok"] = bool(
         report["self_check"].get("ok")
         and report["launchd"].get("print_ok")
         and report["launchd"].get("interval_900")
         and report["launchd"].get("plist_exists")
         and report["custody"].get("ok")
-        and report["unit_tests"].get("ok")
     )
-    outp = ROOT / "evidence" / "runs" / f"SOVEREIGN-LOG-SNATCHER-HARDEN-{stamp}.json"
+    outp = ROOT / "receipts" / f"SOVEREIGN-LOG-SNATCHER-HARDEN-{stamp}.json"
     outp.parent.mkdir(parents=True, exist_ok=True)
     outp.write_text(json.dumps(report, indent=2, default=str))
     print(
@@ -132,9 +96,6 @@ def main() -> int:
                 "self_check": report["self_check"].get("ok"),
                 "launchd_running": report["launchd"].get("print_ok"),
                 "interval_900": report["launchd"].get("interval_900"),
-                "unit_tests": report["unit_tests"].get("ok"),
-                "amma_observe": amma.get("observe_ok"),
-                "abba_status": abba.get("status_ok"),
             },
             indent=2,
             default=str,

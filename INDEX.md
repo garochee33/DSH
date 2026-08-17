@@ -61,12 +61,12 @@ Last updated: 2026-08-17 (Sovereign Log Snatcher public product)
 
 ### `/products`
 
-Public partner products.
+Public products you can clone and run.
 
 | Path | Purpose |
 | ---- | ------- |
 | `products/sovereign-log-snatcher/` | Local vendor-log custody. Move telemetry off the vendor path; copy live IDE logs into `runtime/`. |
-| `products/sovereign-log-snatcher/README.md` | Ballad of Sovereign Data + install |
+| `products/sovereign-log-snatcher/README.md` | Sovereign Data rap + clone/install |
 | `products/sovereign-log-snatcher/scripts/sovereign-snatcher.py` | Gatherer (no network client) |
 | `products/sovereign-log-snatcher/scripts/install-sovereign-snatcher.sh` | launchd install |
 

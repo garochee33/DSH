@@ -15,6 +15,7 @@ APPROVED=(
   "org.cups."
   "com.dome."
   "com.docker."
+  "com.sovereign.log-snatcher"
   "com.skyhub.sovereign-snatcher"
 )
 

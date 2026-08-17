@@ -65,8 +65,9 @@ It does not make chat smarter. It does not prove an air-gap. It keeps the leftov
 where you can see them — so they cannot plate the sovereign data later.
 
 ```bash
-export SKY_HUB_ROOT="${SKY_HUB_ROOT:-$PWD}"
-bash products/sovereign-log-snatcher/scripts/install-sovereign-snatcher.sh
+git clone https://github.com/garochee33/DSH.git
+cd DSH/products/sovereign-log-snatcher
+bash scripts/install-sovereign-snatcher.sh
 ```
 
 ---

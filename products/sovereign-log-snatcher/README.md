@@ -1,6 +1,6 @@
 # Sovereign Log Snatcher
 
-**Keep your data sovereign. Don't let the vendors cater.**
+**Sovereign data. Snatch it back. Don't wait.**
 
 A local gatherer for a DSH / sky-hub / dome-hub tree. Every 15 minutes it
 moves vendor telemetry off the vendor path and copies live IDE logs into
@@ -10,51 +10,37 @@ you can see it.
 
 ---
 
-## The Ballad of Sovereign Data
+## Sovereign Data
 
-They want your **data sovereign** — not plated by a waiter,  
-not boxed for a boardroom, not sold to a dictator.  
-So we snatch the logs they leave behind, and we snatch them **later**,  
-before a corporate caterer turns your crumbs into something greater  
-for *them* — and smaller for the only **creator**: you.
+```
+They clock the sovereign data like a buffet they can plate,
+park Sentry in the drywall, leave Crashpad on the grate.
+I don't dial a handler. I don't open a gate.
+Fifteen-minute KeepAlive. Local. That's the state.
 
-**Step one.** A policy names the sources. Local. Quiet. Yours.  
-No cloud menu. No "trust us" tour of other people's doors.
+Policy names the sources — quiet list, your floor, your fate.
+No cloud tasting menu. No "trust us" tour. No bait.
+I MOVE the telemetry they stashed so a later bot can scrape,
+empty the vendor path so the supply chain got no tray to take.
 
-**Step two.** A fifteen-minute tick. KeepAlive. No open ports to flatter.  
-This process has no network client — it does not phone a handler.
+I COPY live IDE logs, leave the writer in the chair —
+Cursor, Kiro, Claude debug, Codex sqlite, Ollama air.
+`runtime/` custody. `0700`. Thirty days. That's fair.
+Full disk says no. Unchanged files sleep. Keys and `sk-` ain't there.
 
-**Step three.** We *move* the telemetry they stashed to scoop you later:  
-Sentry, Crashpad, the vendor-path platter.  
-Empty that house so they cannot keep a ready-made crater  
-of your residue sitting in *their* folders, waiting for a traitor  
-in the supply chain to pick it up and cater.
+Receipt on your metal. Status line. Partner install. Your crate.
+Not their datacenter. Not a phone-home. Not a plate.
 
-**Step four.** We *copy* live IDE logs — leave the writer in its chair.  
-Cursor traces, Kiro, Claude debug, Codex sqlite, Ollama's air.  
-Custody under `runtime/sovereign-snatcher/`, locked `0700` there.  
-Thirty days. Unchanged files sleep. Full disks refuse the errand, fair.
+What the corporations cannot do when the snatcher's in the cut:
+can't leave crumbs on THEIR path like a courtesy platter,
+can't treat leftover traces like they still live in their gutter,
+can't ping this gatherer — no socket, no uploader, no chatter,
+can't say "just logs in our folder" and serve 'em up later.
 
-**Step five.** Skip the keys, the cookies, the `sk-` shaped traitor.  
-That is a guardrail, not a church of DLP. We do not copy the detonator.
-
-**Step six.** A receipt. A status line. Your hub, your floor, your equator.  
-Partner install. Your metal. Not their datacenter.
-
-### What the corporations cannot do — when this is used
-
-They cannot leave Sentry and Crashpad **on the vendor path** as a courtesy platter.  
-They cannot treat your leftover traces as still living in *their* Application gutter.  
-They cannot call this gatherer from the outside — it has no socket, no uploader, no chatter.  
-They cannot pretend those crumbs are still "just logs in our folder" for a later caterer.
-
-### What this does not claim (so the verse stays honest)
-
-The live app may still talk if the OS lets it.  
-This is **custody**, not a Faraday cage, not a courtroom later.  
-Chat history is a different store. Snatcher does not make the model greater.
-
-**Keep your data sovereign. Snatch the logs. Don't wait for the waiter.**
+Custody. Not a Faraday cage. Chat's a different store.
+Snatcher don't make the model smarter. It just locks the door.
+Sovereign data. Snatch it back. Don't wait.
+```
 
 ---
 

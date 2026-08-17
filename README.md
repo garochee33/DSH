@@ -55,14 +55,14 @@ Everything is isolated to your machine. Your data, your models, your code — ne
 
 ### Sovereign Log Snatcher
 
-**Keep your data sovereign. Don't let the vendors cater.**
+**Sovereign data. Snatch it back. Don't wait.**
 
 Vendor apps park telemetry, Sentry, and crash crumbs on *their* path on *your* disk.
 [Sovereign Log Snatcher](products/sovereign-log-snatcher/README.md) runs a 15-minute
 local tick: move that residue off the vendor path, copy live IDE logs into
 `runtime/`, skip keys and secret-shaped tokens. The gatherer has no network client.
 It does not make chat smarter. It does not prove an air-gap. It keeps the leftovers
-where you can see them — so a corporate waiter cannot plate your data later.
+where you can see them — so they cannot plate the sovereign data later.
 
 ```bash
 export SKY_HUB_ROOT="${SKY_HUB_ROOT:-$PWD}"

@@ -14,3 +14,10 @@ overrides:
   postcss: ">=8.5.10"
   qs: ">=6.15.2"
   hono: ">=4.12.21"
+
+allowBuilds:
+  better-sqlite3: set this to true or false
+  esbuild: set this to true or false
+  msw: set this to true or false
+  sharp: set this to true or false
+  unrs-resolver: set this to true or false

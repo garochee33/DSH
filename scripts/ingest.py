@@ -7,6 +7,11 @@ Run: python3 scripts/ingest.py
 import sys
 import os
 
+# Windows: force UTF-8 output so emoji don't crash on cp1252 terminals
+if sys.platform == "win32":
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
 from pathlib import Path
 
 DOME_ROOT = Path(os.environ.get("DOME_ROOT", Path(__file__).resolve().parents[1])).resolve()

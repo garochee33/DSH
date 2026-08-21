@@ -42,7 +42,7 @@ def _get_embedder():
     from sentence_transformers import SentenceTransformer
     _embedder = SentenceTransformer("all-MiniLM-L6-v2", cache_folder=str(_MODELS_DIR))
     _backend = "sentence-transformers"
-    print("[VectorMemory] ✓ Loaded sentence-transformers (CPU)")
+    print("[VectorMemory] OK Loaded sentence-transformers (CPU)")
     return _embedder
 
 

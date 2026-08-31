@@ -48,7 +48,7 @@ slowapi>=0.1.9
 # No upstream fix available as of 2026-06-06. Ignore in pip-audit.
 chromadb>=0.5.0
 sentence-transformers>=2.7.0
-tiktoken>=0.7.0
+tiktoken>=0.14.0
 
 # --- Data / analysis ---
 pandas>=2.1.0

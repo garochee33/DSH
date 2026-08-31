@@ -62,7 +62,7 @@ qiskit>=2.0.0,<=2.3.0
 qiskit-aer>=0.16.0
 # Differentiable QML — hybrid quantum/classical ML (MPS-compatible)
 pennylane>=0.40.0
-pennylane-qiskit>=0.40.0
+pennylane-qiskit>=0.45.0
 # Google-style quantum circuits
 cirq-core>=1.3.0
 # Open quantum systems, density matrices, Lindblad dynamics
